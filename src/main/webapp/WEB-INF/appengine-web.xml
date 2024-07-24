@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
+    <runtime>java17</runtime>
+    <instance-class>F1</instance-class>
+    <service>default</service>
+</appengine-web-app>

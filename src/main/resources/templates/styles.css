@@ -1,0 +1,61 @@
+/* Estilos para el contenedor de los KPI */
+.kpi-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-bottom: 12px;
+}
+.kpi-box {
+    width: 150px;
+    height: 70px;
+    background-color: #343a40; /* Fondo del cuadrado */
+    color: #ffffff; /* Color del texto */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3px; /* Bordes redondeados */
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1); /* Sombra */
+    font-family: 'Roboto', sans-serif; /* Fuente */
+    margin: 3px;
+    padding: 3px;
+    text-align: center;
+}
+.kpi-box .kpi-label {
+    font-size: 13px;
+    font-weight: 500;
+}
+.kpi-box .kpi-value {
+    font-size: 20px; /* Tamaño de la fuente del valor */
+    font-weight: 700;
+}
+/* Estilo de la gráfica */
+.chart-container {
+    position: relative;
+    width: 100%; /* O puedes ajustar a un ancho fijo, como '1200px' */
+    height: 600px; /* Aumenta la altura según sea necesario */
+    margin-top: 10px; /* Ajusta el margen superior si es necesario */
+}
+/* Estilos para la tabla de fuentes */
+.source-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-family: 'Roboto', sans-serif;
+}
+.source-table th, .source-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+.source-table th {
+    background-color: #343a40; /* Fondo de la cabecera */
+    color: white; /* Color del texto de la cabecera */
+    text-align: center;
+}
+.source-table td {
+    text-align: center;
+}
+.source-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
