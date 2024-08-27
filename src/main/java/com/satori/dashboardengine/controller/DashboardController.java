@@ -1,18 +1,23 @@
 package com.satori.dashboardengine.controller;
 
+import com.satori.dashboardengine.dto.Activities;
+import com.satori.dashboardengine.dto.ActivitiesData;
 import com.satori.dashboardengine.dto.Deals;
 import com.satori.dashboardengine.dto.DealsData;
 import com.satori.dashboardengine.service.PipedriveService;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Controller
 public class DashboardController {
@@ -20,56 +25,109 @@ public class DashboardController {
     @Autowired
     private PipedriveService pipedriveService;
 
-    @GetMapping("/dashboard")
+    /**
+     *
+     * @param model
+     * @return
+     */
+    @GetMapping("/mercadeo")
     public String viewData(Model model) {
-        Deals deals = pipedriveService.getDeals();
 
-        // Procesar conteos de tratos por fecha y etapa
-        Map<String, Integer> dealsCountByDate = pipedriveService.getDealsCountByDate(deals);
-        Map<String, Integer> stageContactados = pipedriveService.getStageDealsByDate(deals, 7);
-        Map<String, Integer> stageInteresados = pipedriveService.getStageDealsByDate(deals, 6);
-        Map<String, Integer> stageCita = pipedriveService.getStageDealsByDate(deals, 8);
-        Map<String, Integer> stageVisita = pipedriveService.getStageDealsByDate(deals, 9);
-        Map<String, Integer> stageNegociacion = pipedriveService.getStageDealsByDate(deals, 10);
-        Map<String, Integer> stageApartado = pipedriveService.getStageDealsByDate(deals, 11);
-        Map<String, Integer> wonDealsCountByDate = pipedriveService.getDealsWonCountByDate(deals);
+        // Establecer valores predeterminados para fechas si no se proporcionan
+        LocalDate startDate = LocalDate.now().withDayOfMonth(1);
+        LocalDate endDate = LocalDate.now();
+
+        // Generar el rango de fechas basado en startDate y endDate
+        List<String> dates = new ArrayList<>();
+
+        LocalDate currentDate = startDate;
+        while (!currentDate.isAfter(endDate)) {
+            dates.add(currentDate.toString());
+            currentDate = currentDate.plusDays(1);
+        }
+
+        int start = 0;
+        int LIMIT = 500;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        List<DealsData> filteredDeals = new ArrayList<>();
+
+        while (true) {
+            Deals deals = pipedriveService.getDealsStart(start);
+            LocalDate date = null;
+
+            for (DealsData deal : deals.getData()) {
+                String addTime = deal.getAddTime();
+                LocalDateTime dateTime = LocalDateTime.parse(addTime, formatter);
+
+                // Restar 6 horas
+                LocalDateTime adjustedTime = dateTime.minusHours(6);
+                date = adjustedTime.toLocalDate();
+
+                if (!date.isBefore(startDate) && !date.isAfter(endDate)) {
+                    filteredDeals.add(deal);
+                }
+            }
+
+            assert date != null;
+            if (date.isBefore(startDate)) {
+                break;
+            }
+            start += LIMIT;
+        }
+
+        Map<String, Integer> dealsCountByDate = pipedriveService.getDealsCountByDate(filteredDeals, startDate, endDate);
+        Map<String, Integer> stageInteresados = pipedriveService.getStageDealsByDate(filteredDeals, 6, startDate, endDate);
+        Map<String, Integer> stageContactados = pipedriveService.getStageDealsByDate(filteredDeals, 7, startDate, endDate);
+        Map<String, Integer> stageCita = pipedriveService.getStageDealsByDate(filteredDeals, 8, startDate, endDate);
+        Map<String, Integer> stageVisita = pipedriveService.getStageDealsByDate(filteredDeals, 9, startDate, endDate);
+        Map<String, Integer> stageNegociacion = pipedriveService.getStageDealsByDate(filteredDeals, 10, startDate, endDate);
+        Map<String, Integer> stageApartado = pipedriveService.getStageDealsByDate(filteredDeals, 11, startDate, endDate);
+        Map<String, Integer> wonDealsCountByDate = pipedriveService.getDealsWonCountByDate(filteredDeals);
+
 
         // Recopilar razones de pérdida
         Map<String, Integer> lostReasons = new HashMap<>();
-        for (DealsData deal : deals.getData()) {
+        for (DealsData deal : filteredDeals) {
             if ("lost".equalsIgnoreCase(deal.getStatus())) {
                 String reason = deal.getLostReason();
                 if (reason != null && !reason.isEmpty()) {
-                    lostReasons.merge(reason, 1, Integer::sum);
+                    if (lostReasons.containsKey(reason)) {
+                        lostReasons.put(reason, lostReasons.get(reason) + 1);
+                    } else {
+                        lostReasons.put(reason, 1);
+                    }
                 }
             }
         }
 
         // Ordenar razones de pérdida de mayor a menor
-        Map<String, Integer> sortedLostReasons = lostReasons.entrySet()
-                .stream()
-                .sorted((entry1, entry2) -> Integer.compare(entry2.getValue(), entry1.getValue()))
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        Map.Entry::getValue,
-                        (e1, e2) -> e1,
-                        LinkedHashMap::new
-                ));
+        List<Map.Entry<String, Integer>> sortedLostReasonsList = new ArrayList<>(lostReasons.entrySet());
+        sortedLostReasonsList.sort(new Comparator<Map.Entry<String, Integer>>() {
+            @Override
+            public int compare(Map.Entry<String, Integer> entry1, Map.Entry<String, Integer> entry2) {
+                return Integer.compare(entry2.getValue(), entry1.getValue());
+            }
+        });
+
+        Map<String, Integer> sortedLostReasons = new LinkedHashMap<>();
+        for (Map.Entry<String, Integer> entry : sortedLostReasonsList) {
+            sortedLostReasons.put(entry.getKey(), entry.getValue());
+        }
 
         // Calcular el total de pérdidas
-        int totalLostReasons = sortedLostReasons.values().stream().mapToInt(Integer::intValue).sum();
+        int totalLostReasons = 0;
+        for (int value : sortedLostReasons.values()) {
+            totalLostReasons += value;
+        }
 
         // Calcular el porcentaje de pérdida para cada razón
-        Map<String, String> reasonsWithPercentages = sortedLostReasons.entrySet()
-                .stream()
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        entry -> {
-                            int count = entry.getValue();
-                            double percentage = (count * 100.0) / totalLostReasons;
-                            return String.format("%.2f%%", percentage);
-                        }
-                ));
+        Map<String, String> reasonsWithPercentages = new HashMap<>();
+        for (Map.Entry<String, Integer> entry : sortedLostReasons.entrySet()) {
+            int count = entry.getValue();
+            double percentage = (count * 100.0) / totalLostReasons;
+            reasonsWithPercentages.put(entry.getKey(), String.format("%.2f%%", percentage));
+        }
 
         // Agrupar tratos por fuente, etapa y status
         Map<String, Map<String, Integer>> dealsBySource = new HashMap<>();
@@ -82,48 +140,47 @@ public class DashboardController {
         int totalOpenDeals = 0;
         int totalLostDeals = 0;
 
-        for (DealsData deal : deals.getData()) {
+        for (DealsData deal : filteredDeals) {
             String sourceName = pipedriveService.getFuenteName(deal.getFuente());
             String stage = pipedriveService.getStageName(deal.getStageId());
             String status = deal.getStatus();
 
-            dealsBySource.computeIfAbsent(sourceName, k -> new HashMap<>()).merge(stage, 1, Integer::sum);
-            totalDealsBySource.merge(sourceName, 1, Integer::sum);
+            if (!dealsBySource.containsKey(sourceName)) {
+                dealsBySource.put(sourceName, new HashMap<>());
+            }
+            Map<String, Integer> stageCount = dealsBySource.get(sourceName);
+            stageCount.put(stage, stageCount.getOrDefault(stage, 0) + 1);
+            totalDealsBySource.put(sourceName, totalDealsBySource.getOrDefault(sourceName, 0) + 1);
 
             switch (status) {
                 case "open":
-                    openDealsBySource.merge(sourceName, 1, Integer::sum);
+                    openDealsBySource.put(sourceName, openDealsBySource.getOrDefault(sourceName, 0) + 1);
                     totalOpenDeals++;
                     break;
                 case "lost":
-                    lostDealsBySource.merge(sourceName, 1, Integer::sum);
+                    lostDealsBySource.put(sourceName, lostDealsBySource.getOrDefault(sourceName, 0) + 1);
                     totalLostDeals++;
                     break;
                 case "won":
-                    wonDealsBySource.merge(sourceName, 1, Integer::sum);
+                    wonDealsBySource.put(sourceName, wonDealsBySource.getOrDefault(sourceName, 0) + 1);
                     totalWonDeals++;
                     break;
             }
         }
 
         // Ordenar dealsBySource de mayor a menor según el número total de tratos
-        Map<String, Map<String, Integer>> sortedDealsBySource = dealsBySource.entrySet()
-                .stream()
-                .sorted((entry1, entry2) -> Integer.compare(totalDealsBySource.get(entry2.getKey()), totalDealsBySource.get(entry1.getKey())))
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        Map.Entry::getValue,
-                        (e1, e2) -> e1,
-                        LinkedHashMap::new
-                ));
+        List<Map.Entry<String, Map<String, Integer>>> sortedDealsBySourceList = new ArrayList<>(dealsBySource.entrySet());
+        sortedDealsBySourceList.sort(new Comparator<Map.Entry<String, Map<String, Integer>>>() {
+            @Override
+            public int compare(Map.Entry<String, Map<String, Integer>> entry1, Map.Entry<String, Map<String, Integer>> entry2) {
+                return Integer.compare(totalDealsBySource.get(entry2.getKey()), totalDealsBySource.get(entry1.getKey()));
+            }
+        });
 
-        // Generar el rango de fechas del 1 de julio al 31 de julio
-        LocalDate startDate = LocalDate.of(LocalDate.now().getYear(), 7, 1);
-        LocalDate endDate = LocalDate.of(LocalDate.now().getYear(), 7, 31);
-        List<String> dates = IntStream.rangeClosed(0, (int) startDate.until(endDate).getDays())
-                .mapToObj(startDate::plusDays)
-                .map(LocalDate::toString)
-                .collect(Collectors.toList());
+        Map<String, Map<String, Integer>> sortedDealsBySource = new LinkedHashMap<>();
+        for (Map.Entry<String, Map<String, Integer>> entry : sortedDealsBySourceList) {
+            sortedDealsBySource.put(entry.getKey(), entry.getValue());
+        }
 
         // Crear listas de conteos de tratos por fecha y etapa
         List<Integer> counts = pipedriveService.getCountsByDate(dates, dealsCountByDate);
@@ -136,19 +193,71 @@ public class DashboardController {
         List<Integer> wonDeals = pipedriveService.getCountsByDate(dates, wonDealsCountByDate);
 
         // Calcular los totales de tratos
-        int totalDeals = counts.stream().mapToInt(Integer::intValue).sum();
-        int totalContactados = contactados.stream().mapToInt(Integer::intValue).sum();
-        int totalInteresados = interesados.stream().mapToInt(Integer::intValue).sum();
-        int totalCitas = citas.stream().mapToInt(Integer::intValue).sum();
-        int totalVisitas = visitas.stream().mapToInt(Integer::intValue).sum();
-        int totalNegociaciones = negociaciones.stream().mapToInt(Integer::intValue).sum();
-        int totalApartados = apartados.stream().mapToInt(Integer::intValue).sum();
+        int totalDeals = 0;
+        int totalContactados = 0;
+        int totalInteresados = 0;
+        int totalCitas = 0;
+        int totalVisitas = 0;
+        int totalNegociaciones = 0;
+        int totalApartados = 0;
+
+        for (Integer count : counts) {
+            totalDeals += count;
+        }
+        for (Integer count : contactados) {
+            totalContactados += count;
+        }
+        for (Integer count : interesados) {
+            totalInteresados += count;
+        }
+        for (Integer count : citas) {
+            totalCitas += count;
+        }
+        for (Integer count : visitas) {
+            totalVisitas += count;
+        }
+        for (Integer count : negociaciones) {
+            totalNegociaciones += count;
+        }
+        for (Integer count : apartados) {
+            totalApartados += count;
+        }
+
+
+        // Obtener los datos de tratos por etapa y estado
+        Map<String, Map<String, Integer>> dealsByStageAndStatus = pipedriveService.getDealsByStageAndStatus(filteredDeals);
+
+// Crear una lista para almacenar los conteos de tratos abiertos en el orden deseado
+        List<Integer> orderedOpenDeals = new ArrayList<>();
+        List<Integer> orderedLostDeals = new ArrayList<>();
+        List<Integer> orderedWonDeals = new ArrayList<>();
+
+// Definir el orden deseado de las etapas
+        List<String> desiredOrder = Arrays.asList("Interesado", "Contactado", "Cita", "Visita", "Negociación", "Apartado");
+
+// Iterar sobre las etapas en el orden deseado
+        for (String stage : desiredOrder) {
+            Map<String, Integer> statusCounts = dealsByStageAndStatus.getOrDefault(stage, Collections.emptyMap());
+            // Obtener el número de tratos abiertos o 0 si no hay datos
+            int openCount = statusCounts.getOrDefault("open", 0);
+            orderedOpenDeals.add(openCount);
+            int lostCount = statusCounts.getOrDefault("lost", 0);
+            orderedLostDeals.add(lostCount);
+            int wonCount = statusCounts.getOrDefault("won", 0);
+            orderedWonDeals.add(wonCount);
+        }
+
+        // Obtener lista de asesores únicos
+        List<String> listAsesores = filteredDeals.stream()
+                .map(DealsData::getOwnerName)
+                .distinct()
+                .collect(Collectors.toList());
 
         // Agregar datos al modelo para ser utilizados en la vista Thymeleaf
         model.addAttribute("dealsDates", dates);
         model.addAttribute("dealsCounts", counts);
-        model.addAttribute("contactados", contactados);
         model.addAttribute("interesados", interesados);
+        model.addAttribute("contactados", contactados);
         model.addAttribute("citas", citas);
         model.addAttribute("visitas", visitas);
         model.addAttribute("negociaciones", negociaciones);
@@ -172,8 +281,286 @@ public class DashboardController {
         model.addAttribute("sortedLostReasons", sortedLostReasons);
         model.addAttribute("reasonsWithPercentages", reasonsWithPercentages);
         model.addAttribute("totalLostReasons", totalLostReasons);
-        model.addAttribute("allDealdsData", deals.getData());
+        model.addAttribute("orderedOpenDeals", orderedOpenDeals);
+        model.addAttribute("orderedLostDeals", orderedLostDeals);
+        model.addAttribute("orderedWonDeals", orderedWonDeals);
+        model.addAttribute("asesores", listAsesores);
 
-        return "index"; // Nombre de la vista Thymeleaf
+        return "mercadeo"; // Retorna la vista con los datos filtrados
+    }
+
+    @GetMapping("/comercial")
+    public String comerical(Model model){
+
+        // Establecer valores predeterminados para fechas si no se proporcionan
+        LocalDate startDate = LocalDate.now().withDayOfMonth(1);
+        LocalDate endDate = LocalDate.now();
+
+        // Generar el rango de fechas basado en startDate y endDate
+        List<String> dates = new ArrayList<>();
+
+        LocalDate currentDate = startDate;
+        while (!currentDate.isAfter(endDate)) {
+            dates.add(currentDate.toString());
+            currentDate = currentDate.plusDays(1);
+        }
+
+        int start = 0;
+        int LIMIT = 500;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        List<DealsData> filteredDeals = new ArrayList<>();
+
+        while (true) {
+            Deals deals = pipedriveService.getDealsStart(start);
+            LocalDate date = null;
+
+            for (DealsData deal : deals.getData()) {
+                String addTime = deal.getAddTime();
+                LocalDateTime dateTime = LocalDateTime.parse(addTime, formatter);
+
+                // Restar 6 horas
+                LocalDateTime adjustedTime = dateTime.minusHours(6);
+                date = adjustedTime.toLocalDate();
+
+                if (!date.isBefore(startDate) && !date.isAfter(endDate)) {
+                    filteredDeals.add(deal);
+                }
+            }
+
+            assert date != null;
+            if (date.isBefore(startDate)) {
+                break;
+            }
+            start += LIMIT;
+        }
+
+        // Crear un mapa para almacenar la suma de deals por asesor
+        Map<String, Integer> dealsByAdvisor = new HashMap<>();
+
+        // Iterar sobre la lista de filteredDeals
+        for (DealsData deal : filteredDeals) {
+            String advisor = deal.getOwnerName();  // Suponiendo que getOwnerName() devuelve el nombre del asesor
+            dealsByAdvisor.put(advisor, dealsByAdvisor.getOrDefault(advisor, 0) + 1);
+        }
+
+        // Ordenar el mapa por número de deals en orden descendente
+        List<Map.Entry<String, Integer>> sortedDealsByAdvisor = dealsByAdvisor.entrySet()
+                .stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                .toList();
+
+        model.addAttribute("sortedDealsByAdvisor", sortedDealsByAdvisor);
+
+        List<DealsData> filteredDealsByStageChange = new ArrayList<>();
+
+        while (true) {
+            Deals deals = pipedriveService.getDealsStart(start);
+
+            if (deals.getData() == null) {
+                break;
+            }
+
+            for (DealsData deal : deals.getData()) {
+                String addTime = deal.getStageChangeTime();
+                LocalDate date = null;
+
+                if (addTime != null) {
+                    // Procesar el caso donde addTime no es null
+                    LocalDateTime dateTime = LocalDateTime.parse(addTime, formatter);
+
+                    // Restar 6 horas
+                    LocalDateTime adjustedTime = dateTime.minusHours(6);
+                    date = adjustedTime.toLocalDate();
+
+                    if (!date.isBefore(startDate) && !date.isAfter(endDate)) {
+                        filteredDealsByStageChange.add(deal);
+                    }
+                }
+            }
+
+            // Incrementar el valor de `start` para la próxima iteración
+            start += LIMIT;
+        }
+
+        Map<String, AdvisorStats> advisorStatsMap = new HashMap<>();
+
+        for (DealsData deal : filteredDealsByStageChange) {
+            String advisor = deal.getOwnerName();
+            AdvisorStats stats = advisorStatsMap.getOrDefault(advisor, new AdvisorStats());
+
+            if (deal.getStageId() == 8) {
+                stats.cita++;
+                //System.out.println(deal.getPersonName() + " " + deal.getStageId() + " " + deal.getOwnerName() + " " + deal.getAddTime() + " " + deal.getStageChangeTime());
+            }
+            if (deal.getStageId() == 9) {
+                stats.cita++;
+                stats.visita++;
+                //System.out.println(deal.getPersonName() + " " + deal.getStageId() + " " + deal.getOwnerName() + " " + deal.getAddTime() + " " + deal.getStageChangeTime());
+
+            }
+            if (deal.getStageId() == 10) {
+                stats.cita++;
+                stats.visita++;
+                stats.negociacion++;
+                //System.out.println(deal.getPersonName() + " " + deal.getStageId() + " " + deal.getOwnerName() + " " + deal.getAddTime() + " " + deal.getStageChangeTime());
+
+            }
+            if (deal.getStageId() == 11) {
+                stats.cita++;
+                stats.visita++;
+                stats.negociacion++;
+                stats.apartado++;
+                //System.out.println(deal.getPersonName() + " " + deal.getStageId() + " " + deal.getOwnerName() + " " + deal.getAddTime() + " " + deal.getStageChangeTime());
+
+            }
+            if (deal.getStatus().equals("won")) {
+                stats.ganado++;
+                //System.out.println(deal.getPersonName() + " " + deal.getStageId() + " " + deal.getOwnerName() + " " + deal.getAddTime() + " " + deal.getStageChangeTime());
+
+            }
+
+            advisorStatsMap.put(advisor, stats);
+        }
+
+        // Crear una lista para almacenar la combinación de ambos
+        List<CombinedAdvisorStats> combinedList = new ArrayList<>();
+
+        for (Map.Entry<String, Integer> entry : sortedDealsByAdvisor) {
+            String advisor = entry.getKey();
+            int dealsCount = entry.getValue();
+
+            AdvisorStats stats = advisorStatsMap.getOrDefault(advisor, new AdvisorStats());
+
+            CombinedAdvisorStats combinedStats = new CombinedAdvisorStats(advisor, dealsCount,
+                    stats.getCita(), stats.getVisita(), stats.getNegociacion(),
+                    stats.getApartado(), stats.getGanado());
+
+            combinedList.add(combinedStats);
+        }
+        // Pasar la lista combinada al modelo
+        model.addAttribute("combinedAdvisorStats", combinedList);
+
+        // Inicializar los totales
+        int totalDeals = 0;
+        int totalCitas = 0;
+        int totalVisitas = 0;
+        int totalNegociaciones = 0;
+        int totalApartados = 0;
+        int totalWonDeals = 0;
+
+// Calcular totales
+        for (CombinedAdvisorStats stats : combinedList) {
+            totalDeals += stats.getDeals();
+            totalCitas += stats.getCita();
+            totalVisitas += stats.getVisita();
+            totalNegociaciones += stats.getNegociacion();
+            totalApartados += stats.getApartado();
+            totalWonDeals += stats.getGanado();
+        }
+
+// Pasar los totales al modelo
+        model.addAttribute("totalDeals", totalDeals);
+        model.addAttribute("totalCitas", totalCitas);
+        model.addAttribute("totalVisitas", totalVisitas);
+        model.addAttribute("totalNegociaciones", totalNegociaciones);
+        model.addAttribute("totalApartados", totalApartados);
+        model.addAttribute("totalWonDeals", totalWonDeals);
+
+
+        // Recopilación de actividades por asesor y por fecha
+        Map<String, Map<String, Integer>> actividadesPorAsesorYFecha = new HashMap<>();
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        List<ActivitiesData> activitiesList = new ArrayList<>();
+        List<String> asesoresList = new ArrayList<>();
+        List<Integer> processedIds = new ArrayList<>();
+
+        for (CombinedAdvisorStats asesor : combinedList) {
+            asesoresList.add(asesor.getAdvisor());
+
+            for (DealsData deal : filteredDealsByStageChange) {
+                int userId = deal.getUserId().getId();
+
+                if (!processedIds.contains(userId)) {
+                    processedIds.add(userId);
+                }
+            }
+        }
+
+        for (Integer userId : processedIds) {
+            activitiesList.addAll(pipedriveService.getAllActivities(startDate, endDate, userId));
+        }
+
+        for (ActivitiesData activity : activitiesList) {
+            System.out.println(activity.getUpdateTime() + " " + activity.getOwnerName());
+            for(String asesor : asesoresList) {
+                // Si el asesor no está en el mapa, añadirlo con un nuevo mapa de fechas y actividades
+                actividadesPorAsesorYFecha.putIfAbsent(asesor, new HashMap<>());
+
+                if (activity.getOwnerName().equals(asesor)) {
+                    LocalDateTime dateTime = LocalDateTime.parse(activity.getUpdateTime(), formatter);
+                    String fecha = dateTime.format(dateFormatter); // Formato "yyyy-MM-dd"
+                    // Sumar la actividad a la fecha correspondiente
+                    actividadesPorAsesorYFecha.get(asesor).merge(fecha, 1, Integer::sum);
+                }
+            }
+        }
+// Preparar los datos para Highcharts
+        List<String> fechas = new ArrayList<>();
+        List<Map<String, Object>> series = new ArrayList<>();
+
+// Recolectar todas las fechas únicas
+        List<String> finalFechas = fechas;
+        actividadesPorAsesorYFecha.values().forEach(map -> finalFechas.addAll(map.keySet()));
+        fechas = fechas.stream().distinct().sorted().collect(Collectors.toList());
+
+// Crear las series para cada asesor
+        for (Map.Entry<String, Map<String, Integer>> entry : actividadesPorAsesorYFecha.entrySet()) {
+            String asesor = entry.getKey();
+            Map<String, Integer> actividadesPorFecha = entry.getValue();
+
+            // Preparar la data para este asesor con valores alineados a las fechas
+            List<Integer> data = new ArrayList<>();
+            for (String fecha : fechas) {
+                data.add(actividadesPorFecha.getOrDefault(fecha, 0));
+            }
+
+            // Agregar la serie
+            series.add(Map.of("name", asesor, "data", data));
+        }
+
+        for(int i = 0; i < series.size(); i++) {
+            System.out.println(series.get(i) + " " + fechas.get(i));
+        }
+
+        model.addAttribute("fechas", fechas);
+        model.addAttribute("series", series);
+
+
+        return "comercial";
+    }
+
+
+    @Data
+    @AllArgsConstructor
+    // Clase auxiliar para combinar los datos
+    public static class CombinedAdvisorStats {
+        private String advisor;
+        private int deals;
+        private int cita;
+        private int visita;
+        private int negociacion;
+        private int apartado;
+        private int ganado;
+    }
+
+    @Data
+    public static class AdvisorStats {
+        public int cita = 0;
+        public int visita = 0;
+        public int negociacion = 0;
+        public int apartado = 0;
+        public int ganado = 0;
     }
 }
