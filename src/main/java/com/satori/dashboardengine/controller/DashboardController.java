@@ -50,11 +50,13 @@ public class DashboardController {
         int LIMIT = 500;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-        List<DealsData> filteredDeals = pipedriveService.getDealsStart(startDate, endDate);
+        List<DealsData> filteredDeals = new ArrayList<>();
+        Deals deals = pipedriveService.getDealsStart(start);
+
         while (true) {
             LocalDate date = null;
 
-            for (DealsData deal : filteredDeals) {
+            for (DealsData deal : deals.getData()) {
                 String addTime = deal.getAddTime();
                 LocalDateTime dateTime = LocalDateTime.parse(addTime, formatter);
 
@@ -287,111 +289,99 @@ public class DashboardController {
         return "mercadeo"; // Retorna la vista con los datos filtrados
     }
 
-    /**
-     *
-     * @param model
-     * @return
-     */
     @GetMapping("/comercial")
-    public String comerical(Model model) {
+    public String comercial(Model model) {
         log.info("*************** COMERCIAL ***************");
 
-        // Establecer valores predeterminados para fechas si no se proporcionan
         LocalDate startDate = LocalDate.now().withDayOfMonth(1);
         LocalDate endDate = LocalDate.now();
 
-
+        int start = 0;
+        int LIMIT = 500;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-        // Trae los deals conforme a los valores predeterminados de fechas
-        List<DealsData> dealsDataList = pipedriveService.getDealsStart(startDate, endDate);
-        List<Map.Entry<String, Integer>> sortedDealsByAdvisorList = sortedDealsByAdvisor(dealsDataList);
-        List<CombinedAdvisorStats> combinedList = combinedList(sortedDealsByAdvisorList);
-        List<DealsData> filteredDealsByStageChange = filteredDealsByStageChange(dealsDataList, startDate, endDate);
-        List<String> datesList = datesList(combinedList, filteredDealsByStageChange, startDate, endDate, formatter);
+        List<DealsData> filteredDeals = new ArrayList<>();
+        Deals deals = pipedriveService.getDealsStart(start);
 
-        // Inicializar los totales
-        int totalDeals = 0;
-        int totalCitas = 0;
-        int totalVisitas = 0;
-        int totalNegociaciones = 0;
-        int totalApartados = 0;
-        int totalWonDeals = 0;
+        while (true) {
+            LocalDate date = null;
 
-        // Ccalcular totales
-        for (CombinedAdvisorStats stats : combinedList) {
-            totalDeals += stats.getDeals();
-            totalCitas += stats.getCita();
-            totalVisitas += stats.getVisita();
-            totalNegociaciones += stats.getNegociacion();
-            totalApartados += stats.getApartado();
-            totalWonDeals += stats.getGanado();
+            for (DealsData deal : deals.getData()) {
+                String addTime = deal.getAddTime();
+                LocalDateTime dateTime = LocalDateTime.parse(addTime, formatter);
+
+                // Restar 6 horas
+                LocalDateTime adjustedTime = dateTime.minusHours(6);
+                date = adjustedTime.toLocalDate();
+
+                if (!date.isBefore(startDate) && !date.isAfter(endDate)) {
+                    filteredDeals.add(deal);
+                }
+            }
+
+            assert date != null;
+            if (date.isBefore(startDate)) {
+                break;
+            }
+            start += LIMIT;
         }
-
-        model.addAttribute("fechas", datesList);
-        model.addAttribute("series", series(datesList));
-
-        // Pasar los totales al modelo
-        model.addAttribute("totalDeals", totalDeals);
-        model.addAttribute("totalCitas", totalCitas);
-        model.addAttribute("totalVisitas", totalVisitas);
-        model.addAttribute("totalNegociaciones", totalNegociaciones);
-        model.addAttribute("totalApartados", totalApartados);
-        model.addAttribute("totalWonDeals", totalWonDeals);
-
-        // Pasar la lista de Deals/Asesor
-        model.addAttribute("sortedDealsByAdvisor", sortedDealsByAdvisorList);
-
-        // Pasar la lista combinada al modelo
-        model.addAttribute("combinedAdvisorStats", combinedList);
-
-        return "comercial";
-    }
-
-    public List<Map.Entry<String, Integer>> sortedDealsByAdvisor(List<DealsData> dealsDataList) {
 
         // Crear un mapa para almacenar la suma de deals por asesor
         Map<String, Integer> dealsByAdvisor = new HashMap<>();
 
-        // Iterar sobre la lista de dealsDataList
-        for (DealsData deal : dealsDataList) {
+        // Iterar sobre la lista de filteredDeals
+        for (DealsData deal : filteredDeals) {
             String advisor = deal.getOwnerName();  // Suponiendo que getOwnerName() devuelve el nombre del asesor
             dealsByAdvisor.put(advisor, dealsByAdvisor.getOrDefault(advisor, 0) + 1);
         }
 
         // Ordenar el mapa por número de deals en orden descendente
-
-        return dealsByAdvisor.entrySet()
+        List<Map.Entry<String, Integer>> sortedDealsByAdvisor = dealsByAdvisor.entrySet()
                 .stream()
                 .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
                 .toList();
-    }
 
-    Map<String, AdvisorStats> advisorStatsMap = new HashMap<>();
+        model.addAttribute("sortedDealsByAdvisor", sortedDealsByAdvisor);
 
-    public List<DealsData> filteredDealsByStageChange(List<DealsData> dealsDataList, LocalDate startDate, LocalDate endDate){
-        LocalDate date;
         List<DealsData> filteredDealsByStageChange = new ArrayList<>();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-        for (DealsData deal : dealsDataList) {
-            String addTime = deal.getStageChangeTime();
+        start = 0;
+        while (true) {
+            System.out.println("start= " + start);
 
-            // Procesar el caso donde addTime no es null
-            LocalDateTime dateTime = LocalDateTime.parse(addTime, formatter);
-
-            // Restar 6 horas
-            LocalDateTime adjustedTime = dateTime.minusHours(6);
-            date = adjustedTime.toLocalDate();
-
-            if (!date.isBefore(startDate) && !date.isAfter(endDate)) {
-                filteredDealsByStageChange.add(deal);
+            if (deals.getData() == null) {
+                break;
             }
+
+            for (DealsData deal : deals.getData()) {
+                String addTime = deal.getStageChangeTime();
+                LocalDate date = null;
+
+                if (addTime != null) {
+                    // Procesar el caso donde addTime no es null
+                    LocalDateTime dateTime = LocalDateTime.parse(addTime, formatter);
+
+                    // Restar 6 horas
+                    LocalDateTime adjustedTime = dateTime.minusHours(6);
+                    date = adjustedTime.toLocalDate();
+
+                    if (!date.isBefore(startDate) && !date.isAfter(endDate)) {
+                        filteredDealsByStageChange.add(deal);
+                    }
+                }
+            }
+
+            // Incrementar el valor de `start` para la próxima iteración
+            start += LIMIT;
         }
+
+        Map<String, DashboardController.AdvisorStats> advisorStatsMap = new HashMap<>();
+
+        DashboardController.AdvisorStats stats;
 
         for (DealsData deal : filteredDealsByStageChange) {
             String advisor = deal.getOwnerName();
-            AdvisorStats stats = advisorStatsMap.getOrDefault(advisor, new AdvisorStats());
+            stats = advisorStatsMap.getOrDefault(advisor, new DashboardController.AdvisorStats());
 
             if (deal.getStageId() == 8) {
                 stats.cita++;
@@ -415,7 +405,10 @@ public class DashboardController {
                 stats.visita++;
                 stats.negociacion++;
                 stats.apartado++;
-                //System.out.println(deal.getPersonName() + " " + deal.getStageId() + " " + deal.getOwnerName() + " " + deal.getAddTime() + " " + deal.getStageChangeTime());
+
+                if(deal.getOwnerName().equals("Norberto Huerta")){
+                    System.out.println(deal.getPersonName());
+                }
 
             }
             if (deal.getStatus().equals("won")) {
@@ -424,45 +417,67 @@ public class DashboardController {
 
             }
 
+//            System.out.println("citas: " + stats.getCita());
+//            System.out.println("visitas: " + stats.getVisita());
+//            System.out.println("negociaciones: " + stats.getNegociacion());
+//            System.out.println("apartados: " + stats.getApartado());
+//            System.out.println(advisorStatsMap);
             advisorStatsMap.put(advisor, stats);
         }
 
-        return filteredDealsByStageChange;
-    }
-
-    public List<CombinedAdvisorStats> combinedList(List<Map.Entry<String, Integer>> sortedDealsByAdvisor) {
-
         // Crear una lista para almacenar la combinación de ambos
-        List<CombinedAdvisorStats> combinedList = new ArrayList<>();
+        List<DashboardController.CombinedAdvisorStats> combinedList = new ArrayList<>();
 
         for (Map.Entry<String, Integer> entry : sortedDealsByAdvisor) {
             String advisor = entry.getKey();
             int dealsCount = entry.getValue();
 
-            AdvisorStats stats = advisorStatsMap.getOrDefault(advisor, new AdvisorStats());
+            stats = advisorStatsMap.getOrDefault(advisor, new DashboardController.AdvisorStats());
 
-            CombinedAdvisorStats combinedStats = new CombinedAdvisorStats(advisor, dealsCount,
+            DashboardController.CombinedAdvisorStats combinedStats = new DashboardController.CombinedAdvisorStats(advisor, dealsCount,
                     stats.getCita(), stats.getVisita(), stats.getNegociacion(),
                     stats.getApartado(), stats.getGanado());
 
             combinedList.add(combinedStats);
         }
-        return combinedList;
-    }
+        // Pasar la lista combinada al modelo
+        model.addAttribute("combinedAdvisorStats", combinedList);
 
-    Map<String, Map<String, Integer>> actividadesPorAsesorYFecha = new HashMap<>();
+        // Inicializar los totales
+        int totalDeals = 0;
+        int totalCitas = 0;
+        int totalVisitas = 0;
+        int totalNegociaciones = 0;
+        int totalApartados = 0;
+        int totalWonDeals = 0;
 
-    public List<String> datesList(List<CombinedAdvisorStats> combinedList, List<DealsData> filteredDealsByStageChange, LocalDate startDate, LocalDate endDate, DateTimeFormatter formatter){
-        List<String> datesList = new ArrayList<>();
+// Calcular totales
+        for (DashboardController.CombinedAdvisorStats stat : combinedList) {
+            totalDeals += stat.getDeals();
+            totalCitas += stat.getCita();
+            totalVisitas += stat.getVisita();
+            totalNegociaciones += stat.getNegociacion();
+            totalApartados += stat.getApartado();
+            totalWonDeals += stat.getGanado();
+        }
+
+// Pasar los totales al modelo
+        model.addAttribute("totalDeals", totalDeals);
+        model.addAttribute("totalCitas", totalCitas);
+        model.addAttribute("totalVisitas", totalVisitas);
+        model.addAttribute("totalNegociaciones", totalNegociaciones);
+        model.addAttribute("totalApartados", totalApartados);
+        model.addAttribute("totalWonDeals", totalWonDeals);
 
         // Recopilación de actividades por asesor y por fecha
+        Map<String, Map<String, Integer>> actividadesPorAsesorYFecha = new HashMap<>();
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         List<ActivitiesData> activitiesList = new ArrayList<>();
         List<String> asesoresList = new ArrayList<>();
         List<Integer> processedIds = new ArrayList<>();
 
-        for (CombinedAdvisorStats asesor : combinedList) {
+        for (DashboardController.CombinedAdvisorStats asesor : combinedList) {
             asesoresList.add(asesor.getAdvisor());
 
             for (DealsData deal : filteredDealsByStageChange) {
@@ -492,22 +507,16 @@ public class DashboardController {
                 }
             }
         }
-
-        // Preparar los datos para Highcharts
+// Preparar los datos para Highcharts
         List<String> fechas = new ArrayList<>();
+        List<Map<String, Object>> series = new ArrayList<>();
 
-        // Recolectar todas las fechas únicas
+// Recolectar todas las fechas únicas
         List<String> finalFechas = fechas;
         actividadesPorAsesorYFecha.values().forEach(map -> finalFechas.addAll(map.keySet()));
         fechas = fechas.stream().distinct().sorted().collect(Collectors.toList());
 
-        return datesList;
-    }
-
-    public List<Map<String, Object>> series(List<String> fechas){
-
-        List<Map<String, Object>> series = new ArrayList<>();
-        // Crear las series para cada asesor
+// Crear las series para cada asesor
         for (Map.Entry<String, Map<String, Integer>> entry : actividadesPorAsesorYFecha.entrySet()) {
             String asesor = entry.getKey();
             Map<String, Integer> actividadesPorFecha = entry.getValue();
@@ -525,13 +534,15 @@ public class DashboardController {
         for(int i = 0; i < series.size(); i++) {
             System.out.println(series.get(i) + " " + fechas.get(i));
         }
-        return series;
-    }
 
+        model.addAttribute("fechas", fechas);
+        model.addAttribute("series", series);
+
+        return "comercial";
+    }
 
     @Data
     @AllArgsConstructor
-    // Clase auxiliar para combinar los datos
     public static class CombinedAdvisorStats {
         private String advisor;
         private int deals;
@@ -549,5 +560,11 @@ public class DashboardController {
         public int negociacion = 0;
         public int apartado = 0;
         public int ganado = 0;
+
+        public int getCita() { return cita; }
+        public int getVisita() { return visita; }
+        public int getNegociacion() { return negociacion; }
+        public int getApartado() { return apartado; }
+        public int getGanado() { return ganado; }
     }
 }

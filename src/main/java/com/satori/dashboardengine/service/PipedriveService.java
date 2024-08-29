@@ -18,8 +18,8 @@ public class PipedriveService {
     @Autowired
     PipedriveBo pipedriveBo;
 
-    public List<DealsData> getDealsStart(LocalDate startDate, LocalDate endDate){
-        return pipedriveBo.getDealsStart(startDate, endDate);
+    public Deals getDealsStart(Integer start){
+        return pipedriveBo.getDealsStart(start);
     }
 
     public List<ActivitiesData> getAllActivities(LocalDate start, LocalDate end, int userId){
