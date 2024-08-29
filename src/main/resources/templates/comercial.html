@@ -1,351 +1,31 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns="http://www.w3.org/1999/html">
 
 <head>
-    <link rel="stylesheet" href="/path/to/styles.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard de Tratos</title>
-    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <meta http-equiv="Cache-Control" content="no-store">
+    <title>Satori Dashboard</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/stylesComercial.css}">
+
+    <!-- Highcharts -->
+    <script src="https://code.highcharts.com/highcharts.js" defer></script>
+
+    <!-- Bootstrap JS Bundle (includes Popper) -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js" defer></script>
+
+    <!-- Custom JavaScript -->
+    <script src="/js/scriptsComercial.js" defer></script>
+
 </head>
-<style>
-    /* Estilo general del cuerpo */
-    body {
-        background-color: #323339;
-        margin: 0;
-        padding: 0;
-        font-family: "Arial", sans-serif;
-        color: #ffffff;
-        /* Color del texto */
-    }
-
-    /* Contenedor principal */
-    .navbar-container {
-        width: 100%;
-        /* Ajusta el ancho de la navbar */
-        max-width: 100%;
-        /* Ancho máximo para la navbar */
-        margin: 0px;
-        z-index: 99999;
-        position: relative;
-    }
-
-    /* Estilos del navbar */
-    .navbar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background-color: #333;
-        padding: 0px 200px;
-        color: #fff;
-        position: fixed;
-        height: 70px;
-    }
-
-    .navbar-logo a {
-        color: #fff;
-        text-decoration: none;
-        font-size: 24px;
-        font-weight: bold;
-    }
-
-    /* Aplica la fuente a los textos del gráfico */
-    .highcharts-title,
-    .highcharts-subtitle,
-    .highcharts-axis-labels text,
-    .highcharts-legend text,
-    .highcharts-tooltip text {
-        font-family: "Arial", monospace;
-        /* Aplica la fuente */
-    }
-
-    .kpi-title-1 {
-        text-align: center;
-        /* Centra el título en la página */
-        font-size: 20px;
-        /* Tamaño de la fuente */
-        margin-bottom: 50px;
-        /* Espacio entre el título y los KPIs */
-        position: absolute;
-        top: 100px;
-        width: 45%;
-        /* Asegura que el fondo cubra toda la anchura */
-        color: #ffffff;
-        /* Color del texto */
-        background-color: #a1725a;
-        /* Color de fondo corregido */
-        padding: 20px 0;
-        /* Espacio interior para mejorar la legibilidad */
-    }
-
-    .kpi-title-2 {
-        text-align: center;
-        /* Centra el título en la página */
-        font-size: 20px;
-        /* Tamaño de la fuente */
-        margin-bottom: 20px;
-        /* Espacio entre el título y los KPIs */
-        position: absolute;
-        margin-top: 250px;
-        width: 45%;
-        /* Asegura que el fondo cubra toda la anchura */
-        color: #ffffff;
-        /* Color del texto */
-        background-color: #a1725a;
-        /* Color de fondo corregido */
-        padding: 20px 0;
-        /* Espacio interior para mejorar la legibilidad */
-    }
-
-    /* Estilo de la gráfica */
-    .chart-container {
-        position: relative;
-        margin-top: 30px;
-        width: 50%;
-        /* Ajusta el ancho del contenedor a tu preferencia */
-        height: 350px;
-        /* La altura se ajustará automáticamente según el contenido */
-        margin: 0px auto;
-        /* Centra el contenedor horizontalmente con margen */
-        border-radius: 4px;
-        /* Bordes redondeados para el contenedor */
-        background-color: #1f1d1c;
-        /* Color de fondo del contenedor */
-        padding: 10px;
-        /* Espaciado interno */
-        top: 350px;
-    }
-
-    /* Contenedor centrado para las tablas */
-    .table-chart-container {
-        width: 80%;
-        /* Ajusta el ancho del contenedor */
-        margin: 20px auto;
-        /* Centra el contenedor horizontalmente con margen */
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-    }
-
-    /* Estilos para las tablas de fuentes */
-    .source-table {
-        width: 70%;
-        /* Ocupa el 100% del ancho del contenedor padre */
-        border-collapse: collapse;
-        /* Colapsa los bordes de las celdas adyacentes para que no se dupliquen */
-        font-family: "Arial";
-        /* Establece la fuente de texto de la tabla como Arial */
-        font-size: 9px;
-        /* Define el tamaño de la fuente dentro de la tabla */
-        position: relative;
-        /* Establece el posicionamiento de la tabla como relativo. Esto es útil si se aplican posicionamientos absolutos a elementos hijos */
-        top: 220px;
-        /* Añade un margen superior de 100 píxeles para separar la tabla del contenido superior */
-        margin: 0 auto;
-        /* Centra la tabla horizontalmente en su contenedor. La propiedad auto aplica márgenes automáticos a los lados izquierdo y derecho, mientras que el margen superior es de 0 píxeles */
-        table-layout: fixed;
-        /* Establece el diseño de la tabla en modo fijo, lo que asegura que las columnas tengan un ancho uniforme basado en el ancho especificado de la tabla */
-        background-color: #333333;
-    }
-
-    .source-table-reason {
-        width: 50%;
-        /* Ocupa el 45% del ancho del contenedor padre */
-        border-collapse: collapse;
-        font-family: "Arial";
-        font-size: 11px;
-        /* Tamaño de fuente reducido */
-        position: relative;
-        margin-top: 100px;
-        margin: 0 auto;
-        table-layout: fixed;
-    }
-
-    .source-table th {
-        border: 1px solid #333333;
-        padding: 11px;
-        text-align: left;
-        background-color: #333333;
-    }
-
-    .source-table td {
-        border: 0px solid #000000;
-        padding: 11px;
-        text-align: left;
-    }
-
-    .source-table-reason th {
-        border: 1px solid #000000;
-        padding: 8px;
-        text-align: left;
-    }
-
-    .source-table-reason td {
-        border: 0px solid #000000;
-        padding: 8px;
-        text-align: left;
-    }
-
-    .source-table th {
-        background-color: #a1725a;
-        /* Fondo de la cabecera */
-        color: white;
-        /* Color del texto de la cabecera */
-        text-align: left;
-    }
-
-    .source-table-reason th {
-        background-color: #a1725a;
-        /* Fondo de la cabecera */
-        color: white;
-        /* Color del texto de la cabecera */
-        text-align: left;
-    }
-
-    .source-table td {
-        text-align: left;
-        background-color: #333333;
-        color: #ffffff;
-    }
-
-    .source-table-reason td {
-        text-align: left;
-        color: #ffffff;
-        background-color: #333333;
-    }
-
-    .source-table tr.highlight {
-        background-color: #ff6347;
-        /* Color para filas resaltadas */
-    }
-
-    .source-table-reason tr.highlight {
-        background-color: #ff6347;
-        /* Color para filas resaltadas */
-    }
-
-    /* Estilo del contenedor del gráfico circular */
-    #pie-container {
-        width: 45%;
-        /* Ajusta el ancho del contenedor */
-        height: 650px;
-        /* Ajusta la altura según sea necesario */
-        margin: 0 auto;
-        /* Centra el gráfico horizontalmente con margen */
-        background-color: #1f1d1c;
-        /* Color de fondo del gráfico */
-        font-family: "Arial", monospace;
-        /* Aplica la fuente */
-        border-radius: 4px;
-        /* Bordes redondeados */
-    }
-
-    /* Estilos para el formulario de filtros */
-    #filter-form {
-        display: flex;
-        align-items: center;
-        padding: 20px;
-        max-width: max-content;
-        width: max-content;
-        margin: 100px auto;
-        gap: 20px;
-    }
-
-    .select-container {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-    }
-
-    #filter-form select {
-        width: auto;
-        padding: 10px;
-        border: 1px solid #1f1d1c;
-        color: #ffffff;
-        background: #1f1d1c;
-        border-radius: 4px;
-        font-size: 16px;
-        box-sizing: border-box;
-    }
-
-    #filter-form button {
-        background-color: #1f1d1c;
-        color: #fff;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 4px;
-        font-size: 16px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-
-    #filter-form button:hover {
-        background-color: #1f1d1c;
-    }
-
-    #filter-form button:focus {
-        outline: none;
-    }
-
-    .menu {
-        display: none;
-        flex-direction: column;
-        width: 200px;
-        background-color: #333;
-        position: absolute;
-        top: 60px;
-        left: 10px;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    }
-
-    .menu a {
-        padding: 15px;
-        color: white;
-        text-decoration: none;
-        text-align: center;
-    }
-
-    .menu a:hover {
-        background-color: #555;
-    }
-
-    .hamburger {
-        cursor: pointer;
-        padding: 15px;
-        background-color: #333;
-        color: white;
-        display: inline-block;
-        border-radius: 5px;
-        margin: 10px;
-        position: relative;
-    }
-
-    .hamburger div {
-        width: 30px;
-        height: 3px;
-        background-color: white;
-        margin: 5px 0;
-        transition: all 0.3s ease;
-    }
-
-    .hamburger.active div:nth-child(1) {
-        transform: rotate(45deg) translate(5px, 5px);
-    }
-
-    .hamburger.active div:nth-child(2) {
-        opacity: 0;
-    }
-
-    .hamburger.active div:nth-child(3) {
-        transform: rotate(-45deg) translate(5px, -5px);
-    }
-</style>
 
 <body>
+
 <div class="navbar-container">
     <nav class="navbar">
         <div class="navbar-logo">
@@ -363,18 +43,9 @@
             <a href="/comercial">Comercial</a>
         </div>
 
-        <script>
-            function toggleMenu() {
-                const menu = document.getElementById('menu');
-                const hamburger = document.querySelector('.hamburger');
-                menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
-                hamburger.classList.toggle('active');
-            }
-        </script>
-
         <!-- Formulario de filtro dentro de la navbar -->
         <div class="container">
-            <form id="filter-form" action="/mercadeoFilter" method="post">
+            <form id="filter-form" action="/filterComercial" method="post">
                 <select id="source-select" name="source">
                     <option value="all">Fuente</option>
                     <option value="67">Cartera Propia</option>
@@ -383,11 +54,13 @@
                     <option value="28">Facebook</option>
                     <option value="30">Instagram</option>
                     <option value="114">LinkedIn</option>
+                    <option value="71">Real Estate</option>
                     <option value="23">Referido</option>
                     <option value="77">Sitio Web</option>
                     <option value="69">Tapial Obra</option>
                     <option value="70">Tapial ShowRoom</option>
                     <option value="87">TikTok</option>
+                    <option value="73">Valla Publicitaria</option>
                     <option value="65">WhatsApp</option>
                     <option value="18">X</option>
                     <option value="26">YouTube</option>
@@ -413,13 +86,15 @@
 </div>
 
 <!-- Título general para los KPIs -->
-<h2 class="kpi-title-1">¿La estrategia nos entrega suficientes Leads de calidad?</h2>
+<h2 class="kpi-title-1">¿Qué hicieron los asesores este periodo?</h2>
+
 <!-- Tabla para mostrar datos por asesor -->
 <table class="source-table">
     <thead>
+
     <tr>
         <th>Asesor</th>
-        <th>Deals</th>
+        <th>Leads</th>
         <th>Citas</th>
         <th>Visitas</th>
         <th>Negociaciones</th>
@@ -428,6 +103,7 @@
     </tr>
     </thead>
     <tbody>
+
     <!-- Iterar sobre la lista combinada de asesores y estadísticas -->
     <tr th:each="entry : ${combinedAdvisorStats}">
         <td th:text="${entry.advisor}">Nombre del Asesor</td>
@@ -440,6 +116,8 @@
     </tr>
     </tbody>
     <tfoot>
+
+    <!-- Muestra los totales en el pie de la tabla -->
     <tr>
         <th>Total</th>
         <td th:text="${totalDeals}" style="text-align: center;">0</td>
@@ -454,66 +132,18 @@
 </table>
 
 <!-- Título general para los KPIs -->
-<h2 class="kpi-title-2">¿La estrategia nos entrega suficientes Leads de calidad?</h2>
-<!-- Contenedor para la gráfica -->
+<h2 class="kpi-title-2">¿Cuántas actividades se realizaron este periodo?</h2>
+
+<!-- Gráfica de tendencia -->
 <div id="chart-container" class="chart-container"></div>
-<script th:inline="javascript">
+
+<!-- Contenedor para la gráfica -->
+<script>
     /*<![CDATA[*/
-    document.addEventListener('DOMContentLoaded', function() {
-        Highcharts.chart('chart-container', {
-            chart: {
-                backgroundColor: '#1F1D1C',
-                type: 'line'
-            },
-            title: {
-                text: '',
-                style: {
-                    color: '#FFFFFF'
-                }
-            },
-            xAxis: {
-                categories: /*[[${fechas}]]*/ , // Array de fechas
-                labels: {
-                    rotation: -45,
-                    style: {
-                        color: '#FFFFFF'
-                    }
-                }
-            },
-            yAxis: {
-                title: {
-                    text: 'Actividades',
-                    style: {
-                        color: '#FFFFFF'
-                    }
-                },
-                labels: {
-                    style: {
-                        color: '#FFFFFF'
-                    }
-                }
-            },
-            legend: {
-                itemStyle: {
-                    color: '#FFFFFF'
-                }
-            },
-            plotOptions: {
-                line: {
-                    dataLabels: {
-                        enabled: true,
-                        style: {
-                            color: '#FFFFFF'
-                        }
-                    },
-                    enableMouseTracking: true
-                }
-            },
-            series: /*[[${series}]]*/ // Array de objetos, cada uno representando a un asesor
-        });
-    });
+        var fechas = /*[[${fechas}]]*/;
+        var series = /*[[${series}]]*/;
     /*]]>*/
 </script>
-</body>
 
+</body>
 </html>

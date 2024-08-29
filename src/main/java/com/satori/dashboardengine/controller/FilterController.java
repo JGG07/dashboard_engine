@@ -1,5 +1,6 @@
 package com.satori.dashboardengine.controller;
 
+import com.satori.dashboardengine.dto.ActivitiesData;
 import com.satori.dashboardengine.dto.Deals;
 import com.satori.dashboardengine.dto.DealsData;
 import com.satori.dashboardengine.service.PipedriveService;
@@ -539,74 +540,74 @@ public class FilterController {
         model.addAttribute("totalApartados", totalApartados);
         model.addAttribute("totalWonDeals", totalWonDeals);
 
-//        // Recopilación de actividades por asesor y por fecha
-//        Map<String, Map<String, Integer>> actividadesPorAsesorYFecha = new HashMap<>();
-//        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-//
-//        List<ActivitiesData> activitiesList = new ArrayList<>();
-//        List<String> asesoresList = new ArrayList<>();
-//        List<Integer> processedIds = new ArrayList<>();
-//
-//        for (CombinedAdvisorStats asesor : combinedList) {
-//            asesoresList.add(asesor.getAdvisor());
-//
-//            for (DealsData deal : filteredDealsByStageChange) {
-//                int userId = deal.getUserId().getId();
-//
-//                if (!processedIds.contains(userId)) {
-//                    processedIds.add(userId);
-//                }
-//            }
-//        }
-//
-//        for (Integer userId : processedIds) {
-//            activitiesList.addAll(pipedriveService.getAllActivities(startDate, endDate, userId));
-//        }
-//
-//        for (ActivitiesData activity : activitiesList) {
-//            System.out.println(activity.getUpdateTime() + " " + activity.getOwnerName());
-//            for(String asesor : asesoresList) {
-//                // Si el asesor no está en el mapa, añadirlo con un nuevo mapa de fechas y actividades
-//                actividadesPorAsesorYFecha.putIfAbsent(asesor, new HashMap<>());
-//
-//                if (activity.getOwnerName().equals(asesor)) {
-//                    LocalDateTime dateTime = LocalDateTime.parse(activity.getUpdateTime(), formatter);
-//                    String fecha = dateTime.format(dateFormatter); // Formato "yyyy-MM-dd"
-//                    // Sumar la actividad a la fecha correspondiente
-//                    actividadesPorAsesorYFecha.get(asesor).merge(fecha, 1, Integer::sum);
-//                }
-//            }
-//        }
-//// Preparar los datos para Highcharts
-//        List<String> fechas = new ArrayList<>();
-//        List<Map<String, Object>> series = new ArrayList<>();
-//
-//// Recolectar todas las fechas únicas
-//        List<String> finalFechas = fechas;
-//        actividadesPorAsesorYFecha.values().forEach(map -> finalFechas.addAll(map.keySet()));
-//        fechas = fechas.stream().distinct().sorted().collect(Collectors.toList());
-//
-//// Crear las series para cada asesor
-//        for (Map.Entry<String, Map<String, Integer>> entry : actividadesPorAsesorYFecha.entrySet()) {
-//            String asesor = entry.getKey();
-//            Map<String, Integer> actividadesPorFecha = entry.getValue();
-//
-//            // Preparar la data para este asesor con valores alineados a las fechas
-//            List<Integer> data = new ArrayList<>();
-//            for (String fecha : fechas) {
-//                data.add(actividadesPorFecha.getOrDefault(fecha, 0));
-//            }
-//
-//            // Agregar la serie
-//            series.add(Map.of("name", asesor, "data", data));
-//        }
-//
-//        for(int i = 0; i < series.size(); i++) {
-//            System.out.println(series.get(i) + " " + fechas.get(i));
-//        }
-//
-//        model.addAttribute("fechas", fechas);
-//        model.addAttribute("series", series);
+        // Recopilación de actividades por asesor y por fecha
+        Map<String, Map<String, Integer>> actividadesPorAsesorYFecha = new HashMap<>();
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        List<ActivitiesData> activitiesList = new ArrayList<>();
+        List<String> asesoresList = new ArrayList<>();
+        List<Integer> processedIds = new ArrayList<>();
+
+        for (DashboardController.CombinedAdvisorStats asesor : combinedList) {
+            asesoresList.add(asesor.getAdvisor());
+
+            for (DealsData deal : filteredDealsByStageChange) {
+                int userId = deal.getUserId().getId();
+
+                if (!processedIds.contains(userId)) {
+                    processedIds.add(userId);
+                }
+            }
+        }
+
+        for (Integer userId : processedIds) {
+            activitiesList.addAll(pipedriveService.getAllActivities(startDate, endDate, userId));
+        }
+
+        for (ActivitiesData activity : activitiesList) {
+            System.out.println(activity.getUpdateTime() + " " + activity.getOwnerName());
+            for(String asesor : asesoresList) {
+                // Si el asesor no está en el mapa, añadirlo con un nuevo mapa de fechas y actividades
+                actividadesPorAsesorYFecha.putIfAbsent(asesor, new HashMap<>());
+
+                if (activity.getOwnerName().equals(asesor)) {
+                    LocalDateTime dateTime = LocalDateTime.parse(activity.getUpdateTime(), formatter);
+                    String fecha = dateTime.format(dateFormatter); // Formato "yyyy-MM-dd"
+                    // Sumar la actividad a la fecha correspondiente
+                    actividadesPorAsesorYFecha.get(asesor).merge(fecha, 1, Integer::sum);
+                }
+            }
+        }
+// Preparar los datos para Highcharts
+        List<String> fechas = new ArrayList<>();
+        List<Map<String, Object>> series = new ArrayList<>();
+
+// Recolectar todas las fechas únicas
+        List<String> finalFechas = fechas;
+        actividadesPorAsesorYFecha.values().forEach(map -> finalFechas.addAll(map.keySet()));
+        fechas = fechas.stream().distinct().sorted().collect(Collectors.toList());
+
+// Crear las series para cada asesor
+        for (Map.Entry<String, Map<String, Integer>> entry : actividadesPorAsesorYFecha.entrySet()) {
+            String asesor = entry.getKey();
+            Map<String, Integer> actividadesPorFecha = entry.getValue();
+
+            // Preparar la data para este asesor con valores alineados a las fechas
+            List<Integer> data = new ArrayList<>();
+            for (String fecha : fechas) {
+                data.add(actividadesPorFecha.getOrDefault(fecha, 0));
+            }
+
+            // Agregar la serie
+            series.add(Map.of("name", asesor, "data", data));
+        }
+
+        for(int i = 0; i < series.size(); i++) {
+            System.out.println(series.get(i) + " " + fechas.get(i));
+        }
+
+        model.addAttribute("fechas", fechas);
+        model.addAttribute("series", series);
 
         return "comercial";
     }

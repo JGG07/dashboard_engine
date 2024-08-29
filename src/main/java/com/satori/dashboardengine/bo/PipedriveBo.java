@@ -5,6 +5,7 @@ import com.satori.dashboardengine.dto.Activities;
 import com.satori.dashboardengine.dto.ActivitiesData;
 import com.satori.dashboardengine.dto.Deals;
 import com.satori.dashboardengine.dto.DealsData;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -16,19 +17,76 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @Component
+@Log4j2
 public class PipedriveBo {
 
     private final RestTemplate restTemplate;
     private final PipedriveConfig pipedriveConfig;
+
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public PipedriveBo(RestTemplate restTemplate, PipedriveConfig pipedriveConfig) {
         this.restTemplate = restTemplate;
         this.pipedriveConfig = pipedriveConfig;
     }
 
-    public Deals getDeals(){
-        String url = pipedriveConfig.getApiUrl() + "/deals?api_token=" + pipedriveConfig.getApiToken() + "&limit=500&filter_id=91";
-        return restTemplate.getForObject(url, Deals.class);
+    /**
+     *
+     * @param startDate
+     * @param endDate
+     * @return
+     */
+    public List<DealsData> getDealsStart(LocalDate startDate, LocalDate endDate){
+        log.info("*************** GET DEALS ***************");
+
+        int start = 0;
+        int LIMIT = 500;
+
+        StringBuilder url = new StringBuilder();
+        List<DealsData> dealsDataList = new ArrayList<>();
+
+        url.append(pipedriveConfig.getApiUrl())
+                .append("/deals?api_token=")
+                .append(pipedriveConfig.getApiToken())
+                .append("&limit=")
+                .append(LIMIT)
+                .append("&start=")
+                .append(start)
+                .append("&sort=add_time DESC");
+        try {
+            Deals deals = restTemplate.getForObject(url.toString(), Deals.class);
+
+            while (true) {
+                LocalDate date = null;
+
+                assert deals != null;
+                for (DealsData deal : deals.getData()) {
+                    String addTime = deal.getAddTime();
+                    LocalDateTime dateTime = LocalDateTime.parse(addTime, formatter);
+
+                    // Restar 6 horas
+                    LocalDateTime adjustedTime = dateTime.minusHours(6);
+                    date = adjustedTime.toLocalDate();
+
+                    if (!date.isBefore(startDate) && !date.isAfter(endDate)) {
+                        dealsDataList.add(deal);
+                    }
+                }
+
+                assert date != null;
+                if (date.isBefore(startDate)) {
+                    break;
+                }
+
+                start += LIMIT;
+            }
+
+            return dealsDataList;
+        } catch (Exception e){
+            log.error("*************** " + e.getMessage() + " ***************");
+            return dealsDataList;
+        }
+
     }
 
     public List<ActivitiesData> getAllActivities(LocalDate startDate, LocalDate endDate, int userId){
@@ -51,11 +109,6 @@ public class PipedriveBo {
             }
         }
         return activitiesDataList;
-    }
-
-    public Deals getDealsStart(Integer start){
-        String url = pipedriveConfig.getApiUrl() + "/deals?api_token=" + pipedriveConfig.getApiToken() + "&limit=500" + "&start=" + start + "&sort=add_time DESC";
-        return restTemplate.getForObject(url, Deals.class);
     }
 
     // Procesar los datos de los tratos para obtener conteos por fecha y etapa
