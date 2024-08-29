@@ -69,13 +69,12 @@ public class FilterController {
         int LIMIT = 500;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-        List<DealsData> filteredDeals = new ArrayList<>();
+        List<DealsData> filteredDeals = pipedriveService.getDealsStart(startDate, endDate);
 
         while (true) {
-            Deals deals = pipedriveService.getDealsStart(start);
             LocalDate date = null;
 
-            for (DealsData deal : deals.getData()) {
+            for (DealsData deal : filteredDeals) {
                 String addTime = deal.getAddTime();
                 LocalDateTime dateTime = LocalDateTime.parse(addTime, formatter);
 
@@ -368,15 +367,14 @@ public class FilterController {
         int LIMIT = 500;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-        List<DealsData> filteredDeals = new ArrayList<>();
+        List<DealsData> filteredDeals = pipedriveService.getDealsStart(startDate, endDate);
 
         int start = 0;
         while (true) {
             System.out.println("start= " + start);
-            Deals deals = pipedriveService.getDealsStart(start);
             LocalDate date = null;
 
-            for (DealsData deal : deals.getData()) {
+            for (DealsData deal : filteredDeals) {
                 String addTime = deal.getAddTime();
                 LocalDateTime dateTime = LocalDateTime.parse(addTime, formatter);
 
@@ -413,18 +411,17 @@ public class FilterController {
 
         model.addAttribute("sortedDealsByAdvisor", sortedDealsByAdvisor);
 
-        List<DealsData> filteredDealsByStageChange = new ArrayList<>();
+        List<DealsData> filteredDealsByStageChange = filteredDeals;
 
         start = 0;
         while (true) {
             System.out.println("start= " + start);
-            Deals deals = pipedriveService.getDealsStart(start);
 
-            if (deals.getData() == null) {
+            if (filteredDealsByStageChange.isEmpty()) {
                 break;
             }
 
-            for (DealsData deal : deals.getData()) {
+            for (DealsData deal : filteredDealsByStageChange) {
                 String addTime = deal.getStageChangeTime();
                 LocalDate date = null;
 
