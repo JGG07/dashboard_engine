@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title, links)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <title th:text="${title}">Default Title</title>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+</head>
+
+<body>
+<div th:fragment="navbar">
+    <div class="navbar-container">
+        <nav class="navbar">
+            <div class="navbar-logo">
+                <a href="#">MiLogo</a>
+            </div>
+            <div class="hamburger" onclick="toggleMenu()">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+            <div class="menu" id="menu">
+                <a href="/home">Inicio</a>
+                <a href="/mercadeo">Mercadeo</a>
+                <a href="/comercial">Comercial</a>
+            </div>
+            <script>
+                function toggleMenu() {
+                    const menu = document.getElementById('menu');
+                    const hamburger = document.querySelector('.hamburger');
+                    menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
+                    hamburger.classList.toggle('active');
+                }
+            </script>
+            <div class="container">
+                <form id="filter-form" action="/mercadeoFilter" method="post">
+                    <select id="source-select" name="source">
+                        <option value="all">Fuente</option>
+                        <option value="67">Cartera Propia</option>
+                        <option value="68">Espectacular</option>
+                        <option value="20">Evento</option>
+                        <!-- Agrega aquí las demás opciones -->
+                    </select>
+                    <select id="asesor-select" name="ownerName">
+                        <option value="all">Asesor</option>
+                        <th:block th:each="asesor : ${asesores}">
+                            <option th:value="${asesor}" th:text="${asesor}"></option>
+                        </th:block>
+                    </select>
+                    <label for="startDate">Inicio:</label>
+                    <input type="date" id="startDate" name="startDate" th:value="${startDate}">
+                    <label for="endDate">Fin:</label>
+                    <input type="date" id="endDate" name="endDate" th:value="${endDate}">
+                    <button type="submit">Filtrar</button>
+                </form>
+            </div>
+        </nav>
+    </div>
+</div>
+</body>
+</html>
