@@ -9,6 +9,7 @@
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" th:href="@{/css/styles.css}" />
+
 </head>
 
 <body>
@@ -16,8 +17,11 @@
     <div class="navbar-container">
         <nav class="navbar">
             <div class="navbar-logo">
-                <a href="#">MiLogo</a>
+                <a href="/home">
+                    <img th:src="@{/img/satorilogo.png}" alt="Satori Logo">
+                </a>
             </div>
+
             <div class="hamburger" onclick="toggleMenu()">
                 <div></div>
                 <div></div>
@@ -38,23 +42,40 @@
             </script>
             <div class="container">
                 <form id="filter-form" action="/mercadeoFilter" method="post">
+
                     <select id="source-select" name="source">
-                        <option value="all">Fuente</option>
-                        <option value="67">Cartera Propia</option>
-                        <option value="68">Espectacular</option>
-                        <option value="20">Evento</option>
-                        <!-- Agrega aquí las demás opciones -->
+                        <option value="all" th:selected="${selectedSource == 'all'}">Fuente</option>
+                        <option value="67" th:selected="${selectedSource == '67'}">Cartera Propia</option>
+                        <option value="68" th:selected="${selectedSource == '68'}">Espectacular</option>
+                        <option value="20" th:selected="${selectedSource == '20'}">Evento</option>
+                        <option value="28" th:selected="${selectedSource == '28'}">Facebook</option>
+                        <option value="30" th:selected="${selectedSource == '30'}">Instagram</option>
+                        <option value="114" th:selected="${selectedSource == '114'}">LinkedIn</option>
+                        <option value="71" th:selected="${selectedSource == '71'}">Real Estate</option>
+                        <option value="23" th:selected="${selectedSource == '23'}">Referido</option>
+                        <option value="77" th:selected="${selectedSource == '77'}">Sitio Web</option>
+                        <option value="69" th:selected="${selectedSource == '69'}">Tapial Obra</option>
+                        <option value="70" th:selected="${selectedSource == '70'}">Tapial ShowRoom</option>
+                        <option value="87" th:selected="${selectedSource == '87'}">TikTok</option>
+                        <option value="73" th:selected="${selectedSource == '73'}">Valla Publicitaria</option>
+                        <option value="65" th:selected="${selectedSource == '65'}">WhatsApp</option>
+                        <option value="18" th:selected="${selectedSource == '18'}">X</option>
+                        <option value="26" th:selected="${selectedSource == '26'}">YouTube</option>
                     </select>
+
                     <select id="asesor-select" name="ownerName">
-                        <option value="all">Asesor</option>
+                        <option value="all" th:selected="${selectedOwner == 'all'}">Asesor</option>
                         <th:block th:each="asesor : ${asesores}">
-                            <option th:value="${asesor}" th:text="${asesor}"></option>
+                            <option th:value="${asesor}" th:selected="${selectedOwner == asesor}" th:text="${asesor}"></option>
                         </th:block>
                     </select>
+
                     <label for="startDate">Inicio:</label>
                     <input type="date" id="startDate" name="startDate" th:value="${startDate}">
+
                     <label for="endDate">Fin:</label>
                     <input type="date" id="endDate" name="endDate" th:value="${endDate}">
+
                     <button type="submit">Filtrar</button>
                 </form>
             </div>

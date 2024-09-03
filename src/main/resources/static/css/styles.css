@@ -1,354 +1,458 @@
-        /* Estilo general del cuerpo */
-        body {
-            background-color: #323339;
-            margin: 0;
-            padding: 0;
-            font-family: "Arial", sans-serif;
-            color: #ffffff; /* Color del texto */
-        }
+/* Estilo general del cuerpo */
+body {
+    background-color: #323339;
+    margin: 0;
+    padding: 0;
+    font-family: "Arial", sans-serif;
+    color: #ffffff;
+    /* Color del texto */
+}
 
-        /* Contenedor principal */
-        .navbar-container {
-            width: 100%; /* Ajusta el ancho de la navbar */
-            max-width: 100%; /* Ancho máximo para la navbar */
-            margin: -20px;
-            z-index: 99999;
-            position: relative;
-        }
+/* Estilo de la navbar */
+.navbar {
+    margin: 0;
+    padding: 0 20px;
+    background-color: #202321;
+    color: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    z-index: 9999999;
+}
 
-        /* Estilos del navbar */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #333;
-            padding: 0px 200px;
-            color: #fff;
-            position: fixed;
-            height: 70px;
-        }
+/* Estilo de los elementos dentro de la navbar */
+.navbar .navbar-items {
+    display: flex;
+    gap: 15px;
+}
 
-        .navbar-logo a {
-            color: #fff;
-            text-decoration: none;
-            font-size: 24px;
-            font-weight: bold;
-        }
+/* Estilo para los enlaces dentro de la navbar */
+.navbar .navbar-items a {
+    color: #fff;
+    text-decoratio: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    white-space: nowrap; /* Evita que los textos se separen en varias líneas */
+}
 
-        /* Estilo del contenedor principal de la gráfica */
-        #container {
-            width: 80%; /* Ajusta el ancho del contenedor a tu preferencia */
-            height: 400px; /* Ajusta la altura según sea necesario */
-            margin: 20px auto; /* Centra el gráfico horizontalmente con margen */
-            background-color: #1f1d1c; /* Color de fondo del gráfico */
-            font-family: "Arial", monospace; /* Aplica la fuente */
-            border-radius: 4px; /* Bordes redondeados */
-            padding: 10px; /* Espaciado interno */
-        }
+.navbar .navbar-items a:hover {
+    background-color: #555;
+    border-radius: 4px;
+}
 
-        /* Aplica la fuente a los textos del gráfico */
-        .highcharts-title,
-        .highcharts-subtitle,
-        .highcharts-axis-labels text,
-        .highcharts-legend text,
-        .highcharts-tooltip text {
-            font-family: "Arial", monospace; /* Aplica la fuente */
-        }
-        .kpi-title-1 {
-            text-align: center; /* Centra el título en la página */
-            font-size: 20px; /* Tamaño de la fuente */
-            margin-bottom: 50px; /* Espacio entre el título y los KPIs */
-            position: absolute;
-            top: 100px;
-            width: 45%; /* Asegura que el fondo cubra toda la anchura */
-            color: #ffffff; /* Color del texto */
-            background-color: #a1725a; /* Color de fondo corregido */
-            padding: 20px 0; /* Espacio interior para mejorar la legibilidad */
-        }
-        .kpi-title-2 {
-            text-align: center; /* Centra el título en la página */
-            font-size: 20px; /* Tamaño de la fuente */
-            margin-bottom: 50px; /* Espacio entre el título y los KPIs */
-            position: absolute;
-            top: 650px;
-            width: 45%; /* Asegura que el fondo cubra toda la anchura */
-            color: #ffffff; /* Color del texto */
-            background-color: #a1725a; /* Color de fondo corregido */
-            padding: 20px 0; /* Espacio interior para mejorar la legibilidad */
-        }
+.navbar-logo a img{
+    width: 100%; /* 50% del ancho del contenedor */
+    max-width: 150px; /* Limita el tamaño máximo */
+    height: auto; /* Mantiene la proporción */
+    margin-left: 100px;
+}
 
-        .kpi-title-4 {
-            text-align: center; /* Centra el título en la página */
-            font-size: 20px; /* Tamaño de la fuente */
-            margin-bottom: 50px; /* Espacio entre el título y los KPIs */
-            position: flex;
-            margin-top: 100px;
-            width: 45%; /* Asegura que el fondo cubra toda la anchura */
-            color: #ffffff; /* Color del texto */
-            background-color: #a1725a; /* Color de fondo corregido */
-            padding: 20px 0; /* Espacio interior para mejorar la legibilidad */
-        }
+/* Estilo del contenedor principal de la gráfica */
+#container {
+    width: 80%;
+    /* Ajusta el ancho del contenedor a tu preferencia */
+    height: 400px;
+    /* Ajusta la altura según sea necesario */
+    margin: 20px auto;
+    /* Centra el gráfico horizontalmente con margen */
+    background-color: #1f1d1c;
+    /* Color de fondo del gráfico */
+    font-family: "Arial", monospace;
+    /* Aplica la fuente */
+    border-radius: 4px;
+    /* Bordes redondeados */
+    padding: 10px;
+    /* Espaciado interno */
+}
 
-        .kpi-title-3 {
-            text-align: center; /* Centra el título en la página */
-            font-size: 20px; /* Tamaño de la fuente */
-            margin-bottom: 50px; /* Espacio entre el título y los KPIs */
-            position: flex;
-            margin-top: 400px;
-            width: 45%; /* Asegura que el fondo cubra toda la anchura */
-            color: #ffffff; /* Color del texto */
-            background-color: #a1725a; /* Color de fondo corregido */
-            padding: 20px 0; /* Espacio interior para mejorar la legibilidad */
-        }
+/* Aplica la fuente a los textos del gráfico */
+.highcharts-title,
+.highcharts-subtitle,
+.highcharts-axis-labels text,
+.highcharts-legend text,
+.highcharts-tooltip text {
+    font-family: "Arial", monospace;
+    /* Aplica la fuente */
+}
 
-        /* Estilos para el contenedor de los KPI */
-        .kpi-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 125px;
-            margin-bottom: 12px;
-            position: absolute; /* También puedes usar 'fixed' si lo prefieres */
-            top: 255px; /* Ajusta este valor para bajar los contenedores */
-            left: 0;
-            right: 0;
-            z-index: 9999;
-        }
+.kpi-title-1 {
+    text-align: center;
+    /* Centra el título en la página */
+    font-size: 20px;
+    /* Tamaño de la fuente */
+    margin-bottom: 50px;
+    /* Espacio entre el título y los KPIs */
+    position: absolute;
+    top: 100px;
+    width: 45%;
+    /* Asegura que el fondo cubra toda la anchura */
+    color: #ffffff;
+    /* Color del texto */
+    background-color: #bfbdbd;
+    /* Color de fondo corregido */
+    padding: 20px 0;
+    /* Espacio interior para mejorar la legibilidad */
+}
 
-        .kpi-box {
-            width: 110px;
-            height: 70px;
-            background-color: #a1725a; /* Fondo del cuadrado */
-            color: #ffffff; /* Color del texto */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border-radius: 6px; /* Bordes redondeados */
-            box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1); /* Sombra */
-            font-family: "Arial"; /* Fuente */
-            margin: -56px;
-            /*margin-top: 100px; /* Ajusta este valor para bajar los contenedores */
-            /*z-index: 9999; /* Un valor alto asegura que esté al frente de otros elementos */
-            padding: 3px;
-            text-align: center;
-        }
+.kpi-title-2 {
+    text-align: center;
+    /* Centra el título en la página */
+    font-size: 20px;
+    /* Tamaño de la fuente */
+    margin-bottom: 50px;
+    /* Espacio entre el título y los KPIs */
+    position: absolute;
+    top: 650px;
+    width: 45%;
+    /* Asegura que el fondo cubra toda la anchura */
+    color: #ffffff;
+    /* Color del texto */
+    background-color: #bfbdbd;
+    /* Color de fondo corregido */
+    padding: 20px 0;
+    /* Espacio interior para mejorar la legibilidad */
+}
 
-        .kpi-box .kpi-label {
-            font-size: 15px;
-            font-weight: 500px;
-            color: #ffffff; /* Color del texto */
-            border-radius: 5px; /* Bordes redondeados */
-        }
+.kpi-title-4 {
+    text-align: center;
+    /* Centra el título en la página */
+    font-size: 20px;
+    /* Tamaño de la fuente */
+    margin-bottom: 50px;
+    /* Espacio entre el título y los KPIs */
+    position: flex;
+    margin-top: 100px;
+    width: 45%;
+    /* Asegura que el fondo cubra toda la anchura */
+    color: #ffffff;
+    /* Color del texto */
+    background-color: #bfbdbd;
+    /* Color de fondo corregido */
+    padding: 20px 0;
+    /* Espacio interior para mejorar la legibilidad */
+}
 
-        .kpi-box .kpi-value {
-            font-size: 30px; /* Tamaño de la fuente del valor */
-            font-weight: 700;
-        }
+.kpi-title-3 {
+    text-align: center;
+    /* Centra el título en la página */
+    font-size: 20px;
+    /* Tamaño de la fuente */
+    margin-bottom: 50px;
+    /* Espacio entre el título y los KPIs */
+    position: flex;
+    margin-top: 400px;
+    width: 45%;
+    /* Asegura que el fondo cubra toda la anchura */
+    color: #ffffff;
+    /* Color del texto */
+    background-color: #bfbdbd;
+    /* Color de fondo corregido */
+    padding: 20px 0;
+    /* Espacio interior para mejorar la legibilidad */
+}
 
-        /* Estilo de la gráfica */
-        .chart-container {
-            position: relative;
-            top: 30px;
-            width: 50%; /* Ajusta el ancho del contenedor a tu preferencia */
-            height: 350px; /* La altura se ajustará automáticamente según el contenido */
-            margin: 20px auto; /* Centra el contenedor horizontalmente con margen */
-            border-radius: 4px; /* Bordes redondeados para el contenedor */
-            background-color: #1f1d1c; /* Color de fondo del contenedor */
-            padding: 10px; /* Espaciado interno */
-            top: 250px;
-        }
+/* Estilos para el contenedor de los KPI */
+.kpi-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 125px;
+    margin-bottom: 12px;
+    position: absolute;
+    /* También puedes usar 'fixed' si lo prefieres */
+    top: 255px;
+    /* Ajusta este valor para bajar los contenedores */
+    left: 0;
+    right: 0;
+    z-index: 9999;
+}
 
-        /* Contenedor centrado para las tablas */
-        .table-chart-container {
-            width: 80%; /* Ajusta el ancho del contenedor */
-            margin: 20px auto; /* Centra el contenedor horizontalmente con margen */
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
+.kpi-box {
+    width: 110px;
+    height: 70px;
+    background-color: #a1725a;
+    /* Fondo del cuadrado */
+    color: #ffffff;
+    /* Color del texto */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    /* Bordes redondeados */
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+    /* Sombra */
+    font-family: "Arial";
+    /* Fuente */
+    margin: -56px;
+    /*margin-top: 100px; /* Ajusta este valor para bajar los contenedores */
+    /*z-index: 9999; /* Un valor alto asegura que esté al frente de otros elementos */
+    padding: 3px;
+    text-align: center;
+}
 
-        /* Estilos para las tablas de fuentes */
-        .source-table {
-            width: 70%; /* Ocupa el 100% del ancho del contenedor padre */
-            border-collapse: collapse; /* Colapsa los bordes de las celdas adyacentes para que no se dupliquen */
-            font-family: "Arial"; /* Establece la fuente de texto de la tabla como Arial */
-            font-size: 9px; /* Define el tamaño de la fuente dentro de la tabla */
-            position: relative; /* Establece el posicionamiento de la tabla como relativo. Esto es útil si se aplican posicionamientos absolutos a elementos hijos */
-            top: 360px; /* Añade un margen superior de 100 píxeles para separar la tabla del contenido superior */
-            margin: 0 auto; /* Centra la tabla horizontalmente en su contenedor. La propiedad auto aplica márgenes automáticos a los lados izquierdo y derecho, mientras que el margen superior es de 0 píxeles */
-            table-layout: fixed; /* Establece el diseño de la tabla en modo fijo, lo que asegura que las columnas tengan un ancho uniforme basado en el ancho especificado de la tabla */
-            background-color: #333333;
-        }
+.kpi-box .kpi-label {
+    font-size: 15px;
+    font-weight: 500px;
+    color: #ffffff;
+    /* Color del texto */
+    border-radius: 5px;
+    /* Bordes redondeados */
+}
 
-        .source-table-reason {
-            width: 50%; /* Ocupa el 45% del ancho del contenedor padre */
-            border-collapse: collapse;
-            font-family: "Arial";
-            font-size: 11px; /* Tamaño de fuente reducido */
-            position: relative;
-            margin-top: 100px;
-            margin: 0 auto;
-            table-layout: fixed;
-        }
+.kpi-box .kpi-value {
+    font-size: 30px;
+    /* Tamaño de la fuente del valor */
+    font-weight: 700;
+}
 
-        .source-table th {
-            border: 1px solid #333333;
-            padding: 11px;
-            text-align: left;
-            background-color: #333333;
-        }
+/* Estilo de la gráfica */
+.chart-container {
+    position: relative;
+    top: 30px;
+    width: 50%;
+    /* Ajusta el ancho del contenedor a tu preferencia */
+    height: 350px;
+    /* La altura se ajustará automáticamente según el contenido */
+    margin: 20px auto;
+    /* Centra el contenedor horizontalmente con margen */
+    border-radius: 4px;
+    /* Bordes redondeados para el contenedor */
+    background-color: #1f1d1c;
+    /* Color de fondo del contenedor */
+    padding: 10px;
+    /* Espaciado interno */
+    top: 250px;
+}
 
-        .source-table td {
-            border: 0px solid #000000;
-            padding: 11px;
-            text-align: left;
-        }
+/* Contenedor centrado para las tablas */
+.table-chart-container {
+    width: 80%;
+    /* Ajusta el ancho del contenedor */
+    margin: 20px auto;
+    /* Centra el contenedor horizontalmente con margen */
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
 
-        .source-table-reason th {
-            border: 1px solid #000000;
-            padding: 8px;
-            text-align: left;
-        }
+/* Estilos para las tablas de fuentes */
+.source-table {
+    width: 90%;
+    /* Ocupa el 100% del ancho del contenedor padre */
+    border-collapse: collapse;
+    /* Colapsa los bordes de las celdas adyacentes para que no se dupliquen */
+    font-family: "Arial";
+    /* Establece la fuente de texto de la tabla como Arial */
+    font-size: 14px;
+    /* Define el tamaño de la fuente dentro de la tabla */
+    position: relative;
+    /* Establece el posicionamiento de la tabla como relativo. Esto es útil si se aplican posicionamientos absolutos a elementos hijos */
+    top: 360px;
+    /* Añade un margen superior de 100 píxeles para separar la tabla del contenido superior */
+    margin: 0 auto;
+    /* Centra la tabla horizontalmente en su contenedor. La propiedad auto aplica márgenes automáticos a los lados izquierdo y derecho, mientras que el margen superior es de 0 píxeles */
+    table-layout: fixed;
+    /* Establece el diseño de la tabla en modo fijo, lo que asegura que las columnas tengan un ancho uniforme basado en el ancho especificado de la tabla */
+    background-color: #000000;
+    text-align: left;
+}
 
-        .source-table-reason td {
-            border: 0px solid #000000;
-            padding: 8px;
-            text-align: left;
-        }
+.source-table-reason {
+    width: 50%;
+    /* Ocupa el 45% del ancho del contenedor padre */
+    border-collapse: collapse;
+    font-family: "Arial";
+    font-size: 11px;
+    /* Tamaño de fuente reducido */
+    position: relative;
+    margin-top: 100px;
+    margin: 0 auto;
+    table-layout: fixed;
+}
 
-        .source-table th {
-            background-color: #a1725a; /* Fondo de la cabecera */
-            color: white; /* Color del texto de la cabecera */
-            text-align: left;
-        }
+.source-table th {
+    border: 1px solid #bfbdbd;
+    padding: 10px;
+    text-align: center;
+    background-color: #000000;
+}
 
-        .source-table-reason th {
-            background-color: #a1725a; /* Fondo de la cabecera */
-            color: white; /* Color del texto de la cabecera */
-            text-align: left;
-        }
+.source-table td {
+    border: 0px solid #000000;
+    padding: 11px;
+    text-align: left;
+}
 
-        .source-table td {
-            text-align: left;
-            background-color: #333333;
-            color: #ffffff;
-        }
+.source-table-reason th {
+    border: 1px solid #000000;
+    padding: 8px;
+    text-align: left;
+}
 
-        .source-table-reason td {
-            text-align: left;
-            color: #ffffff;
-            background-color: #333333;
-        }
+.source-table-reason td {
+    border: 0px solid #000000;
+    padding: 8px;
+    text-align: left;
+}
 
-        .source-table tr.highlight {
-            background-color: #ff6347; /* Color para filas resaltadas */
-        }
+.source-table th {
+    background-color: #a1725a;
+    /* Fondo de la cabecera */
+    color: white;
+    /* Color del texto de la cabecera */
+    text-align: left;
+}
 
-        .source-table-reason tr.highlight {
-            background-color: #ff6347; /* Color para filas resaltadas */
-        }
+.source-table-reason th {
+    background-color: #a1725a;
+    /* Fondo de la cabecera */
+    color: white;
+    /* Color del texto de la cabecera */
+    text-align: left;
+}
 
-        /* Estilo del contenedor del gráfico circular */
-        #pie-container {
-            width: 45%; /* Ajusta el ancho del contenedor */
-            height: 650px; /* Ajusta la altura según sea necesario */
-            margin: 0 auto; /* Centra el gráfico horizontalmente con margen */
-            background-color: #1f1d1c; /* Color de fondo del gráfico */
-            font-family: "Arial", monospace; /* Aplica la fuente */
-            border-radius: 4px; /* Bordes redondeados */
-        }
+.source-table td {
+    text-align: left;
+    background-color: #000000;
+    color: #ffffff;
+}
 
-        /* Estilos para el formulario de filtros */
-        #filter-form {
-            display: flex;
-            align-items: center;
-            padding: 20px;
-            max-width: max-content;
-            width: max-content;
-            margin: 100px auto;
-            gap: 20px;
-        }
+.source-table-reason td {
+    text-align: left;
+    color: #ffffff;
+    background-color: #000000;
+}
 
-        .select-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
+.source-table tr.highlight {
+    background-color: #ff6347;
+    /* Color para filas resaltadas */
+}
 
-        #filter-form select {
-            width: auto;
-            padding: 10px;
-            border: 1px solid #1f1d1c;
-            color: #ffffff;
-            background: #1f1d1c;
-            border-radius: 4px;
-            font-size: 16px;
-            box-sizing: border-box;
-        }
+.source-table-reason tr.highlight {
+    background-color: #ff6347;
+    /* Color para filas resaltadas */
+}
 
-        #filter-form button {
-            background-color: #1f1d1c;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+/* Estilo del contenedor del gráfico circular */
+#pie-container {
+    width: 45%;
+    /* Ajusta el ancho del contenedor */
+    height: 650px;
+    /* Ajusta la altura según sea necesario */
+    margin: 0 auto;
+    /* Centra el gráfico horizontalmente con margen */
+    background-color: #1f1d1c;
+    /* Color de fondo del gráfico */
+    font-family: "Arial", monospace;
+    /* Aplica la fuente */
+    border-radius: 4px;
+    /* Bordes redondeados */
+}
 
-        #filter-form button:hover {
-            background-color: #1f1d1c;
-        }
+/* Estilos para el formulario de filtros */
+#filter-form {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    max-width: max-content;
+    width: max-content;
+    margin: 100px auto;
+    gap: 20px;
+}
 
-        #filter-form button:focus {
-            outline: none;
-        }
+.select-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
 
-        .menu {
-            display: none;
-            flex-direction: column;
-            width: 200px;
-            background-color: #333;
-            position: absolute;
-            top: 60px;
-            left: 10px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        }
-        .menu a {
-            padding: 15px;
-            color: white;
-            text-decoration: none;
-            text-align: center;
-        }
-        .menu a:hover {
-            background-color: #555;
-        }
-        .hamburger {
-            cursor: pointer;
-            padding: 15px;
-            background-color: #333;
-            color: white;
-            display: inline-block;
-            border-radius: 5px;
-            margin: 10px;
-            position: relative;
-        }
-        .hamburger div {
-            width: 30px;
-            height: 3px;
-            background-color: white;
-            margin: 5px 0;
-            transition: all 0.3s ease;
-        }
-        .hamburger.active div:nth-child(1) {
-            transform: rotate(45deg) translate(5px, 5px);
-        }
-        .hamburger.active div:nth-child(2) {
-            opacity: 0;
-        }
-        .hamburger.active div:nth-child(3) {
-            transform: rotate(-45deg) translate(5px, -5px);
-        }
+#filter-form select {
+    width: auto;
+    padding: 10px;
+    border: 1px solid #1f1d1c;
+    color: #ffffff;
+    background: #1f1d1c;
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+#filter-form button {
+    background-color: #1f1d1c;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#filter-form button:hover {
+    background-color: #1f1d1c;
+}
+
+#filter-form button:focus {
+    outline: none;
+}
+
+.menu {
+    display: none;
+    flex-direction: column;
+    width: 200px;
+    background-color: #333;
+    position: absolute;
+    top: 60px;
+    left: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.menu a {
+    padding: 15px;
+    color: white;
+    text-decoration: none;
+    text-align: center;
+}
+
+.menu a:hover {
+    background-color: #555;
+}
+
+.hamburger {
+    cursor: pointer;
+    padding: 15px;
+    background-color: #202321;
+    color: white;
+    display: inline-block;
+    border-radius: 5px;
+    margin-right: 200px;
+    position: absolute;
+}
+
+.hamburger div {
+    width: 30px;
+    height: 3px;
+    background-color: white;
+    margin: 5px 0;
+    transition: all 0.3s ease;
+}
+
+.hamburger.active div:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger.active div:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active div:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+}
