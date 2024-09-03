@@ -5,6 +5,7 @@ import com.satori.dashboardengine.dto.Activities;
 import com.satori.dashboardengine.dto.ActivitiesData;
 import com.satori.dashboardengine.dto.Deals;
 import com.satori.dashboardengine.dto.DealsData;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -16,6 +17,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @Component
+@Log4j2
 public class PipedriveBo {
 
     private final RestTemplate restTemplate;
@@ -35,29 +37,33 @@ public class PipedriveBo {
      * @return
      */
     public Deals getDealsStart(int start){
+        log.info("************************ getDealsStart ************************");
         String url = pipedriveConfig.getApiUrl() + "/deals?api_token=" + pipedriveConfig.getApiToken() + "&limit=500" + "&start=" + start + "&sort=add_time DESC";
         return restTemplate.getForObject(url, Deals.class);
     }
 
     public List<ActivitiesData> getAllActivities(LocalDate startDate, LocalDate endDate, int userId){
+        log.info("************************ getAllActivities for: " + userId + "************************");
         boolean active = true;
 
         List<ActivitiesData> activitiesDataList = new ArrayList<>();
 
         String url = pipedriveConfig.getApiUrl() + "/activities?api_token=" + pipedriveConfig.getApiToken() + "&start_date=" + startDate + "&end_date=" + endDate + "&user_id=" + userId;
-        Activities activities = restTemplate.getForObject(url, Activities.class);
+        Activities activities;
 
-        if(activities.getAdditionalData().getPagination().isMoreItems()) {
-            int start = 0;
-            while (active) {
-                activities = restTemplate.getForObject(url + "&start=" + start, Activities.class);
-                activitiesDataList.addAll(activities.getData());
-                start += activities.getAdditionalData().getPagination().getLimit();
-                if(!activities.getAdditionalData().getPagination().isMoreItems()) {
-                    active = false;
-                }
+        int start = 0;
+        while (active) {
+            //System.out.println("start: " + start);
+            activities = restTemplate.getForObject(url + "&start=" + start, Activities.class);
+            activitiesDataList.addAll(activities.getData());
+            //System.out.println("limit: " + activities.getAdditionalData().getPagination().getLimit());
+            start += activities.getAdditionalData().getPagination().getLimit();
+
+            if(!activities.getAdditionalData().getPagination().isMoreItems()) {
+                active = false;
             }
         }
+
         return activitiesDataList;
     }
 

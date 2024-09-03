@@ -4,6 +4,7 @@ import com.satori.dashboardengine.dto.ActivitiesData;
 import com.satori.dashboardengine.dto.Deals;
 import com.satori.dashboardengine.dto.DealsData;
 import com.satori.dashboardengine.service.PipedriveService;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
+@Log4j2
 public class FilterController {
 
     @Autowired
@@ -314,6 +316,12 @@ public class FilterController {
         model.addAttribute("orderedWonDeals", orderedWonDeals);
         model.addAttribute("asesores", listAsesores);
 
+        // Agregar el valor seleccionado al modelo
+        model.addAttribute("selectedSource", source);
+        model.addAttribute("selectedOwner", ownerName);
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
+
         return "mercadeo"; // Retorna la vista con los datos filtrados
     }
 
@@ -334,6 +342,8 @@ public class FilterController {
                             @RequestParam(name = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
                             Model model){
 
+        log.info("************************ COMERCIAL ************************");
+
         // Establecer valores predeterminados para fechas si no se proporcionan
 
         source = (source != null) ? source : "all";
@@ -352,17 +362,7 @@ public class FilterController {
         boolean allConditionsTrue = "all".equals(source) && "all".equals(ownerName) && startDate.equals(LocalDate.now().withDayOfMonth(1)) && endDate.equals(LocalDate.now());
 
         if (allConditionsTrue) {
-            return "redirect:/mercadeo"; // Redirigir a "/mercadeo" si todas las condiciones son verdaderas
-        }
-
-
-        // Generar el rango de fechas basado en startDate y endDate
-        List<String> dates = new ArrayList<>();
-
-        LocalDate currentDate = startDate;
-        while (!currentDate.isAfter(endDate)) {
-            dates.add(currentDate.toString());
-            currentDate = currentDate.plusDays(1);
+            return "redirect:/comercial"; // Redirigir a "/mercadeo" si todas las condiciones son verdaderas
         }
 
         int start = 0;
@@ -370,10 +370,13 @@ public class FilterController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         List<DealsData> filteredDeals = new ArrayList<>();
-        Deals deals = pipedriveService.getDealsStart(start);
+
 
         while (true) {
-            System.out.println("start= " + start);
+
+            log.info("*************** FirstWhile ***************");
+
+            Deals deals = pipedriveService.getDealsStart(start);
             LocalDate date = null;
 
             for (DealsData deal : deals.getData()) {
@@ -384,7 +387,8 @@ public class FilterController {
                 LocalDateTime adjustedTime = dateTime.minusHours(6);
                 date = adjustedTime.toLocalDate();
 
-                if (!date.isBefore(startDate) && !date.isAfter(endDate)) {
+                // Filtrar por source y rango de fechas
+                if (!date.isBefore(startDate) && !date.isAfter(endDate) && ("all".equals(source) || source.equals(deal.getFuente()))) {
                     filteredDeals.add(deal);
                 }
             }
@@ -416,14 +420,16 @@ public class FilterController {
         List<DealsData> filteredDealsByStageChange = new ArrayList<>();
 
         start = 0;
-        while (true) {
-            System.out.println("start= " + start);
 
-            if (deals.getData().isEmpty()) {
+        while (true) {
+            log.info("*************** SecondWhile ***************");
+            Deals dealsData = pipedriveService.getDealsStart(start);
+
+            if (dealsData.getData() == null) {
                 break;
             }
 
-            for (DealsData deal : deals.getData()) {
+            for (DealsData deal : dealsData.getData()) {
                 String addTime = deal.getStageChangeTime();
                 LocalDate date = null;
 
@@ -435,12 +441,11 @@ public class FilterController {
                     LocalDateTime adjustedTime = dateTime.minusHours(6);
                     date = adjustedTime.toLocalDate();
 
-                    if (!date.isBefore(startDate) && !date.isAfter(endDate)) {
+                    if (!date.isBefore(startDate) && !date.isAfter(endDate) && ("all".equals(source) || source.equals(deal.getFuente()))) {
                         filteredDealsByStageChange.add(deal);
                     }
                 }
             }
-
             // Incrementar el valor de `start` para la próxima iteración
             start += LIMIT;
         }
@@ -475,12 +480,9 @@ public class FilterController {
                 stats.visita++;
                 stats.negociacion++;
                 stats.apartado++;
-
-                if(deal.getOwnerName().equals("Norberto Huerta")){
-                    System.out.println(deal.getPersonName());
-                }
-
+                //System.out.println(deal.getPersonName() + " " + deal.getStageId() + " " + deal.getOwnerName() + " " + deal.getAddTime() + " " + deal.getStageChangeTime());
             }
+
             if (deal.getStatus().equals("won")) {
                 stats.ganado++;
                 //System.out.println(deal.getPersonName() + " " + deal.getStageId() + " " + deal.getOwnerName() + " " + deal.getAddTime() + " " + deal.getStageChangeTime());
@@ -564,7 +566,7 @@ public class FilterController {
         }
 
         for (ActivitiesData activity : activitiesList) {
-            System.out.println(activity.getUpdateTime() + " " + activity.getOwnerName());
+            //System.out.println(activity.getUpdateTime() + " " + activity.getOwnerName());
             for(String asesor : asesoresList) {
                 // Si el asesor no está en el mapa, añadirlo con un nuevo mapa de fechas y actividades
                 actividadesPorAsesorYFecha.putIfAbsent(asesor, new HashMap<>());
@@ -601,12 +603,14 @@ public class FilterController {
             series.add(Map.of("name", asesor, "data", data));
         }
 
-        for(int i = 0; i < series.size(); i++) {
-            System.out.println(series.get(i) + " " + fechas.get(i));
-        }
-
         model.addAttribute("fechas", fechas);
         model.addAttribute("series", series);
+
+        // Agregar el valor seleccionado al modelo
+        model.addAttribute("selectedSource", source);
+        model.addAttribute("selectedOwner", ownerName);
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
 
         return "comercial";
     }

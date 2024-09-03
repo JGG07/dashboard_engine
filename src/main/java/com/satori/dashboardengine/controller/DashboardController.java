@@ -301,9 +301,12 @@ public class DashboardController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         List<DealsData> filteredDeals = new ArrayList<>();
-        Deals deals = pipedriveService.getDealsStart(start);
+
 
         while (true) {
+            log.info("*************** FirstWhile ***************");
+
+            Deals deals = pipedriveService.getDealsStart(start);
             LocalDate date = null;
 
             for (DealsData deal : deals.getData()) {
@@ -345,34 +348,19 @@ public class DashboardController {
 
         List<DealsData> filteredDealsByStageChange = new ArrayList<>();
 
-        start = 0;
-        while (true) {
-            System.out.println("start= " + start);
-
-            if (deals.getData() == null) {
-                break;
-            }
-
-            for (DealsData deal : deals.getData()) {
-                String addTime = deal.getStageChangeTime();
-                LocalDate date = null;
-
-                if (addTime != null) {
-                    // Procesar el caso donde addTime no es null
-                    LocalDateTime dateTime = LocalDateTime.parse(addTime, formatter);
-
-                    // Restar 6 horas
-                    LocalDateTime adjustedTime = dateTime.minusHours(6);
-                    date = adjustedTime.toLocalDate();
-
-                    if (!date.isBefore(startDate) && !date.isAfter(endDate)) {
-                        filteredDealsByStageChange.add(deal);
-                    }
+        for (DealsData deal : filteredDeals) {
+            String addTime = deal.getStageChangeTime();
+            LocalDate date = null;
+            if (addTime != null) {
+                // Procesar el caso donde addTime no es null
+                LocalDateTime dateTime = LocalDateTime.parse(addTime, formatter);
+                // Restar 6 horas
+                LocalDateTime adjustedTime = dateTime.minusHours(6);
+                date = adjustedTime.toLocalDate();
+                if (!date.isBefore(startDate) && !date.isAfter(endDate)) {
+                    filteredDealsByStageChange.add(deal);
                 }
             }
-
-            // Incrementar el valor de `start` para la próxima iteración
-            start += LIMIT;
         }
 
         Map<String, DashboardController.AdvisorStats> advisorStatsMap = new HashMap<>();
@@ -385,35 +373,34 @@ public class DashboardController {
 
             if (deal.getStageId() == 8) {
                 stats.cita++;
-                //System.out.println(deal.getPersonName() + " " + deal.getStageId() + " " + deal.getOwnerName() + " " + deal.getAddTime() + " " + deal.getStageChangeTime());
+                System.out.println(deal.getPersonName() + " " + deal.getStageId() + " " + deal.getOwnerName() + " " + deal.getAddTime() + " " + deal.getStageChangeTime());
             }
+
             if (deal.getStageId() == 9) {
                 stats.cita++;
                 stats.visita++;
-                //System.out.println(deal.getPersonName() + " " + deal.getStageId() + " " + deal.getOwnerName() + " " + deal.getAddTime() + " " + deal.getStageChangeTime());
+                System.out.println(deal.getPersonName() + " " + deal.getStageId() + " " + deal.getOwnerName() + " " + deal.getAddTime() + " " + deal.getStageChangeTime());
 
             }
             if (deal.getStageId() == 10) {
                 stats.cita++;
                 stats.visita++;
                 stats.negociacion++;
-                //System.out.println(deal.getPersonName() + " " + deal.getStageId() + " " + deal.getOwnerName() + " " + deal.getAddTime() + " " + deal.getStageChangeTime());
+                System.out.println(deal.getPersonName() + " " + deal.getStageId() + " " + deal.getOwnerName() + " " + deal.getAddTime() + " " + deal.getStageChangeTime());
 
             }
+
             if (deal.getStageId() == 11) {
                 stats.cita++;
                 stats.visita++;
                 stats.negociacion++;
                 stats.apartado++;
-
-                if(deal.getOwnerName().equals("Norberto Huerta")){
-                    System.out.println(deal.getPersonName());
-                }
-
+                System.out.println(deal.getPersonName() + " " + deal.getStageId() + " " + deal.getOwnerName() + " " + deal.getAddTime() + " " + deal.getStageChangeTime());
             }
+
             if (deal.getStatus().equals("won")) {
                 stats.ganado++;
-                //System.out.println(deal.getPersonName() + " " + deal.getStageId() + " " + deal.getOwnerName() + " " + deal.getAddTime() + " " + deal.getStageChangeTime());
+                System.out.println(deal.getPersonName() + " " + deal.getStageId() + " " + deal.getOwnerName() + " " + deal.getAddTime() + " " + deal.getStageChangeTime());
 
             }
 
@@ -451,7 +438,7 @@ public class DashboardController {
         int totalApartados = 0;
         int totalWonDeals = 0;
 
-// Calcular totales
+        // Calcular totales
         for (DashboardController.CombinedAdvisorStats stat : combinedList) {
             totalDeals += stat.getDeals();
             totalCitas += stat.getCita();
@@ -461,7 +448,7 @@ public class DashboardController {
             totalWonDeals += stat.getGanado();
         }
 
-// Pasar los totales al modelo
+        // Pasar los totales al modelo
         model.addAttribute("totalDeals", totalDeals);
         model.addAttribute("totalCitas", totalCitas);
         model.addAttribute("totalVisitas", totalVisitas);
@@ -494,7 +481,7 @@ public class DashboardController {
         }
 
         for (ActivitiesData activity : activitiesList) {
-            System.out.println(activity.getUpdateTime() + " " + activity.getOwnerName());
+            //System.out.println(activity.getUpdateTime() + " " + activity.getOwnerName());
             for(String asesor : asesoresList) {
                 // Si el asesor no está en el mapa, añadirlo con un nuevo mapa de fechas y actividades
                 actividadesPorAsesorYFecha.putIfAbsent(asesor, new HashMap<>());
@@ -507,16 +494,16 @@ public class DashboardController {
                 }
             }
         }
-// Preparar los datos para Highcharts
+        // Preparar los datos para Highcharts
         List<String> fechas = new ArrayList<>();
         List<Map<String, Object>> series = new ArrayList<>();
 
-// Recolectar todas las fechas únicas
+        // Recolectar todas las fechas únicas
         List<String> finalFechas = fechas;
         actividadesPorAsesorYFecha.values().forEach(map -> finalFechas.addAll(map.keySet()));
         fechas = fechas.stream().distinct().sorted().collect(Collectors.toList());
 
-// Crear las series para cada asesor
+        // Crear las series para cada asesor
         for (Map.Entry<String, Map<String, Integer>> entry : actividadesPorAsesorYFecha.entrySet()) {
             String asesor = entry.getKey();
             Map<String, Integer> actividadesPorFecha = entry.getValue();
@@ -531,13 +518,15 @@ public class DashboardController {
             series.add(Map.of("name", asesor, "data", data));
         }
 
-        for(int i = 0; i < series.size(); i++) {
-            System.out.println(series.get(i) + " " + fechas.get(i));
+        model.addAttribute("fechas", fechas);
+        for(int i = 0; i < fechas.size(); i++){
+            //System.out.println(fechas.get(i));
         }
 
-        model.addAttribute("fechas", fechas);
         model.addAttribute("series", series);
-
+        for(int i = 0; i < series.size(); i++){
+            //System.out.println(series.get(i));
+        }
         return "comercial";
     }
 

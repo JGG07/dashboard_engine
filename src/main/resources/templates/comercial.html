@@ -22,6 +22,279 @@
     <!-- Custom JavaScript -->
     <script src="/js/scriptsComercial.js" defer></script>
 
+    <style>
+        /* Estilo general del cuerpo */
+        body {
+            background-color: #323339;
+            margin: 0;
+            padding: 0;
+            font-family: "Arial", sans-serif;
+            color: #ffffff;
+            /* Color del texto */
+        }
+
+        /* Estilo de la navbar */
+        .navbar {
+            margin: 0;
+            padding: 0 20px;
+            background-color: #333;
+            color: #fff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-sizing: border-box;
+            z-index: 9999999;
+        }
+
+        /* Estilo de los elementos dentro de la navbar */
+        .navbar .navbar-items {
+            display: flex;
+            gap: 15px;
+        }
+
+        /* Estilo para los enlaces dentro de la navbar */
+        .navbar .navbar-items a {
+            color: #fff;
+            text-decoratio: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            white-space: nowrap; /* Evita que los textos se separen en varias líneas */
+        }
+
+        .navbar .navbar-items a:hover {
+            background-color: #555;
+            border-radius: 4px;
+        }
+
+        .navbar-logo a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Aplica la fuente a los textos del gráfico */
+        .highcharts-title,
+        .highcharts-subtitle,
+        .highcharts-axis-labels text,
+        .highcharts-legend text,
+        .highcharts-tooltip text {
+            font-family: "Arial", monospace;
+            /* Aplica la fuente */
+        }
+
+        .kpi-title-1 {
+            text-align: center;
+            /* Centra el título en la página */
+            font-size: 20px;
+            /* Tamaño de la fuente */
+            margin-bottom: 50px;
+            /* Espacio entre el título y los KPIs */
+            position: absolute;
+            top: 100px;
+            width: 45%;
+            /* Asegura que el fondo cubra toda la anchura */
+            color: #ffffff;
+            /* Color del texto */
+            background-color: #bfbdbd;
+            /* Color de fondo corregido */
+            padding: 20px 0;
+            /* Espacio interior para mejorar la legibilidad */
+        }
+
+        .kpi-title-2 {
+            text-align: center;
+            /* Centra el título en la página */
+            font-size: 20px;
+            /* Tamaño de la fuente */
+            margin-bottom: 20px;
+            /* Espacio entre el título y los KPIs */
+            position: absolute;
+            margin-top: 250px;
+            width: 45%;
+            /* Asegura que el fondo cubra toda la anchura */
+            color: #ffffff;
+            /* Color del texto */
+            background-color: #bfbdbd;
+            /* Color de fondo corregido */
+            padding: 20px 0;
+            /* Espacio interior para mejorar la legibilidad */
+        }
+
+        /* Estilo de la gráfica */
+        .chart-container {
+            position: relative;
+            margin-top: 30px;
+            width: 50%;
+            /* Ajusta el ancho del contenedor a tu preferencia */
+            height: 350px;
+            /* La altura se ajustará automáticamente según el contenido */
+            margin: 0px auto;
+            /* Centra el contenedor horizontalmente con margen */
+            border-radius: 4px;
+            /* Bordes redondeados para el contenedor */
+            background-color: #1f1d1c;
+            /* Color de fondo del contenedor */
+            padding: 10px;
+            /* Espaciado interno */
+            top: 350px;
+        }
+
+        /* Estilos para las tablas de fuentes */
+        .source-table {
+            width: 70%;
+            /* Ocupa el 100% del ancho del contenedor padre */
+            border-collapse: collapse;
+            /* Colapsa los bordes de las celdas adyacentes para que no se dupliquen */
+            font-family: "Arial";
+            /* Establece la fuente de texto de la tabla como Arial */
+            font-size: 19px;
+            /* Define el tamaño de la fuente dentro de la tabla */
+            position: relative;
+            /* Establece el posicionamiento de la tabla como relativo. Esto es útil si se aplican posicionamientos absolutos a elementos hijos */
+            top: 220px;
+            /* Añade un margen superior de 100 píxeles para separar la tabla del contenido superior */
+            margin: 0 auto;
+            /* Centra la tabla horizontalmente en su contenedor. La propiedad auto aplica márgenes automáticos a los lados izquierdo y derecho, mientras que el margen superior es de 0 píxeles */
+            table-layout: fixed;
+            /* Establece el diseño de la tabla en modo fijo, lo que asegura que las columnas tengan un ancho uniforme basado en el ancho especificado de la tabla */
+            background-color: #333333;
+        }
+
+        .source-table th {
+            border: 1px solid #333333;
+            font-size: 28px;
+            padding: 11px;
+            text-align: center;
+            background-color: #333333;
+        }
+
+        .source-table td {
+            border: 1px solid #bfbdbd;
+            padding: 11px;
+            text-align: center;
+        }
+
+        .source-table th {
+            background-color: #a1725a;
+            /* Fondo de la cabecera */
+            color: white;
+            /* Color del texto de la cabecera */
+            text-align: center;
+        }
+
+        .source-table td {
+            text-align: left;
+            background-color: #000000;
+            color: #ffffff;
+        }
+
+        .source-table tr.highlight {
+            background-color: #ff6347;
+            /* Color para filas resaltadas */
+        }
+
+        /* Estilos para el formulario de filtros */
+        #filter-form {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            max-width: max-content;
+            width: max-content;
+            margin: 100px auto;
+            gap: 20px;
+        }
+
+        #filter-form select {
+            width: auto;
+            padding: 10px;
+            border: 1px solid #1f1d1c;
+            color: #ffffff;
+            background: #1f1d1c;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        #filter-form button {
+            background-color: #1f1d1c;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #filter-form button:hover {
+            background-color: #1f1d1c;
+        }
+
+        #filter-form button:focus {
+            outline: none;
+        }
+
+        .menu {
+            display: none;
+            flex-direction: column;
+            width: 200px;
+            background-color: #333;
+            position: absolute;
+            top: 60px;
+            left: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .menu a {
+            padding: 15px;
+            color: white;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .menu a:hover {
+            background-color: #555;
+        }
+
+        .hamburger {
+            cursor: pointer;
+            padding: 15px;
+            background-color: #333;
+            color: white;
+            display: inline-block;
+            border-radius: 5px;
+            margin: 10px;
+            position: relative;
+        }
+
+        .hamburger div {
+            width: 30px;
+            height: 3px;
+            background-color: white;
+            margin: 5px 0;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger.active div:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger.active div:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active div:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+    </style>
+
 </head>
 
 <body>
@@ -29,7 +302,8 @@
 <div class="navbar-container">
     <nav class="navbar">
         <div class="navbar-logo">
-            <a href="#">MiLogo</a>
+            <a href="/mercadeo">
+                <img src="/static/SATORILOGO.png" alt="MiLogo" /></a>
         </div>
 
         <div class="hamburger" onclick="toggleMenu()">
@@ -43,33 +317,42 @@
             <a href="/comercial">Comercial</a>
         </div>
 
+        <script>
+            function toggleMenu() {
+                const menu = document.getElementById('menu');
+                const hamburger = document.querySelector('.hamburger');
+                menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
+                hamburger.classList.toggle('active');
+            }
+        </script>
+
         <!-- Formulario de filtro dentro de la navbar -->
         <div class="container">
             <form id="filter-form" action="/filterComercial" method="post">
                 <select id="source-select" name="source">
-                    <option value="all">Fuente</option>
-                    <option value="67">Cartera Propia</option>
-                    <option value="68">Espectacular</option>
-                    <option value="20">Evento</option>
-                    <option value="28">Facebook</option>
-                    <option value="30">Instagram</option>
-                    <option value="114">LinkedIn</option>
-                    <option value="71">Real Estate</option>
-                    <option value="23">Referido</option>
-                    <option value="77">Sitio Web</option>
-                    <option value="69">Tapial Obra</option>
-                    <option value="70">Tapial ShowRoom</option>
-                    <option value="87">TikTok</option>
-                    <option value="73">Valla Publicitaria</option>
-                    <option value="65">WhatsApp</option>
-                    <option value="18">X</option>
-                    <option value="26">YouTube</option>
+                    <option value="all" th:selected="${selectedSource == 'all'}">Fuente</option>
+                    <option value="67" th:selected="${selectedSource == '67'}">Cartera Propia</option>
+                    <option value="68" th:selected="${selectedSource == '68'}">Espectacular</option>
+                    <option value="20" th:selected="${selectedSource == '20'}">Evento</option>
+                    <option value="28" th:selected="${selectedSource == '28'}">Facebook</option>
+                    <option value="30" th:selected="${selectedSource == '30'}">Instagram</option>
+                    <option value="114" th:selected="${selectedSource == '114'}">LinkedIn</option>
+                    <option value="71" th:selected="${selectedSource == '71'}">Real Estate</option>
+                    <option value="23" th:selected="${selectedSource == '23'}">Referido</option>
+                    <option value="77" th:selected="${selectedSource == '77'}">Sitio Web</option>
+                    <option value="69" th:selected="${selectedSource == '69'}">Tapial Obra</option>
+                    <option value="70" th:selected="${selectedSource == '70'}">Tapial ShowRoom</option>
+                    <option value="87" th:selected="${selectedSource == '87'}">TikTok</option>
+                    <option value="73" th:selected="${selectedSource == '73'}">Valla Publicitaria</option>
+                    <option value="65" th:selected="${selectedSource == '65'}">WhatsApp</option>
+                    <option value="18" th:selected="${selectedSource == '18'}">X</option>
+                    <option value="26" th:selected="${selectedSource == '26'}">YouTube</option>
                 </select>
 
                 <select id="asesor-select" name="ownerName">
-                    <option value="all">Asesor</option>
+                    <option value="all" th:selected="${selectedOwner == 'all'}">Asesor</option>
                     <th:block th:each="asesor : ${asesores}">
-                        <option th:value="${asesor}" th:text="${asesor}"></option>
+                        <option th:value="${asesor}" th:selected="${selectedOwner == asesor}" th:text="${asesor}"></option>
                     </th:block>
                 </select>
 
@@ -138,12 +421,66 @@
 <div id="chart-container" class="chart-container"></div>
 
 <!-- Contenedor para la gráfica -->
-<script>
+<script th:inline="javascript">
     /*<![CDATA[*/
-        var fechas = /*[[${fechas}]]*/;
-        var series = /*[[${series}]]*/;
+    var fechas = /*[[${fechas}]]*/;
+    var series = /*[[${series}]]*/;
+
+    document.addEventListener('DOMContentLoaded', function () {
+        Highcharts.chart('chart-container', {
+            chart: {
+                backgroundColor: '#1F1D1C',
+                type: 'line'
+            },
+            title: {
+                text: '',
+                style: {
+                    color: '#FFFFFF'
+                }
+            },
+            xAxis: {
+                categories: fechas, // Array de fechas
+                labels: {
+                    rotation: -90,
+                    style: {
+                        color: '#FFFFFF'
+                    }
+                }
+            },
+            yAxis: {
+                title: {
+                    text: 'Actividades',
+                    style: {
+                        color: '#FFFFFF'
+                    }
+                },
+                labels: {
+                    style: {
+                        color: '#FFFFFF'
+                    }
+                }
+            },
+            legend: {
+                itemStyle: {
+                    color: '#FFFFFF'
+                }
+            },
+            plotOptions: {
+                line: {
+                    dataLabels: {
+                        enabled: true,
+                        style: {
+                            color: '#FFFFFF'
+                        }
+                    },
+                    enableMouseTracking: true
+                }
+            },
+            series: series // Array de objetos, cada uno representando a un asesor
+        });
+    });
+
     /*]]>*/
 </script>
-
 </body>
 </html>

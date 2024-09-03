@@ -1,10 +1,3 @@
-function toggleMenu() {
-    const menu = document.getElementById('menu');
-    const hamburger = document.querySelector('.hamburger');
-    menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
-    hamburger.classList.toggle('active');
-}
-
 document.addEventListener('DOMContentLoaded', function() {
     Highcharts.chart('chart-container', {
         chart: {
