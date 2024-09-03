@@ -264,6 +264,25 @@ body {
     text-align: center;
 }
 
+.source-table td {
+    border: 1px solid #bfbdbd; /* Borde gris claro */
+    padding: 11px; /* Relleno de 11px */
+    text-align: left; /* Alineación del texto a la izquierda */
+    background-color: #000000; /* Fondo negro */
+    color: #ffffff; /* Texto blanco */
+}
+
+.source-table th {
+    border: 1px solid #333333;
+    padding: 10px;
+    text-align: center;
+    background-color: #a1725a;
+    /* Fondo de la cabecera */
+    color: white;
+    /* Color del texto de la cabecera */
+    text-align: left;
+}
+
 .source-table-reason {
     width: 50%;
     /* Ocupa el 45% del ancho del contenedor padre */
@@ -277,18 +296,6 @@ body {
     table-layout: fixed;
 }
 
-.source-table th {
-    border: 1px solid #333333;
-    padding: 10px;
-    text-align: center;
-    background-color: #333333;
-}
-
-.source-table td {
-    border: 1px solid #bfbdbd;
-    padding: 11px;
-    text-align: center;
-}
 
 .source-table-reason th {
     border: 1px solid #333333;
@@ -303,26 +310,12 @@ body {
     text-align: left;
 }
 
-.source-table th {
-    background-color: #a1725a;
-    /* Fondo de la cabecera */
-    color: white;
-    /* Color del texto de la cabecera */
-    text-align: left;
-}
-
 .source-table-reason th {
     background-color: #a1725a;
     /* Fondo de la cabecera */
     color: white;
     /* Color del texto de la cabecera */
     text-align: left;
-}
-
-.source-table td {
-    text-align: left;
-    background-color: #000000;
-    color: #ffffff;
 }
 
 .source-table-reason td {

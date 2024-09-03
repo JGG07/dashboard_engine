@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
         xAxis: {
             categories: dealsDates,
             labels: {
-                rotation: -45, // Opcional para evitar superposición
+                rotation: -90, // Opcional para evitar superposición
                 style: {
                     color: '#FFFFFF'
                 }
