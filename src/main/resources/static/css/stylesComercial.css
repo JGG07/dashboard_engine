@@ -105,7 +105,7 @@ body {
 .chart-container {
     position: relative;
     margin-top: 30px;
-    width: 50%;
+    width: 70%;
     /* Ajusta el ancho del contenedor a tu preferencia */
     height: 350px;
     /* La altura se ajustará automáticamente según el contenido */
@@ -122,13 +122,13 @@ body {
 
 /* Estilos para las tablas de fuentes */
 .source-table {
-    width: 70%;
+    width: 60%;
     /* Ocupa el 100% del ancho del contenedor padre */
     border-collapse: collapse;
     /* Colapsa los bordes de las celdas adyacentes para que no se dupliquen */
     font-family: "Arial";
     /* Establece la fuente de texto de la tabla como Arial */
-    font-size: 19px;
+    font-size: 14px;
     /* Define el tamaño de la fuente dentro de la tabla */
     position: relative;
     /* Establece el posicionamiento de la tabla como relativo. Esto es útil si se aplican posicionamientos absolutos a elementos hijos */
@@ -143,7 +143,7 @@ body {
 
 .source-table th {
     border: 1px solid #333333;
-    font-size: 28px;
+    font-size: 14px;
     padding: 11px;
     text-align: center;
     background-color: #333333;

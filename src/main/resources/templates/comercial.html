@@ -20,7 +20,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js" defer></script>
 
     <!-- Custom JavaScript -->
-    <script src="/js/scriptsComercial.js" defer></script>
+    <script src="/js/comercial.js" defer></script>
 
 </head>
 
@@ -44,15 +44,6 @@
             <a href="/mercadeo">Mercadeo</a>
             <a href="/comercial">Comercial</a>
         </div>
-
-        <script>
-            function toggleMenu() {
-                const menu = document.getElementById('menu');
-                const hamburger = document.querySelector('.hamburger');
-                menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
-                hamburger.classList.toggle('active');
-            }
-        </script>
 
         <!-- Formulario de filtro dentro de la navbar -->
         <div class="container">
@@ -131,12 +122,12 @@
     <!-- Muestra los totales en el pie de la tabla -->
     <tr>
         <th>Total</th>
-        <td th:text="${totalDeals}" style="text-align: center;">0</td>
-        <td th:text="${totalCitas}" style="text-align: center;">0</td>
-        <td th:text="${totalVisitas}" style="text-align: center;">0</td>
-        <td th:text="${totalNegociaciones}" style="text-align: center;">0</td>
-        <td th:text="${totalApartados}" style="text-align: center;">0</td>
-        <td th:text="${totalWonDeals}" style="text-align: center;">0</td>
+        <td th:text="${totalDeals}" style="text-align: center; font-weight: bold;">0</td>
+        <td th:text="${totalCitas}" style="text-align: center; font-weight: bold;">0</td>
+        <td th:text="${totalVisitas}" style="text-align: center; font-weight: bold;">0</td>
+        <td th:text="${totalNegociaciones}" style="text-align: center; font-weight: bold;">0</td>
+        <td th:text="${totalApartados}" style="text-align: center; font-weight: bold;">0</td>
+        <td th:text="${totalWonDeals}" style="text-align: center; font-weight: bold;">0</td>
     </tr>
     </tfoot>
 
@@ -153,61 +144,6 @@
     /*<![CDATA[*/
     var fechas = /*[[${fechas}]]*/;
     var series = /*[[${series}]]*/;
-
-    document.addEventListener('DOMContentLoaded', function () {
-        Highcharts.chart('chart-container', {
-            chart: {
-                backgroundColor: '#1F1D1C',
-                type: 'line'
-            },
-            title: {
-                text: '',
-                style: {
-                    color: '#FFFFFF'
-                }
-            },
-            xAxis: {
-                categories: fechas, // Array de fechas
-                labels: {
-                    rotation: -90,
-                    style: {
-                        color: '#FFFFFF'
-                    }
-                }
-            },
-            yAxis: {
-                title: {
-                    text: 'Actividades',
-                    style: {
-                        color: '#FFFFFF'
-                    }
-                },
-                labels: {
-                    style: {
-                        color: '#FFFFFF'
-                    }
-                }
-            },
-            legend: {
-                itemStyle: {
-                    color: '#FFFFFF'
-                }
-            },
-            plotOptions: {
-                line: {
-                    dataLabels: {
-                        enabled: true,
-                        style: {
-                            color: '#FFFFFF'
-                        }
-                    },
-                    enableMouseTracking: true
-                }
-            },
-            series: series // Array de objetos, cada uno representando a un asesor
-        });
-    });
-
     /*]]>*/
 </script>
 </body>
