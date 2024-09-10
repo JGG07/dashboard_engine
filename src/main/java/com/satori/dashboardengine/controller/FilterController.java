@@ -72,10 +72,11 @@ public class FilterController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         List<DealsData> filteredDeals = new ArrayList<>();
-        Deals deals = pipedriveService.getDealsStart(start);
 
         while (true) {
+
             LocalDate date = null;
+            Deals deals = pipedriveService.getDealsStart(start);
 
             for (DealsData deal : deals.getData()) {
                 String addTime = deal.getAddTime();
@@ -572,7 +573,7 @@ public class FilterController {
                 actividadesPorAsesorYFecha.putIfAbsent(asesor, new HashMap<>());
 
                 if (activity.getOwnerName().equals(asesor)) {
-                    LocalDateTime dateTime = LocalDateTime.parse(activity.getUpdateTime(), formatter);
+                    LocalDateTime dateTime = LocalDateTime.parse(activity.getDoneTime(), formatter);
                     String fecha = dateTime.format(dateFormatter); // Formato "yyyy-MM-dd"
                     // Sumar la actividad a la fecha correspondiente
                     actividadesPorAsesorYFecha.get(asesor).merge(fecha, 1, Integer::sum);
@@ -586,8 +587,15 @@ public class FilterController {
 // Recolectar todas las fechas únicas
         List<String> finalFechas = fechas;
         actividadesPorAsesorYFecha.values().forEach(map -> finalFechas.addAll(map.keySet()));
-        fechas = fechas.stream().distinct().sorted().collect(Collectors.toList());
-
+        LocalDate finalStartDate = startDate;
+        LocalDate finalEndDate = endDate;
+        fechas = fechas.stream()
+                .distinct()
+                .map(fecha -> LocalDate.parse(fecha)) // Convertir las cadenas a LocalDate
+                .filter(fecha -> (fecha.isEqual(finalStartDate) || fecha.isAfter(finalStartDate)) && (fecha.isEqual(finalEndDate) || fecha.isBefore(finalEndDate))) // Filtrar las fechas dentro del rango
+                .sorted()
+                .map(LocalDate::toString) // Convertir de nuevo a String si es necesario
+                .collect(Collectors.toList());
 // Crear las series para cada asesor
         for (Map.Entry<String, Map<String, Integer>> entry : actividadesPorAsesorYFecha.entrySet()) {
             String asesor = entry.getKey();
@@ -596,7 +604,9 @@ public class FilterController {
             // Preparar la data para este asesor con valores alineados a las fechas
             List<Integer> data = new ArrayList<>();
             for (String fecha : fechas) {
-                data.add(actividadesPorFecha.getOrDefault(fecha, 0));
+                if(fecha.equals(startDate) && fecha.equals(endDate)) {
+                    data.add(actividadesPorFecha.getOrDefault(fecha, 0));
+                }
             }
 
             // Agregar la serie
