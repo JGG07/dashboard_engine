@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="home :: head('Home', null)"></head>
+<head th:replace="~{home :: head('Home', null)}"></head>
 <body>
-<div th:replace="home :: navbar"></div>
+<div th:replace="~{home :: navbar}"></div>
 
 <!-- Título general para los KPIs -->
 <h2 class="kpi-title-1">¿La estrategia nos entrega suficientes Leads de calidad?</h2>

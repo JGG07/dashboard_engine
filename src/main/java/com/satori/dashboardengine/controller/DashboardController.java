@@ -467,7 +467,7 @@ public class DashboardController {
         for (DashboardController.CombinedAdvisorStats asesor : combinedList) {
             asesoresList.add(asesor.getAdvisor());
 
-            for (DealsData deal : filteredDealsByStageChange) {
+            for (DealsData deal : filteredDeals) {
                 int userId = deal.getUserId().getId();
 
                 if (!processedIds.contains(userId)) {
@@ -487,7 +487,7 @@ public class DashboardController {
                 actividadesPorAsesorYFecha.putIfAbsent(asesor, new HashMap<>());
 
                 if (activity.getOwnerName().equals(asesor)) {
-                    LocalDateTime dateTime = LocalDateTime.parse(activity.getUpdateTime(), formatter);
+                    LocalDateTime dateTime = LocalDateTime.parse(activity.getDoneTime(), formatter);
                     String fecha = dateTime.format(dateFormatter); // Formato "yyyy-MM-dd"
                     // Sumar la actividad a la fecha correspondiente
                     actividadesPorAsesorYFecha.get(asesor).merge(fecha, 1, Integer::sum);
@@ -501,7 +501,14 @@ public class DashboardController {
         // Recolectar todas las fechas únicas
         List<String> finalFechas = fechas;
         actividadesPorAsesorYFecha.values().forEach(map -> finalFechas.addAll(map.keySet()));
-        fechas = fechas.stream().distinct().sorted().collect(Collectors.toList());
+        // Filtrar las fechas dentro del rango
+        fechas = fechas.stream()
+                .distinct()
+                .map(fecha -> LocalDate.parse(fecha)) // Convertir las cadenas a LocalDate
+                .filter(fecha -> (fecha.isEqual(startDate) || fecha.isAfter(startDate)) && (fecha.isEqual(endDate) || fecha.isBefore(endDate))) // Filtrar las fechas dentro del rango
+                .sorted()
+                .map(LocalDate::toString) // Convertir de nuevo a String si es necesario
+                .collect(Collectors.toList());
 
         // Crear las series para cada asesor
         for (Map.Entry<String, Map<String, Integer>> entry : actividadesPorAsesorYFecha.entrySet()) {
@@ -520,7 +527,7 @@ public class DashboardController {
 
         model.addAttribute("fechas", fechas);
         for(int i = 0; i < fechas.size(); i++){
-            //System.out.println(fechas.get(i));
+            System.out.println(fechas.get(i));
         }
 
         model.addAttribute("series", series);
