@@ -33,14 +33,19 @@ public class FilterController {
      * @return
      */
     @PostMapping("/mercadeoFilter")
-    public String viewData(@RequestParam(value = "source", required = false) String source,
-                           @RequestParam(value = "ownerName", required = false) String ownerName,
+    public String viewData(@RequestParam(value = "source", required = false) List<String> source,
+                           @RequestParam(value = "ownerName", required = false) List<String> ownerName,
                            @RequestParam(name = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
                            @RequestParam(name = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
                            Model model) {
 
-        source = (source != null) ? source : "all";
-        ownerName = (ownerName != null) ? ownerName : "all";
+        // Si source o ownerName son nulos, usa "all" como valor predeterminado.
+        if (source == null || source.isEmpty()) {
+            source = List.of("all"); // Usa una lista con "all" como valor predeterminado
+        }
+        if (ownerName == null || ownerName.isEmpty()) {
+            ownerName = List.of("all"); // Usa una lista con "all" como valor predeterminado
+        }
 
         // Establecer valores predeterminados para fechas si no se proporcionan
         if (startDate == null) {
@@ -98,14 +103,15 @@ public class FilterController {
             start += LIMIT;
         }
 
-        // Filtrar por fuente y asesor
-        String finalSource = source;
-        String finalOwnerName = ownerName;
+        // Supongamos que `source` y `ownerName` son List<String> en lugar de String
+        List<String> finalSource = source != null ? source : List.of("all");
+        List<String> finalOwnerName = ownerName != null ? ownerName : List.of("all");
 
         List<DealsData> finalFilteredDeals = filteredDeals.stream()
-                .filter(deal -> ("all".equals(finalSource) || finalSource.equals(deal.getFuente())) &&
-                        ("all".equals(finalOwnerName) || finalOwnerName.equals(deal.getOwnerName())))
+                .filter(deal -> (finalSource.contains("all") || finalSource.contains(deal.getFuente())) &&
+                        (finalOwnerName.contains("all") || finalOwnerName.contains(deal.getOwnerName())))
                 .collect(Collectors.toList());
+
 
         Map<String, Integer> dealsCountByDate = pipedriveService.getDealsCountByDate(finalFilteredDeals, startDate, endDate);
         Map<String, Integer> stageInteresados = pipedriveService.getStageDealsByDate(finalFilteredDeals, 6, startDate, endDate);
@@ -337,8 +343,8 @@ public class FilterController {
      * @return
      */
     @PostMapping("/filterComercial")
-    public String comerical(@RequestParam(value = "source", required = false) String source,
-                            @RequestParam(value = "ownerName", required = false) String ownerName,
+    public String comerical(@RequestParam(value = "source", required = false) List<String> source,
+                            @RequestParam(value = "ownerName", required = false) List<String> ownerName,
                             @RequestParam(name = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
                             @RequestParam(name = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
                             Model model){
@@ -347,8 +353,13 @@ public class FilterController {
 
         // Establecer valores predeterminados para fechas si no se proporcionan
 
-        source = (source != null) ? source : "all";
-        ownerName = (ownerName != null) ? ownerName : "all";
+        // Si source o ownerName son nulos, usa "all" como valor predeterminado.
+        if (source == null || source.isEmpty()) {
+            source = List.of("all"); // Usa una lista con "all" como valor predeterminado
+        }
+        if (ownerName == null || ownerName.isEmpty()) {
+            ownerName = List.of("all"); // Usa una lista con "all" como valor predeterminado
+        }
 
         // Establecer valores predeterminados para fechas si no se proporcionan
         if (startDate == null) {
@@ -372,6 +383,8 @@ public class FilterController {
 
         List<DealsData> filteredDeals = new ArrayList<>();
 
+        boolean filterBySource = !source.contains("all");
+        boolean filterByOwner = !ownerName.contains("all");
 
         while (true) {
 
@@ -388,10 +401,33 @@ public class FilterController {
                 LocalDateTime adjustedTime = dateTime.minusHours(6);
                 date = adjustedTime.toLocalDate();
 
-                // Filtrar por source y rango de fechas
-                if (!date.isBefore(startDate) && !date.isAfter(endDate) && ("all".equals(source) || source.equals(deal.getFuente()))) {
-                    filteredDeals.add(deal);
+
+                // Filtrar por source, rango de fechas y asesor
+                if (filterBySource && filterByOwner) {
+                    // Filtrar por fuente, asesor y rango de fechas
+                    if (!date.isBefore(startDate) && !date.isAfter(endDate) &&
+                            source.contains(deal.getFuente()) && ownerName.contains(deal.getOwnerName())) {
+                        filteredDeals.add(deal);
+                    }
+                } else if (filterBySource) {
+                    // Filtrar solo por fuente y rango de fechas
+                    if (!date.isBefore(startDate) && !date.isAfter(endDate) &&
+                            source.contains(deal.getFuente())) {
+                        filteredDeals.add(deal);
+                    }
+                } else if (filterByOwner) {
+                    // Filtrar solo por asesor y rango de fechas
+                    if (!date.isBefore(startDate) && !date.isAfter(endDate) &&
+                            ownerName.contains(deal.getOwnerName())) {
+                        filteredDeals.add(deal);
+                    }
+                } else {
+                    // Filtrar solo por rango de fechas
+                    if (!date.isBefore(startDate) && !date.isAfter(endDate)) {
+                        filteredDeals.add(deal);
+                    }
                 }
+
             }
 
             assert date != null;
@@ -442,8 +478,30 @@ public class FilterController {
                     LocalDateTime adjustedTime = dateTime.minusHours(6);
                     date = adjustedTime.toLocalDate();
 
-                    if (!date.isBefore(startDate) && !date.isAfter(endDate) && ("all".equals(source) || source.equals(deal.getFuente()))) {
-                        filteredDealsByStageChange.add(deal);
+                    // Filtrar por source, rango de fechas y asesor
+                    if (filterBySource && filterByOwner) {
+                        // Filtrar por fuente, asesor y rango de fechas
+                        if (!date.isBefore(startDate) && !date.isAfter(endDate) &&
+                                source.contains(deal.getFuente()) && ownerName.contains(deal.getOwnerName())) {
+                            filteredDealsByStageChange.add(deal);
+                        }
+                    } else if (filterBySource) {
+                        // Filtrar solo por fuente y rango de fechas
+                        if (!date.isBefore(startDate) && !date.isAfter(endDate) &&
+                                source.contains(deal.getFuente())) {
+                            filteredDealsByStageChange.add(deal);
+                        }
+                    } else if (filterByOwner) {
+                        // Filtrar solo por asesor y rango de fechas
+                        if (!date.isBefore(startDate) && !date.isAfter(endDate) &&
+                                ownerName.contains(deal.getOwnerName())) {
+                            filteredDealsByStageChange.add(deal);
+                        }
+                    } else {
+                        // Filtrar solo por rango de fechas
+                        if (!date.isBefore(startDate) && !date.isAfter(endDate)) {
+                            filteredDealsByStageChange.add(deal);
+                        }
                     }
                 }
             }
@@ -596,7 +654,8 @@ public class FilterController {
                 .sorted()
                 .map(LocalDate::toString) // Convertir de nuevo a String si es necesario
                 .collect(Collectors.toList());
-// Crear las series para cada asesor
+
+        // Crear las series para cada asesor
         for (Map.Entry<String, Map<String, Integer>> entry : actividadesPorAsesorYFecha.entrySet()) {
             String asesor = entry.getKey();
             Map<String, Integer> actividadesPorFecha = entry.getValue();
@@ -604,8 +663,13 @@ public class FilterController {
             // Preparar la data para este asesor con valores alineados a las fechas
             List<Integer> data = new ArrayList<>();
             for (String fecha : fechas) {
-                if(fecha.equals(startDate) && fecha.equals(endDate)) {
+                // Verificar si la fecha está en el rango de fechas
+                LocalDate currentDate = LocalDate.parse(fecha); // Asumiendo que fecha está en formato 'YYYY-MM-DD'
+                if ((startDate == null || !currentDate.isBefore(startDate)) &&
+                        (endDate == null || !currentDate.isAfter(endDate))) {
                     data.add(actividadesPorFecha.getOrDefault(fecha, 0));
+                } else {
+                    data.add(0); // Añadir 0 si la fecha no está en el rango
                 }
             }
 
@@ -613,14 +677,17 @@ public class FilterController {
             series.add(Map.of("name", asesor, "data", data));
         }
 
+
         model.addAttribute("fechas", fechas);
         model.addAttribute("series", series);
 
-        // Agregar el valor seleccionado al modelo
-        model.addAttribute("selectedSource", source);
-        model.addAttribute("selectedOwner", ownerName);
+        // Agregar los valores seleccionados al modelo
+        model.addAttribute("selectedSource", source != null ? source : Collections.emptyList());
+        model.addAttribute("selectedOwner", ownerName != null ? ownerName : Collections.emptyList());
         model.addAttribute("startDate", startDate);
         model.addAttribute("endDate", endDate);
+
+
 
         return "comercial";
     }

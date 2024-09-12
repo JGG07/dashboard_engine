@@ -9,6 +9,10 @@
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="/js/mercadeo.js" defer></script>
 
 </head>
@@ -33,49 +37,48 @@
                 <a href="/mercadeo">Mercadeo</a>
                 <a href="/comercial">Comercial</a>
             </div>
-            <script>
-                function toggleMenu() {
-                    const menu = document.getElementById('menu');
-                    const hamburger = document.querySelector('.hamburger');
-                    menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
-                    hamburger.classList.toggle('active');
-                }
-            </script>
             <div class="container">
                 <form id="filter-form" action="/mercadeoFilter" method="post">
 
-                    <select id="source-select" name="source">
-                        <option value="all" th:selected="${selectedSource == 'all'}">Fuente</option>
-                        <option value="67" th:selected="${selectedSource == '67'}">Cartera Propia</option>
-                        <option value="68" th:selected="${selectedSource == '68'}">Espectacular</option>
-                        <option value="20" th:selected="${selectedSource == '20'}">Evento</option>
-                        <option value="28" th:selected="${selectedSource == '28'}">Facebook</option>
-                        <option value="30" th:selected="${selectedSource == '30'}">Instagram</option>
-                        <option value="114" th:selected="${selectedSource == '114'}">LinkedIn</option>
-                        <option value="71" th:selected="${selectedSource == '71'}">Real Estate</option>
-                        <option value="23" th:selected="${selectedSource == '23'}">Referido</option>
-                        <option value="77" th:selected="${selectedSource == '77'}">Sitio Web</option>
-                        <option value="69" th:selected="${selectedSource == '69'}">Tapial Obra</option>
-                        <option value="70" th:selected="${selectedSource == '70'}">Tapial ShowRoom</option>
-                        <option value="87" th:selected="${selectedSource == '87'}">TikTok</option>
-                        <option value="73" th:selected="${selectedSource == '73'}">Valla Publicitaria</option>
-                        <option value="65" th:selected="${selectedSource == '65'}">WhatsApp</option>
-                        <option value="18" th:selected="${selectedSource == '18'}">X</option>
-                        <option value="26" th:selected="${selectedSource == '26'}">YouTube</option>
-                    </select>
+                    <div class="custom-select-source">
+                        <input type="text" id="source-select" placeholder="Select fuente(s)" readonly onclick="toggleSourceDropdown()">
+                        <div id="source-dropdown" class="dropdown-content">
+                            <label><input type="checkbox" name="source" value="67" /> Cartera Propia</label>
+                            <label><input type="checkbox" name="source" value="68" /> Espectacular</label>
+                            <label><input type="checkbox" name="source" value="20" /> Evento</label>
+                            <label><input type="checkbox" name="source" value="28" /> Facebook</label>
+                            <label><input type="checkbox" name="source" value="30" /> Instagram</label>
+                            <label><input type="checkbox" name="source" value="114" /> LinkedIn</label>
+                            <label><input type="checkbox" name="source" value="71" /> Real Estate</label>
+                            <label><input type="checkbox" name="source" value="23" /> Referido</label>
+                            <label><input type="checkbox" name="source" value="77" /> Sitio Web</label>
+                            <label><input type="checkbox" name="source" value="69" /> Tapial Obra</label>
+                            <label><input type="checkbox" name="source" value="70" /> Tapial ShowRoom</label>
+                            <label><input type="checkbox" name="source" value="87" /> TikTok</label>
+                            <label><input type="checkbox" name="source" value="73" /> Valla Publicitaria</label>
+                            <label><input type="checkbox" name="source" value="65" /> WhatsApp</label>
+                            <label><input type="checkbox" name="source" value="18" /> X</label>
+                            <label><input type="checkbox" name="source" value="26" /> YouTube</label>
+                        </div>
+                    </div>
 
-                    <select id="asesor-select" name="ownerName">
-                        <option value="all" th:selected="${selectedOwner == 'all'}">Asesor</option>
-                        <th:block th:each="asesor : ${asesores}">
-                            <option th:value="${asesor}" th:selected="${selectedOwner == asesor}" th:text="${asesor}"></option>
-                        </th:block>
-                    </select>
 
-                    <label for="startDate">Inicio:</label>
-                    <input type="date" id="startDate" name="startDate" th:value="${startDate}">
+                    <div class="custom-select-asesor">
+                        <input type="text" id="asesor-select" placeholder="Select asesor(es)" readonly onclick="toggleAsesorDropdown()">
+                        <div id="asesor-dropdown" class="dropdown-content">
+                            <label><input type="checkbox" name="ownerName" value="all" th:checked="${selectedOwner == 'all'}" /> Asesor</label>
+                            <th:block th:each="asesor : ${asesores}">
+                                <label>
+                                    <input type="checkbox" name="ownerName" th:value="${asesor}" th:checked="${selectedOwner == asesor}" />
+                                    <span th:text="${asesor}"></span>
+                                </label>
+                            </th:block>
+                        </div>
+                    </div>
 
-                    <label for="endDate">Fin:</label>
-                    <input type="date" id="endDate" name="endDate" th:value="${endDate}">
+                    <div class="custom-select" style="position: relative;">
+                        <input type="text" id="dateRange" name="dateRange" placeholder="Select date range">
+                    </div>
 
                     <button type="submit">Filtrar</button>
                 </form>
