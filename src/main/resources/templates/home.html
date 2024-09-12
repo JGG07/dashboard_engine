@@ -76,9 +76,11 @@
                         </div>
                     </div>
 
-                    <div class="custom-select" style="position: relative;">
-                        <input type="text" id="dateRange" name="dateRange" placeholder="Select date range">
-                    </div>
+                    <label for="startDate"></label>
+                    <input type="date" id="startDate" name="startDate" th:value="${startDate}">
+
+                    <label for="endDate"></label>
+                    <input type="date" id="endDate" name="endDate" th:value="${endDate}">
 
                     <button type="submit">Filtrar</button>
                 </form>
