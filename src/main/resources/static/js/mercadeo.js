@@ -268,8 +268,13 @@ document.addEventListener('DOMContentLoaded', function() {
     flatpickr("#dateRange", {
         mode: "range",
         dateFormat: "Y-m-d",
-        defaultDate: ["${startDate}", "${endDate}"],
-        position: "below", /* Asegura que el calendario se posicione debajo del campo de entrada */
+        defaultDate: [
+            /* Manejar nulos adecuadamente */
+            /* Si las variables son nulas, simplemente no pasamos valor al campo */
+            "${startDate != null ? startDate : ''}",
+            "${endDate != null ? endDate : ''}"
+        ],
+        position: "below",
     });
 });
 
