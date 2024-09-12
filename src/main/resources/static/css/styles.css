@@ -361,10 +361,10 @@ body {
 #filter-form {
     display: flex;
     align-items: center;
-    padding: 20px;
+    padding: 0px;
     max-width: max-content;
     width: max-content;
-    margin: 100px auto;
+    margin: 0px auto;
     gap: 20px;
 }
 
@@ -456,4 +456,120 @@ body {
 
 .hamburger.active div:nth-child(3) {
     transform: rotate(-45deg) translate(5px, -5px);
+}
+
+.custom-select-source {
+    position: relative;
+    display: inline-block;
+    width: 150px;
+    color: white;
+}
+
+#source-select {
+    width: 100%;
+    padding: 13px;
+    padding-right: 0px;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #1F1D1C;
+    color: white;
+    border: 0px;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #1F1D1C;
+    width: 110%;
+    z-index: 1;
+    max-height: 600px;
+    overflow-y: auto;
+    border-radius: 6px;
+}
+
+.dropdown-content label {
+    display: block;
+    padding: 8px;
+    cursor: pointer;
+    background-color: #1F1D1C;
+}
+
+.dropdown-content label:hover {
+    background-color: #151716;
+}
+
+#asesor-select {
+    width: 100%;
+    padding: 13px;
+    padding-right: 0px;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #1F1D1C;
+    color: white;
+    border: 0px;
+}
+
+
+
+
+
+/* Estilos para el campo de entrada de fecha */
+#dateRange {
+    width: 100%; /* Asegúrate de que el campo de entrada tiene suficiente ancho */
+    padding: 10px;
+    border: 0;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+    background-color: #1F1D1C;
+    cursor: pointer;
+    color: white;
+}
+
+/* Estilos para el contenedor del calendario */
+.flatpickr-calendar {
+    position: absolute; /* Asegura que el calendario se posicione correctamente */
+    z-index: 9999; /* Asegura que el calendario esté por encima de otros elementos */
+    top: calc(100% + 5px); /* Posiciona el calendario justo debajo del campo de entrada */
+    left: 0;
+    margin-top: 20px;
+    width: 100%; /* Asegura que el calendario tenga el mismo ancho que el campo de entrada */
+    font-family: Arial, sans-serif;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: #1F1D1C; /* Fondo del calendario */
+    color: white; /* Color del texto */
+}
+
+/* Estilos para el calendario de rango */
+.flatpickr-day.range.startRange,
+.flatpickr-day.range.endRange,
+.flatpickr-day.inRange {
+    background-color: #3a3a3a; /* Color de fondo para el rango seleccionado */
+    color: #fff;
+}
+
+.flatpickr-day.selected {
+    background-color: #4a4a4a; /* Color de fondo para el día seleccionado */
+    color: #fff;
+}
+
+/* Estilo para los días fuera del rango seleccionado */
+.flatpickr-day.disabled {
+    color: #666; /* Color gris para días deshabilitados */
+}
+
+/* Estilos para los botones del calendario */
+.flatpickr-button {
+    background-color: #333; /* Color de fondo para los botones del calendario */
+    color: #fff; /* Color del texto de los botones */
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.flatpickr-button:hover {
+    background-color: #555; /* Color más claro para el estado hover de los botones */
 }
