@@ -161,5 +161,87 @@
     var series = /*[[${series}]]*/;
     /*]]>*/
 </script>
+
+
+
+<!-- Título general para los KPIs -->
+<h2 class="kpi-title-3">Evento</h2>
+
+<!-- Tabla para mostrar datos por asesor -->
+<table class="event-table">
+    <thead>
+
+    <tr>
+        <th>Asesor</th>
+        <th>Interesados Evento</th>
+        <th>Confirmados Evento</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <!-- Iterar sobre la lista combinada de asesores y estadísticas -->
+    <tr th:each="entry : ${combinedAdvisorStats}">
+        <td th:text="${entry.advisor}">Nombre del Asesor</td>
+        <td th:text="${entry.interesadoEvento}" style="text-align: center;">0</td>
+        <td th:text="${entry.confirmadoEvento}" style="text-align: center;">0</td>
+    </tr>
+    </tbody>
+    <tfoot>
+
+    <!-- Muestra los totales en el pie de la tabla -->
+    <tr>
+        <th>Total</th>
+        <td th:text="${totalInteresadosEvento}" style="text-align: center; font-weight: bold;">0</td>
+        <td th:text="${totalConfirmadosEvento}" style="text-align: center; font-weight: bold;">0</td>
+    </tr>
+    </tfoot>
+
+</table>
+
+<!-- Título general para los KPIs -->
+<h2 class="kpi-title-4">¿Qué hicieron los asesores este periodo?</h2>
+
+<!-- Tabla para mostrar datos por asesor -->
+<table class="fuente-table">
+    <thead>
+
+    <tr>
+        <th>Fuente</th>
+        <th>Leads</th>
+        <th>Citas</th>
+        <th>Visitas</th>
+        <th>Negociaciones</th>
+        <th>Apartados</th>
+        <th>Ganados</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <!-- Iterar sobre la lista combinada de asesores y estadísticas -->
+    <tr th:each="entry : ${combinedFuenteStats}">
+        <td th:text="${entry.fuente}">Nombre del Asesor</td>
+        <td th:text="${entry.deals}" style="text-align: center;">Número de Deals</td>
+        <td th:text="${entry.cita}" style="text-align: center;">Número de Citas</td>
+        <td th:text="${entry.visita}" style="text-align: center;">Número de Visitas</td>
+        <td th:text="${entry.negociacion}" style="text-align: center;">Número de Negociaciones</td>
+        <td th:text="${entry.apartado}" style="text-align: center;">Número de Apartados</td>
+        <td th:text="${entry.ganado}" style="text-align: center;">Número de Ganados</td>
+    </tr>
+    </tbody>
+    <tfoot>
+
+    <!-- Muestra los totales en el pie de la tabla -->
+    <tr>
+        <th>Total</th>
+        <td th:text="${totalDeals}" style="text-align: center; font-weight: bold;">0</td>
+        <td th:text="${totalCitas}" style="text-align: center; font-weight: bold;">0</td>
+        <td th:text="${totalVisitas}" style="text-align: center; font-weight: bold;">0</td>
+        <td th:text="${totalNegociaciones}" style="text-align: center; font-weight: bold;">0</td>
+        <td th:text="${totalApartados}" style="text-align: center; font-weight: bold;">0</td>
+        <td th:text="${totalWonDeals}" style="text-align: center; font-weight: bold;">0</td>
+    </tr>
+    </tfoot>
+
+</table>
 </body>
 </html>
