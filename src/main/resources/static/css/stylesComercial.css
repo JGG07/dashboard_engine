@@ -54,7 +54,7 @@ body {
 }
 
 /* Aplica la fuente a los textos del gráfico */
-.highcharts-title,
+.highcharts-,
 .highcharts-subtitle,
 .highcharts-axis-labels text,
 .highcharts-legend text,
@@ -76,7 +76,7 @@ body {
     /* Asegura que el fondo cubra toda la anchura */
     color: #ffffff;
     /* Color del texto */
-    background-color: #bfbdbd;
+    background-color: #868686;
     /* Color de fondo corregido */
     padding: 20px 0;
     /* Espacio interior para mejorar la legibilidad */
@@ -95,7 +95,45 @@ body {
     /* Asegura que el fondo cubra toda la anchura */
     color: #ffffff;
     /* Color del texto */
-    background-color: #bfbdbd;
+    background-color: #868686;
+    /* Color de fondo corregido */
+    padding: 20px 0;
+    /* Espacio interior para mejorar la legibilidad */
+}
+
+.kpi-title-3 {
+    text-align: center;
+    /* Centra el título en la página */
+    font-size: 20px;
+    /* Tamaño de la fuente */
+    margin-bottom: 50px;
+    /* Espacio entre el título y los KPIs */
+    position: relative;
+    top: 400px;
+    width: 45%;
+    /* Asegura que el fondo cubra toda la anchura */
+    color: #ffffff;
+    /* Color del texto */
+    background-color: #868686;
+    /* Color de fondo corregido */
+    padding: 20px 0;
+    /* Espacio interior para mejorar la legibilidad */
+}
+
+.kpi-title-4 {
+    text-align: center;
+    /* Centra el título en la página */
+    font-size: 20px;
+    /* Tamaño de la fuente */
+    margin-bottom: 50px;
+    /* Espacio entre el título y los KPIs */
+    position: relative;
+    top: 450px;
+    width: 45%;
+    /* Asegura que el fondo cubra toda la anchura */
+    color: #ffffff;
+    /* Color del texto */
+    background-color: #868686;
     /* Color de fondo corregido */
     padding: 20px 0;
     /* Espacio interior para mejorar la legibilidad */
@@ -386,4 +424,117 @@ body {
 
 .flatpickr-button:hover {
     background-color: #555; /* Color más claro para el estado hover de los botones */
+}
+
+
+
+
+/* Estilos para las tablas de fuentes */
+.event-table {
+    width: 60%;
+    /* Ocupa el 100% del ancho del contenedor padre */
+    border-collapse: collapse;
+    /* Colapsa los bordes de las celdas adyacentes para que no se dupliquen */
+    font-family: "Arial";
+    /* Establece la fuente de texto de la tabla como Arial */
+    font-size: 14px;
+    /* Define el tamaño de la fuente dentro de la tabla */
+    position: relative;
+    /* Establece el posicionamiento de la tabla como relativo. Esto es útil si se aplican posicionamientos absolutos a elementos hijos */
+    top: 410px;
+    /* Añade un margen superior de 100 píxeles para separar la tabla del contenido superior */
+    margin: 0 auto;
+    /* Centra la tabla horizontalmente en su contenedor. La propiedad auto aplica márgenes automáticos a los lados izquierdo y derecho, mientras que el margen superior es de 0 píxeles */
+    table-layout: fixed;
+    /* Establece el diseño de la tabla en modo fijo, lo que asegura que las columnas tengan un ancho uniforme basado en el ancho especificado de la tabla */
+    background-color: #333333;
+}
+
+.event-table th {
+    border: 1px solid #333333;
+    font-size: 14px;
+    padding: 11px;
+    text-align: center;
+    background-color: #333333;
+}
+
+.event-table td {
+    border: 1px solid #bfbdbd;
+    padding: 11px;
+    text-align: center;
+}
+
+.event-table th {
+    background-color: #a1725a;
+    /* Fondo de la cabecera */
+    color: white;
+    /* Color del texto de la cabecera */
+    text-align: center;
+}
+
+.event-table td {
+    text-align: left;
+    background-color: #000000;
+    color: #ffffff;
+}
+
+.event-table tr.highlight {
+    background-color: #ff6347;
+    /* Color para filas resaltadas */
+}
+
+
+
+
+.fuente-table {
+    width: 60%;
+    /* Ocupa el 100% del ancho del contenedor padre */
+    border-collapse: collapse;
+    /* Colapsa los bordes de las celdas adyacentes para que no se dupliquen */
+    font-family: "Arial";
+    /* Establece la fuente de texto de la tabla como Arial */
+    font-size: 14px;
+    /* Define el tamaño de la fuente dentro de la tabla */
+    position: relative;
+    /* Establece el posicionamiento de la tabla como relativo. Esto es útil si se aplican posicionamientos absolutos a elementos hijos */
+    top: 450px;
+    /* Añade un margen superior de 100 píxeles para separar la tabla del contenido superior */
+    margin: 0 auto;
+    /* Centra la tabla horizontalmente en su contenedor. La propiedad auto aplica márgenes automáticos a los lados izquierdo y derecho, mientras que el margen superior es de 0 píxeles */
+    table-layout: fixed;
+    /* Establece el diseño de la tabla en modo fijo, lo que asegura que las columnas tengan un ancho uniforme basado en el ancho especificado de la tabla */
+    background-color: #333333;
+}
+
+.fuente-table th {
+    border: 1px solid #333333;
+    font-size: 14px;
+    padding: 11px;
+    text-align: center;
+    background-color: #333333;
+}
+
+.fuente-table td {
+    border: 1px solid #bfbdbd;
+    padding: 11px;
+    text-align: center;
+}
+
+.fuente-table th {
+    background-color: #a1725a;
+    /* Fondo de la cabecera */
+    color: white;
+    /* Color del texto de la cabecera */
+    text-align: center;
+}
+
+.fuente-table td {
+    text-align: left;
+    background-color: #000000;
+    color: #ffffff;
+}
+
+.fuente-table tr.highlight {
+    background-color: #ff6347;
+    /* Color para filas resaltadas */
 }

@@ -83,6 +83,10 @@ public class DashboardController {
         Map<String, Integer> stageVisita = pipedriveService.getStageDealsByDate(filteredDeals, 9, startDate, endDate);
         Map<String, Integer> stageNegociacion = pipedriveService.getStageDealsByDate(filteredDeals, 10, startDate, endDate);
         Map<String, Integer> stageApartado = pipedriveService.getStageDealsByDate(filteredDeals, 11, startDate, endDate);
+
+        Map<String, Integer> stageInteresadosEvento = pipedriveService.getStageDealsByDate(filteredDeals, 13, startDate, endDate);
+        Map<String, Integer> stageConfirmadosEvento = pipedriveService.getStageDealsByDate(filteredDeals, 14, startDate, endDate);
+
         Map<String, Integer> wonDealsCountByDate = pipedriveService.getDealsWonCountByDate(filteredDeals);
 
 
@@ -186,6 +190,10 @@ public class DashboardController {
         List<Integer> counts = pipedriveService.getCountsByDate(dates, dealsCountByDate);
         List<Integer> contactados = pipedriveService.getCountsByDate(dates, stageContactados);
         List<Integer> interesados = pipedriveService.getCountsByDate(dates, stageInteresados);
+
+        List<Integer> confirmadosEvento = pipedriveService.getCountsByDate(dates, stageConfirmadosEvento);
+        List<Integer> interesadosEvento = pipedriveService.getCountsByDate(dates, stageInteresadosEvento);
+
         List<Integer> citas = pipedriveService.getCountsByDate(dates, stageCita);
         List<Integer> visitas = pipedriveService.getCountsByDate(dates, stageVisita);
         List<Integer> negociaciones = pipedriveService.getCountsByDate(dates, stageNegociacion);
@@ -196,6 +204,10 @@ public class DashboardController {
         int totalDeals = 0;
         int totalContactados = 0;
         int totalInteresados = 0;
+
+        int totalConfirmadosEvento = 0;
+        int totalInteresadosEvento = 0;
+
         int totalCitas = 0;
         int totalVisitas = 0;
         int totalNegociaciones = 0;
@@ -210,6 +222,14 @@ public class DashboardController {
         for (Integer count : interesados) {
             totalInteresados += count;
         }
+
+        for (Integer count : confirmadosEvento) {
+            totalConfirmadosEvento += count;
+        }
+        for (Integer count : interesadosEvento) {
+            totalInteresadosEvento += count;
+        }
+
         for (Integer count : citas) {
             totalCitas += count;
         }
@@ -233,7 +253,7 @@ public class DashboardController {
         List<Integer> orderedWonDeals = new ArrayList<>();
 
 // Definir el orden deseado de las etapas
-        List<String> desiredOrder = Arrays.asList("Interesado", "Contactado", "Cita", "Visita", "Negociación", "Apartado");
+        List<String> desiredOrder = Arrays.asList("Interesado", "Contactado", "Interesado Evento", "Confirmado Evento", "Cita", "Visita", "Negociación", "Apartado");
 
 // Iterar sobre las etapas en el orden deseado
         for (String stage : desiredOrder) {
@@ -258,6 +278,10 @@ public class DashboardController {
         model.addAttribute("dealsCounts", counts);
         model.addAttribute("interesados", interesados);
         model.addAttribute("contactados", contactados);
+
+        model.addAttribute("interesadosEvento", interesadosEvento);
+        model.addAttribute("contactadosEvento", confirmadosEvento);
+
         model.addAttribute("citas", citas);
         model.addAttribute("visitas", visitas);
         model.addAttribute("negociaciones", negociaciones);
@@ -266,6 +290,10 @@ public class DashboardController {
         model.addAttribute("totalDeals", totalDeals);
         model.addAttribute("totalContactado", totalContactados);
         model.addAttribute("totalInteresados", totalInteresados);
+
+        model.addAttribute("totalConfirmadosEvento", totalConfirmadosEvento);
+        model.addAttribute("totalInteresadosEvento", totalInteresadosEvento);
+
         model.addAttribute("totalCitas", totalCitas);
         model.addAttribute("totalVisitas", totalVisitas);
         model.addAttribute("totalNegociaciones", totalNegociaciones);
@@ -331,12 +359,24 @@ public class DashboardController {
 
         // Crear un mapa para almacenar la suma de deals por asesor
         Map<String, Integer> dealsByAdvisor = new HashMap<>();
+        Map<String, Integer> dealsByFuente = new HashMap<>();
 
         // Iterar sobre la lista de filteredDeals
         for (DealsData deal : filteredDeals) {
+
             String advisor = deal.getOwnerName();  // Suponiendo que getOwnerName() devuelve el nombre del asesor
+            String fuente = pipedriveService.getFuenteName(deal.getFuente());
+
             dealsByAdvisor.put(advisor, dealsByAdvisor.getOrDefault(advisor, 0) + 1);
+            dealsByFuente.put(fuente, dealsByFuente.getOrDefault(fuente, 0) + 1);
+
         }
+
+        // Ordenar el mapa por número de deals en orden descendente
+        List<Map.Entry<String, Integer>> sortedDealsByFuente = dealsByFuente.entrySet()
+                .stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                .toList();
 
         // Ordenar el mapa por número de deals en orden descendente
         List<Map.Entry<String, Integer>> sortedDealsByAdvisor = dealsByAdvisor.entrySet()
@@ -344,50 +384,94 @@ public class DashboardController {
                 .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
                 .toList();
 
+        model.addAttribute("sortedDealsByFuente", sortedDealsByFuente);
         model.addAttribute("sortedDealsByAdvisor", sortedDealsByAdvisor);
 
+        start = 0;
         List<DealsData> filteredDealsByStageChange = new ArrayList<>();
+        List<DealsData> listaEvento = new ArrayList<>();
 
-        for (DealsData deal : filteredDeals) {
-            String addTime = deal.getStageChangeTime();
-            LocalDate date = null;
-            if (addTime != null) {
-                // Procesar el caso donde addTime no es null
-                LocalDateTime dateTime = LocalDateTime.parse(addTime, formatter);
-                // Restar 6 horas
-                LocalDateTime adjustedTime = dateTime.minusHours(6);
-                date = adjustedTime.toLocalDate();
-                if (!date.isBefore(startDate) && !date.isAfter(endDate)) {
-                    filteredDealsByStageChange.add(deal);
+        while (true) {
+            log.info("*************** SecondWhile ***************");
+            Deals dealsData = pipedriveService.getDealsStart(start);
+
+            if (!dealsData.getAdditionalData().getPagination().isMoreItems()) {
+                break;
+            }
+
+            for (DealsData deal : dealsData.getData()) {
+                String addTime = deal.getStageChangeTime();
+                LocalDate date = null;
+
+                if(deal.getStageId() == 13 || deal.getStageId() == 14){
+                    listaEvento.add(deal);
+                }
+
+                if (addTime != null) {
+                    // Procesar el caso donde addTime no es null
+                    LocalDateTime dateTime = LocalDateTime.parse(addTime, formatter);
+
+                    // Restar 6 horas
+                    LocalDateTime adjustedTime = dateTime.minusHours(6);
+                    date = adjustedTime.toLocalDate();
+
+                    if (!date.isBefore(startDate) && !date.isAfter(endDate)) {
+                        filteredDealsByStageChange.add(deal);
+                    }
                 }
             }
+            start += LIMIT;
         }
 
         Map<String, DashboardController.AdvisorStats> advisorStatsMap = new HashMap<>();
+        Map<String, DashboardController.AdvisorStats> fuenteStatsMap = new HashMap<>();
 
-        DashboardController.AdvisorStats stats;
+        AdvisorStats stats;
+        AdvisorStats statsFuente;
+
+        for(DealsData dealsData : listaEvento) {
+            String advisor = dealsData.getOwnerName();
+            stats = advisorStatsMap.getOrDefault(advisor, new DashboardController.AdvisorStats());
+
+            if (dealsData.getStageId() == 13) {
+                stats.interesadoEvento++;
+            }
+
+            if (dealsData.getStageId() == 14) {
+                stats.confirmadoEvento++;
+            }
+
+            advisorStatsMap.put(advisor, stats);
+        }
 
         for (DealsData deal : filteredDealsByStageChange) {
             String advisor = deal.getOwnerName();
+            String fuente = pipedriveService.getFuenteName(deal.getFuente());
+
             stats = advisorStatsMap.getOrDefault(advisor, new DashboardController.AdvisorStats());
+            statsFuente = fuenteStatsMap.getOrDefault(fuente, new DashboardController.AdvisorStats());
 
             if (deal.getStageId() == 8) {
                 stats.cita++;
-                System.out.println(deal.getPersonName() + " " + deal.getStageId() + " " + deal.getOwnerName() + " " + deal.getAddTime() + " " + deal.getStageChangeTime());
+
+                statsFuente.cita++;
             }
 
             if (deal.getStageId() == 9) {
                 stats.cita++;
                 stats.visita++;
-                System.out.println(deal.getPersonName() + " " + deal.getStageId() + " " + deal.getOwnerName() + " " + deal.getAddTime() + " " + deal.getStageChangeTime());
 
+                statsFuente.cita++;
+                statsFuente.visita++;
             }
             if (deal.getStageId() == 10) {
                 stats.cita++;
                 stats.visita++;
                 stats.negociacion++;
-                System.out.println(deal.getPersonName() + " " + deal.getStageId() + " " + deal.getOwnerName() + " " + deal.getAddTime() + " " + deal.getStageChangeTime());
 
+                statsFuente.cita++;
+                statsFuente.visita++;
+                statsFuente.negociacion++;
             }
 
             if (deal.getStageId() == 11) {
@@ -395,40 +479,57 @@ public class DashboardController {
                 stats.visita++;
                 stats.negociacion++;
                 stats.apartado++;
-                System.out.println(deal.getPersonName() + " " + deal.getStageId() + " " + deal.getOwnerName() + " " + deal.getAddTime() + " " + deal.getStageChangeTime());
+
+                statsFuente.cita++;
+                statsFuente.visita++;
+                statsFuente.negociacion++;
+                statsFuente.apartado++;
             }
 
             if (deal.getStatus().equals("won")) {
                 stats.ganado++;
-                System.out.println(deal.getPersonName() + " " + deal.getStageId() + " " + deal.getOwnerName() + " " + deal.getAddTime() + " " + deal.getStageChangeTime());
 
+                statsFuente.ganado++;
             }
 
-//            System.out.println("citas: " + stats.getCita());
-//            System.out.println("visitas: " + stats.getVisita());
-//            System.out.println("negociaciones: " + stats.getNegociacion());
-//            System.out.println("apartados: " + stats.getApartado());
-//            System.out.println(advisorStatsMap);
             advisorStatsMap.put(advisor, stats);
+            fuenteStatsMap.put(fuente, statsFuente);
         }
 
         // Crear una lista para almacenar la combinación de ambos
-        List<DashboardController.CombinedAdvisorStats> combinedList = new ArrayList<>();
+        List<CombinedAdvisorStats> combinedList = new ArrayList<>();
+        List<CombinedFuenteStats> combinedFuenteStatsList = new ArrayList<>();
 
         for (Map.Entry<String, Integer> entry : sortedDealsByAdvisor) {
             String advisor = entry.getKey();
             int dealsCount = entry.getValue();
 
-            stats = advisorStatsMap.getOrDefault(advisor, new DashboardController.AdvisorStats());
+            stats = advisorStatsMap.getOrDefault(advisor, new AdvisorStats());
 
-            DashboardController.CombinedAdvisorStats combinedStats = new DashboardController.CombinedAdvisorStats(advisor, dealsCount,
+            CombinedAdvisorStats combinedStats = new DashboardController.CombinedAdvisorStats(advisor, dealsCount,
                     stats.getCita(), stats.getVisita(), stats.getNegociacion(),
-                    stats.getApartado(), stats.getGanado());
+                    stats.getApartado(), stats.getGanado(), stats.getInteresadoEvento(), stats.getConfirmadoEvento());
 
             combinedList.add(combinedStats);
         }
+
+        for (Map.Entry<String, Integer> entry : sortedDealsByFuente) {
+
+            String fuente = entry.getKey();
+            int dealsCount = entry.getValue();
+
+            statsFuente = fuenteStatsMap.getOrDefault(fuente, new AdvisorStats());
+
+            CombinedFuenteStats combinedStats = new CombinedFuenteStats(fuente, dealsCount,
+                    statsFuente.getCita(), statsFuente.getVisita(), statsFuente.getNegociacion(),
+                    statsFuente.getApartado(), statsFuente.getGanado(), statsFuente.getInteresadoEvento(), statsFuente.getConfirmadoEvento());
+
+            combinedFuenteStatsList.add(combinedStats);
+        }
+
         // Pasar la lista combinada al modelo
         model.addAttribute("combinedAdvisorStats", combinedList);
+        model.addAttribute("combinedFuenteStats", combinedFuenteStatsList);
 
         // Inicializar los totales
         int totalDeals = 0;
@@ -438,6 +539,9 @@ public class DashboardController {
         int totalApartados = 0;
         int totalWonDeals = 0;
 
+        int totalInteresadoEvento = 0;
+        int totalConfirmadoEvento = 0;
+
         // Calcular totales
         for (DashboardController.CombinedAdvisorStats stat : combinedList) {
             totalDeals += stat.getDeals();
@@ -446,6 +550,9 @@ public class DashboardController {
             totalNegociaciones += stat.getNegociacion();
             totalApartados += stat.getApartado();
             totalWonDeals += stat.getGanado();
+
+            totalInteresadoEvento += stat.getInteresadoEvento();
+            totalConfirmadoEvento += stat.getConfirmadoEvento();
         }
 
         // Pasar los totales al modelo
@@ -455,6 +562,9 @@ public class DashboardController {
         model.addAttribute("totalNegociaciones", totalNegociaciones);
         model.addAttribute("totalApartados", totalApartados);
         model.addAttribute("totalWonDeals", totalWonDeals);
+
+        model.addAttribute("totalInteresadosEvento", totalInteresadoEvento);
+        model.addAttribute("totalConfirmadosEvento", totalConfirmadoEvento);
 
         // Recopilación de actividades por asesor y por fecha
         Map<String, Map<String, Integer>> actividadesPorAsesorYFecha = new HashMap<>();
@@ -468,10 +578,12 @@ public class DashboardController {
             asesoresList.add(asesor.getAdvisor());
 
             for (DealsData deal : filteredDeals) {
-                int userId = deal.getUserId().getId();
+                if(deal.getUserId().getId() != 12918702) {
+                    int userId = deal.getUserId().getId();
 
-                if (!processedIds.contains(userId)) {
-                    processedIds.add(userId);
+                    if (!processedIds.contains(userId)) {
+                        processedIds.add(userId);
+                    }
                 }
             }
         }
@@ -547,6 +659,24 @@ public class DashboardController {
         private int negociacion;
         private int apartado;
         private int ganado;
+
+        private int interesadoEvento;
+        private int confirmadoEvento;
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class CombinedFuenteStats {
+        private String fuente;
+        private int deals;
+        private int cita;
+        private int visita;
+        private int negociacion;
+        private int apartado;
+        private int ganado;
+
+        private int interesadoEvento;
+        private int confirmadoEvento;
     }
 
     @Data
@@ -557,10 +687,16 @@ public class DashboardController {
         public int apartado = 0;
         public int ganado = 0;
 
+        public int interesadoEvento = 0;
+        public int confirmadoEvento = 0;
+
         public int getCita() { return cita; }
         public int getVisita() { return visita; }
         public int getNegociacion() { return negociacion; }
         public int getApartado() { return apartado; }
         public int getGanado() { return ganado; }
+
+        public int getInteresadoEvento(){ return interesadoEvento; }
+        public int getConfirmadoEvento(){ return confirmadoEvento; }
     }
 }
