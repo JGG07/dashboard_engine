@@ -20,6 +20,8 @@ public class DealsData {
     private String addTime;
     @JsonProperty("stage_id")
     private int stageId;
+    @JsonProperty("won_time")
+    private String wonTime;
     private String status;
     @JsonProperty("lost_reason")
     private String lostReason;

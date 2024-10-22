@@ -513,6 +513,7 @@ public class FilterController {
 
             for (DealsData deal : dealsData.getData()) {
                 String addTime = deal.getStageChangeTime();
+
                 LocalDate date = null;
 
                 if(deal.getStageId() == 13 || deal.getStageId() == 14){
@@ -619,6 +620,15 @@ public class FilterController {
                 statsFuente.visita++;
                 statsFuente.negociacion++;
                 statsFuente.apartado++;
+            }
+
+            if(deal.getWonTime() != null) {
+                LocalDate dateTime = LocalDate.parse(deal.getWonTime(), formatter);
+                if (!dateTime.isBefore(startDate) && !dateTime.isAfter(endDate)) {
+                    stats.ganado++;
+
+                    statsFuente.ganado++;
+                }
             }
 
 //            System.out.println("citas: " + stats.getCita());
