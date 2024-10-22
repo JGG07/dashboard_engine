@@ -1,5 +1,6 @@
 package com.satori.dashboardengine.bo;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.satori.dashboardengine.config.PipedriveConfig;
 import com.satori.dashboardengine.dto.Activities;
 import com.satori.dashboardengine.dto.ActivitiesData;
@@ -8,6 +9,9 @@ import com.satori.dashboardengine.dto.DealsData;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
@@ -29,6 +33,43 @@ public class PipedriveBo {
     public PipedriveBo(RestTemplate restTemplate, PipedriveConfig pipedriveConfig) {
         this.restTemplate = restTemplate;
         this.pipedriveConfig = pipedriveConfig;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public List<DealsData> getAllDeals(){
+        log.info("******************* getAllDeals *********************");
+        int start = 0;
+        Deals deals;
+        List<DealsData> getAllDealsList = new ArrayList<>();
+        try {
+            while (true) {
+                log.info("******************* getAllDeals Start " + start +" *********************");
+                String url = pipedriveConfig.getApiUrl() + "/deals?api_token=" + pipedriveConfig.getApiToken() + "&limit=500" + "&start=" + start + "&sort=add_time DESC";
+                deals = restTemplate.getForObject(url, Deals.class);
+                assert deals != null;
+                getAllDealsList.addAll(deals.getData());
+                if (!deals.getAdditionalData().getPagination().isMoreItems()) {
+                    break;
+                }
+                start += deals.getAdditionalData().getPagination().getLimit();
+            }
+            return getAllDealsList;
+        } catch (HttpClientErrorException e) {
+            log.error("Error de cliente: " + e.getStatusCode() + " - " + e.getResponseBodyAsString());
+            return null;
+        } catch (HttpServerErrorException e) {
+            log.error("Error de servidor: " + e.getStatusCode() + " - " + e.getResponseBodyAsString());
+            return null;
+        } catch (RestClientException e) {
+            log.error("Error de cliente REST: " + e.getMessage());
+            return null;
+        } catch (Exception e) {
+            log.error("Error inesperado: " + e.getMessage());
+            return null;
+        }
     }
 
     /**
@@ -58,6 +99,7 @@ public class PipedriveBo {
 
             // Restar 6 horas a las fechas de update_time de cada actividad
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");  // Ajusta el formato si es necesario
+
             fetchedActivities.forEach(activity -> {
                 try {
                     // Parsear la fecha y hora de update_time
