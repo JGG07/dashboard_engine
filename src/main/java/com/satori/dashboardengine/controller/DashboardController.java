@@ -326,10 +326,11 @@ public class DashboardController {
                 if (!date.isBefore(startDate) && !date.isAfter(endDate)) {
                     filteredDeals.add(deal);
                 }
+
             }
 
             assert date != null;
-            if (date.isBefore(startDate)) {
+            if (!deals.getAdditionalData().getPagination().isMoreItems()) {
                 break;
             }
             start += LIMIT;
@@ -343,18 +344,10 @@ public class DashboardController {
         for (DealsData deal : filteredDeals) {
 
             String advisor = deal.getOwnerName();  // Suponiendo que getOwnerName() devuelve el nombre del asesor
-            String fuente = pipedriveService.getFuenteName(deal.getFuente());
-
             dealsByAdvisor.put(advisor, dealsByAdvisor.getOrDefault(advisor, 0) + 1);
-            dealsByFuente.put(fuente, dealsByFuente.getOrDefault(fuente, 0) + 1);
+
 
         }
-
-        // Ordenar el mapa por número de deals en orden descendente
-        List<Map.Entry<String, Integer>> sortedDealsByFuente = dealsByFuente.entrySet()
-                .stream()
-                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
-                .toList();
 
         // Ordenar el mapa por número de deals en orden descendente
         List<Map.Entry<String, Integer>> sortedDealsByAdvisor = dealsByAdvisor.entrySet()
@@ -362,7 +355,6 @@ public class DashboardController {
                 .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
                 .toList();
 
-        model.addAttribute("sortedDealsByFuente", sortedDealsByFuente);
         model.addAttribute("sortedDealsByAdvisor", sortedDealsByAdvisor);
 
         start = 0;
@@ -419,6 +411,8 @@ public class DashboardController {
             String advisor = deal.getOwnerName();
             String fuente = pipedriveService.getFuenteName(deal.getFuente());
 
+            dealsByFuente.put(fuente, dealsByFuente.getOrDefault(fuente, 0) + 1);
+
             stats = advisorStatsMap.getOrDefault(advisor, new DashboardController.AdvisorStats());
             statsFuente = fuenteStatsMap.getOrDefault(fuente, new DashboardController.AdvisorStats());
 
@@ -466,6 +460,14 @@ public class DashboardController {
             advisorStatsMap.put(advisor, stats);
             fuenteStatsMap.put(fuente, statsFuente);
         }
+
+        // Ordenar el mapa por número de deals en orden descendente
+        List<Map.Entry<String, Integer>> sortedDealsByFuente = dealsByFuente.entrySet()
+                .stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                .toList();
+
+        model.addAttribute("sortedDealsByFuente", sortedDealsByFuente);
 
         // Crear una lista para almacenar la combinación de ambos
         List<CombinedAdvisorStats> combinedList = new ArrayList<>();
@@ -601,14 +603,14 @@ public class DashboardController {
         }
 
         model.addAttribute("fechas", fechas);
-        for(int i = 0; i < fechas.size(); i++){
-            System.out.println(fechas.get(i));
-        }
-
-        model.addAttribute("series", series);
-        for(int i = 0; i < series.size(); i++){
-            //System.out.println(series.get(i));
-        }
+//        for(int i = 0; i < fechas.size(); i++){
+//            System.out.println(fechas.get(i));
+//        }
+//
+//        model.addAttribute("series", series);
+//        for(int i = 0; i < series.size(); i++){
+//            //System.out.println(series.get(i));
+//        }
         return "comercial";
     }
 
