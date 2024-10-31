@@ -225,9 +225,6 @@ public class FilterController {
         List<Integer> contactados = pipedriveService.getCountsByDate(dates, stageContactados);
         List<Integer> interesados = pipedriveService.getCountsByDate(dates, stageInteresados);
 
-        List<Integer> confirmadosEvento = pipedriveService.getCountsByDate(dates, stageConfirmadosEvento);
-        List<Integer> interesadosEvento = pipedriveService.getCountsByDate(dates, stageInteresadosEvento);
-
         List<Integer> citas = pipedriveService.getCountsByDate(dates, stageCita);
         List<Integer> visitas = pipedriveService.getCountsByDate(dates, stageVisita);
         List<Integer> negociaciones = pipedriveService.getCountsByDate(dates, stageNegociacion);
@@ -238,9 +235,6 @@ public class FilterController {
         int totalDeals = 0;
         int totalContactados = 0;
         int totalInteresados = 0;
-
-        int totalConfirmadosEvento = 0;
-        int totalInteresadosEvento = 0;
 
         int totalCitas = 0;
         int totalVisitas = 0;
@@ -255,13 +249,6 @@ public class FilterController {
         }
         for (Integer count : interesados) {
             totalInteresados += count;
-        }
-
-        for (Integer count : confirmadosEvento) {
-            totalConfirmadosEvento += count;
-        }
-        for (Integer count : interesadosEvento) {
-            totalInteresadosEvento += count;
         }
 
         for (Integer count : citas) {
@@ -287,7 +274,7 @@ public class FilterController {
         List<Integer> orderedWonDeals = new ArrayList<>();
 
 // Definir el orden deseado de las etapas
-        List<String> desiredOrder = Arrays.asList("Interesado", "Contactado", "Interesado Evento", "Confirmado Evento", "Cita", "Visita", "Negociación", "Apartado");
+        List<String> desiredOrder = Arrays.asList("Interesado", "Contactado", "Cita", "Visita", "Negociación", "Apartado");
 
 // Iterar sobre las etapas en el orden deseado
         for (String stage : desiredOrder) {
@@ -313,8 +300,6 @@ public class FilterController {
         model.addAttribute("interesados", interesados);
         model.addAttribute("contactados", contactados);
 
-        model.addAttribute("interesadosEvento", interesadosEvento);
-        model.addAttribute("contactadosEvento", confirmadosEvento);
 
         model.addAttribute("citas", citas);
         model.addAttribute("visitas", visitas);
@@ -324,9 +309,6 @@ public class FilterController {
         model.addAttribute("totalDeals", totalDeals);
         model.addAttribute("totalContactado", totalContactados);
         model.addAttribute("totalInteresados", totalInteresados);
-
-        model.addAttribute("totalConfirmadosEvento", totalConfirmadosEvento);
-        model.addAttribute("totalInteresadosEvento", totalInteresadosEvento);
 
         model.addAttribute("totalCitas", totalCitas);
         model.addAttribute("totalVisitas", totalVisitas);
@@ -498,7 +480,6 @@ public class FilterController {
         List<DealsData> filteredDealsByStageChange = new ArrayList<>();
 
         start = 0;
-        List<DealsData> listaEvento = new ArrayList<>();
 
         while (true) {
             log.info("*************** SecondWhile ***************");

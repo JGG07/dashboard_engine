@@ -312,8 +312,6 @@ public class PipedriveBo {
             case 9: return "Visita";
             case 10: return "Negociación";
             case 11: return "Apartado";
-            case 13: return "Interesado Evento";
-            case 14: return "Confirmado Evento";
             default: return "Desconocido";
         }
     }

@@ -84,9 +84,6 @@ public class DashboardController {
         Map<String, Integer> stageNegociacion = pipedriveService.getStageDealsByDate(filteredDeals, 10, startDate, endDate);
         Map<String, Integer> stageApartado = pipedriveService.getStageDealsByDate(filteredDeals, 11, startDate, endDate);
 
-        Map<String, Integer> stageInteresadosEvento = pipedriveService.getStageDealsByDate(filteredDeals, 13, startDate, endDate);
-        Map<String, Integer> stageConfirmadosEvento = pipedriveService.getStageDealsByDate(filteredDeals, 14, startDate, endDate);
-
         Map<String, Integer> wonDealsCountByDate = pipedriveService.getDealsWonCountByDate(filteredDeals);
 
 
@@ -191,9 +188,6 @@ public class DashboardController {
         List<Integer> contactados = pipedriveService.getCountsByDate(dates, stageContactados);
         List<Integer> interesados = pipedriveService.getCountsByDate(dates, stageInteresados);
 
-        List<Integer> confirmadosEvento = pipedriveService.getCountsByDate(dates, stageConfirmadosEvento);
-        List<Integer> interesadosEvento = pipedriveService.getCountsByDate(dates, stageInteresadosEvento);
-
         List<Integer> citas = pipedriveService.getCountsByDate(dates, stageCita);
         List<Integer> visitas = pipedriveService.getCountsByDate(dates, stageVisita);
         List<Integer> negociaciones = pipedriveService.getCountsByDate(dates, stageNegociacion);
@@ -204,9 +198,6 @@ public class DashboardController {
         int totalDeals = 0;
         int totalContactados = 0;
         int totalInteresados = 0;
-
-        int totalConfirmadosEvento = 0;
-        int totalInteresadosEvento = 0;
 
         int totalCitas = 0;
         int totalVisitas = 0;
@@ -221,13 +212,6 @@ public class DashboardController {
         }
         for (Integer count : interesados) {
             totalInteresados += count;
-        }
-
-        for (Integer count : confirmadosEvento) {
-            totalConfirmadosEvento += count;
-        }
-        for (Integer count : interesadosEvento) {
-            totalInteresadosEvento += count;
         }
 
         for (Integer count : citas) {
@@ -253,7 +237,7 @@ public class DashboardController {
         List<Integer> orderedWonDeals = new ArrayList<>();
 
 // Definir el orden deseado de las etapas
-        List<String> desiredOrder = Arrays.asList("Interesado", "Contactado", "Interesado Evento", "Confirmado Evento", "Cita", "Visita", "Negociación", "Apartado");
+        List<String> desiredOrder = Arrays.asList("Interesado", "Contactado", "Cita", "Visita", "Negociación", "Apartado");
 
 // Iterar sobre las etapas en el orden deseado
         for (String stage : desiredOrder) {
@@ -279,9 +263,6 @@ public class DashboardController {
         model.addAttribute("interesados", interesados);
         model.addAttribute("contactados", contactados);
 
-        model.addAttribute("interesadosEvento", interesadosEvento);
-        model.addAttribute("contactadosEvento", confirmadosEvento);
-
         model.addAttribute("citas", citas);
         model.addAttribute("visitas", visitas);
         model.addAttribute("negociaciones", negociaciones);
@@ -290,9 +271,6 @@ public class DashboardController {
         model.addAttribute("totalDeals", totalDeals);
         model.addAttribute("totalContactado", totalContactados);
         model.addAttribute("totalInteresados", totalInteresados);
-
-        model.addAttribute("totalConfirmadosEvento", totalConfirmadosEvento);
-        model.addAttribute("totalInteresadosEvento", totalInteresadosEvento);
 
         model.addAttribute("totalCitas", totalCitas);
         model.addAttribute("totalVisitas", totalVisitas);
@@ -389,7 +367,6 @@ public class DashboardController {
 
         start = 0;
         List<DealsData> filteredDealsByStageChange = new ArrayList<>();
-        List<DealsData> listaEvento = new ArrayList<>();
 
         while (true) {
             log.info("*************** SecondWhile ***************");
@@ -403,9 +380,6 @@ public class DashboardController {
                 String addTime = deal.getStageChangeTime();
                 LocalDate date = null;
 
-                if(deal.getStageId() == 13 || deal.getStageId() == 14){
-                    listaEvento.add(deal);
-                }
 
                 if (addTime != null) {
                     // Procesar el caso donde addTime no es null
@@ -429,20 +403,6 @@ public class DashboardController {
         AdvisorStats stats;
         AdvisorStats statsFuente;
 
-        for(DealsData dealsData : listaEvento) {
-            String advisor = dealsData.getOwnerName();
-            stats = advisorStatsMap.getOrDefault(advisor, new DashboardController.AdvisorStats());
-
-            if (dealsData.getStageId() == 13) {
-                stats.interesadoEvento++;
-            }
-
-            if (dealsData.getStageId() == 14) {
-                stats.confirmadoEvento++;
-            }
-
-            advisorStatsMap.put(advisor, stats);
-        }
 
         for (DealsData deal : filteredDealsByStageChange) {
             String advisor = deal.getOwnerName();
@@ -508,7 +468,7 @@ public class DashboardController {
 
             CombinedAdvisorStats combinedStats = new DashboardController.CombinedAdvisorStats(advisor, dealsCount,
                     stats.getCita(), stats.getVisita(), stats.getNegociacion(),
-                    stats.getApartado(), stats.getGanado(), stats.getInteresadoEvento(), stats.getConfirmadoEvento());
+                    stats.getApartado(), stats.getGanado());
 
             combinedList.add(combinedStats);
         }
@@ -522,7 +482,7 @@ public class DashboardController {
 
             CombinedFuenteStats combinedStats = new CombinedFuenteStats(fuente, dealsCount,
                     statsFuente.getCita(), statsFuente.getVisita(), statsFuente.getNegociacion(),
-                    statsFuente.getApartado(), statsFuente.getGanado(), statsFuente.getInteresadoEvento(), statsFuente.getConfirmadoEvento());
+                    statsFuente.getApartado(), statsFuente.getGanado());
 
             combinedFuenteStatsList.add(combinedStats);
         }
@@ -539,9 +499,6 @@ public class DashboardController {
         int totalApartados = 0;
         int totalWonDeals = 0;
 
-        int totalInteresadoEvento = 0;
-        int totalConfirmadoEvento = 0;
-
         // Calcular totales
         for (DashboardController.CombinedAdvisorStats stat : combinedList) {
             totalDeals += stat.getDeals();
@@ -551,8 +508,6 @@ public class DashboardController {
             totalApartados += stat.getApartado();
             totalWonDeals += stat.getGanado();
 
-            totalInteresadoEvento += stat.getInteresadoEvento();
-            totalConfirmadoEvento += stat.getConfirmadoEvento();
         }
 
         // Pasar los totales al modelo
@@ -562,9 +517,6 @@ public class DashboardController {
         model.addAttribute("totalNegociaciones", totalNegociaciones);
         model.addAttribute("totalApartados", totalApartados);
         model.addAttribute("totalWonDeals", totalWonDeals);
-
-        model.addAttribute("totalInteresadosEvento", totalInteresadoEvento);
-        model.addAttribute("totalConfirmadosEvento", totalConfirmadoEvento);
 
         // Recopilación de actividades por asesor y por fecha
         Map<String, Map<String, Integer>> actividadesPorAsesorYFecha = new HashMap<>();
@@ -682,8 +634,6 @@ public class DashboardController {
         public int apartado = 0;
         public int ganado = 0;
 
-        public int interesadoEvento = 0;
-        public int confirmadoEvento = 0;
 
         public int getCita() { return cita; }
         public int getVisita() { return visita; }
