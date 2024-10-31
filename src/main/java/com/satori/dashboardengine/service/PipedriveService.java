@@ -18,10 +18,6 @@ public class PipedriveService {
     @Autowired
     PipedriveBo pipedriveBo;
 
-    public List<DealsData> getAllDeals(){
-        return pipedriveBo.getAllDeals();
-    }
-
     public Deals getDealsStart(Integer start){
         return pipedriveBo.getDealsStart(start);
     }
