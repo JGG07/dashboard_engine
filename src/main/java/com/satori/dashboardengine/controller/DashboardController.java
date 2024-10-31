@@ -380,8 +380,20 @@ public class DashboardController {
                 String addTime = deal.getStageChangeTime();
                 LocalDate date = null;
 
+                // Tomará los won que estén dentro del rango de fechas
+                if(deal.getStatus().equalsIgnoreCase("won")){
+                    if(deal.getWonTime() != null){
 
-                if (addTime != null) {
+                        LocalDateTime wonTime = LocalDateTime.parse(deal.getWonTime(), formatter);
+                        // Restar 6 horas
+                        LocalDateTime adjustedTime = wonTime.minusHours(6);
+                        date = adjustedTime.toLocalDate();
+
+                        if(!date.isBefore(startDate) && !date.isAfter(endDate)){
+                            filteredDealsByStageChange.add(deal);
+                        }
+                    }
+                } else if (addTime != null) {
                     // Procesar el caso donde addTime no es null
                     LocalDateTime dateTime = LocalDateTime.parse(addTime, formatter);
 
@@ -402,7 +414,6 @@ public class DashboardController {
 
         AdvisorStats stats;
         AdvisorStats statsFuente;
-
 
         for (DealsData deal : filteredDealsByStageChange) {
             String advisor = deal.getOwnerName();
@@ -623,7 +634,6 @@ public class DashboardController {
         private int negociacion;
         private int apartado;
         private int ganado;
-
     }
 
     @Data
