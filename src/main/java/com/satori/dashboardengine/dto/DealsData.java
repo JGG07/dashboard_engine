@@ -25,6 +25,8 @@ public class DealsData {
     private String lostReason;
     @JsonProperty("owner_name")
     private String ownerName;
+    @JsonProperty("won_time")
+    private String wonTime;
     @JsonProperty("stage_change_time")
     private String stageChangeTime;
 }

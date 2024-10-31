@@ -475,7 +475,42 @@ public class FilterController {
                 String addTime = deal.getStageChangeTime();
                 LocalDate date = null;
 
-                if (addTime != null) {
+                // Tomará los won que estén dentro del rango de fechas
+                if(deal.getStatus().equalsIgnoreCase("won")) {
+                    if (deal.getWonTime() != null) {
+
+                        LocalDateTime wonTime = LocalDateTime.parse(deal.getWonTime(), formatter);
+                        // Restar 6 horas
+                        LocalDateTime adjustedTime = wonTime.minusHours(6);
+                        date = adjustedTime.toLocalDate();
+
+                        // Filtrar por source, rango de fechas y asesor
+                        if (filterBySource && filterByOwner) {
+                            // Filtrar por fuente, asesor y rango de fechas
+                            if (!date.isBefore(startDate) && !date.isAfter(endDate) &&
+                                    source.contains(deal.getFuente()) && ownerName.contains(deal.getOwnerName())) {
+                                filteredDealsByStageChange.add(deal);
+                            }
+                        } else if (filterBySource) {
+                            // Filtrar solo por fuente y rango de fechas
+                            if (!date.isBefore(startDate) && !date.isAfter(endDate) &&
+                                    source.contains(deal.getFuente())) {
+                                filteredDealsByStageChange.add(deal);
+                            }
+                        } else if (filterByOwner) {
+                            // Filtrar solo por asesor y rango de fechas
+                            if (!date.isBefore(startDate) && !date.isAfter(endDate) &&
+                                    ownerName.contains(deal.getOwnerName())) {
+                                filteredDealsByStageChange.add(deal);
+                            }
+                        } else {
+                            // Filtrar solo por rango de fechas
+                            if (!date.isBefore(startDate) && !date.isAfter(endDate)) {
+                                filteredDealsByStageChange.add(deal);
+                            }
+                        }
+                    }
+                }else if (addTime != null) {
                     // Procesar el caso donde addTime no es null
                     LocalDateTime dateTime = LocalDateTime.parse(addTime, formatter);
 
@@ -553,11 +588,7 @@ public class FilterController {
 
             }
 
-//            System.out.println("citas: " + stats.getCita());
-//            System.out.println("visitas: " + stats.getVisita());
-//            System.out.println("negociaciones: " + stats.getNegociacion());
-//            System.out.println("apartados: " + stats.getApartado());
-//            System.out.println(advisorStatsMap);
+
             advisorStatsMap.put(advisor, stats);
         }
 

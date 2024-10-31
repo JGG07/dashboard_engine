@@ -380,7 +380,20 @@ public class DashboardController {
                 String addTime = deal.getStageChangeTime();
                 LocalDate date = null;
 
-                if (addTime != null) {
+                // Tomará los won que estén dentro del rango de fechas
+                if(deal.getStatus().equalsIgnoreCase("won")){
+                    if(deal.getWonTime() != null){
+
+                        LocalDateTime wonTime = LocalDateTime.parse(deal.getWonTime(), formatter);
+                        // Restar 6 horas
+                        LocalDateTime adjustedTime = wonTime.minusHours(6);
+                        date = adjustedTime.toLocalDate();
+
+                        if(!date.isBefore(startDate) && !date.isAfter(endDate)){
+                            filteredDealsByStageChange.add(deal);
+                        }
+                    }
+                } else if (addTime != null) {
                     // Procesar el caso donde addTime no es null
                     LocalDateTime dateTime = LocalDateTime.parse(addTime, formatter);
 
