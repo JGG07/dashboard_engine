@@ -230,7 +230,18 @@ document.addEventListener('DOMContentLoaded', function() {
             name: 'Ganados: ' + totalWonDeals,
             data: wonDeals,
             color: '#90ed7d' // Color para la serie 'Ganados'
-        }]
+        }],
+        exporting: {
+            enabled: true,
+            buttons: {
+                contextButton: {
+                    align: 'right',      // Alineación horizontal (left, center, right)
+                    verticalAlign: 'top',  // Alineación vertical (top, middle, bottom)
+                    x: 0,               // Ajuste en píxeles desde el borde especificado (horizontal)
+                    y: 352                // Ajuste en píxeles desde el borde especificado (vertical)
+                }
+            }
+        }
     });
 });
 

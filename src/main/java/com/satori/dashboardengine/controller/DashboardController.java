@@ -329,50 +329,34 @@ public class DashboardController {
         int LIMIT = 500;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-        List<DealsData> allDealsList = pipedriveService.getAllDeals();
+        List<DealsData> filteredDeals = new ArrayList<>();
 
-        List<DealsData> filteredDeals = allDealsList.stream()
-                .filter(deal -> {
-                    try {
-                        String addTime = deal.getAddTime();
-                        LocalDateTime addTimeFormatter = LocalDateTime.parse(addTime, formatter);
-                        LocalDateTime ajusteHora = addTimeFormatter.minusHours(6);
-                        LocalDate fecha = ajusteHora.toLocalDate();
-                        return !fecha.isBefore(startDate) && !fecha.isAfter(endDate);
-                    } catch (Exception e) {
-                        // Manejar el error según sea necesario, por ejemplo, registrar el error
-                        return false; // Ignorar este deal en caso de error
-                    }
-                })
-                .toList(); // Usar Collectors.toList() si estás en Java 11 o anterior
 
-        System.out.println("tamaño de la lista " +  allDealsList.size());
+        while (true) {
+            log.info("*************** FirstWhile ***************");
 
-//        while (true) {
-//            log.info("*************** FirstWhile ***************");
-//
-//            Deals deals = pipedriveService.getDealsStart(start);
-//            LocalDate date = null;
-//
-//            for (DealsData deal : deals.getData()) {
-//                String addTime = deal.getAddTime();
-//                LocalDateTime dateTime = LocalDateTime.parse(addTime, formatter);
-//
-//                // Restar 6 horas
-//                LocalDateTime adjustedTime = dateTime.minusHours(6);
-//                date = adjustedTime.toLocalDate();
-//
-//                if (!date.isBefore(startDate) && !date.isAfter(endDate)) {
-//                    filteredDeals.add(deal);
-//                }
-//            }
-//
-//            assert date != null;
-//            if (date.isBefore(startDate)) {
-//                break;
-//            }
-//            start += LIMIT;
-//        }
+            Deals deals = pipedriveService.getDealsStart(start);
+            LocalDate date = null;
+
+            for (DealsData deal : deals.getData()) {
+                String addTime = deal.getAddTime();
+                LocalDateTime dateTime = LocalDateTime.parse(addTime, formatter);
+
+                // Restar 6 horas
+                LocalDateTime adjustedTime = dateTime.minusHours(6);
+                date = adjustedTime.toLocalDate();
+
+                if (!date.isBefore(startDate) && !date.isAfter(endDate)) {
+                    filteredDeals.add(deal);
+                }
+            }
+
+            assert date != null;
+            if (date.isBefore(startDate)) {
+                break;
+            }
+            start += LIMIT;
+        }
 
         // Crear un mapa para almacenar la suma de deals por asesor
         Map<String, Integer> dealsByAdvisor = new HashMap<>();
@@ -405,57 +389,40 @@ public class DashboardController {
         model.addAttribute("sortedDealsByAdvisor", sortedDealsByAdvisor);
 
         start = 0;
-        List<DealsData> filteredDealsByStageChange = allDealsList.stream()
-                .filter(deal -> {
-                    try {
-                        String addTime = deal.getStageChangeTime();
-                        LocalDateTime addTimeFormatter = LocalDateTime.parse(addTime, formatter);
-                        LocalDateTime ajusteHora = addTimeFormatter.minusHours(6);
-                        LocalDate fecha = ajusteHora.toLocalDate();
-                        return !fecha.isBefore(startDate) && !fecha.isAfter(endDate);
-                    } catch (Exception e) {
-                        // Manejar el error según sea necesario, por ejemplo, registrar el error
-                        return false; // Ignorar este deal en caso de error
+        List<DealsData> filteredDealsByStageChange = new ArrayList<>();
+        List<DealsData> listaEvento = new ArrayList<>();
+
+        while (true) {
+            log.info("*************** SecondWhile ***************");
+            Deals dealsData = pipedriveService.getDealsStart(start);
+
+            if (!dealsData.getAdditionalData().getPagination().isMoreItems()) {
+                break;
+            }
+
+            for (DealsData deal : dealsData.getData()) {
+                String addTime = deal.getStageChangeTime();
+                LocalDate date = null;
+
+                if(deal.getStageId() == 13 || deal.getStageId() == 14){
+                    listaEvento.add(deal);
+                }
+
+                if (addTime != null) {
+                    // Procesar el caso donde addTime no es null
+                    LocalDateTime dateTime = LocalDateTime.parse(addTime, formatter);
+
+                    // Restar 6 horas
+                    LocalDateTime adjustedTime = dateTime.minusHours(6);
+                    date = adjustedTime.toLocalDate();
+
+                    if (!date.isBefore(startDate) && !date.isAfter(endDate)) {
+                        filteredDealsByStageChange.add(deal);
                     }
-                })
-                .toList();
-
-        List<DealsData> listaEvento = allDealsList.stream()
-                .filter(deal -> deal.getStageId() == 13 || deal.getStageId() == 14)
-                .toList(); // Asegúrate de que tu versión de Java es 16 o superior
-
-
-//        while (true) {
-//            log.info("*************** SecondWhile ***************");
-//            Deals dealsData = pipedriveService.getDealsStart(start);
-//
-//            if (!dealsData.getAdditionalData().getPagination().isMoreItems()) {
-//                break;
-//            }
-//
-//            for (DealsData deal : dealsData.getData()) {
-//                String addTime = deal.getStageChangeTime();
-//                LocalDate date = null;
-//
-//                if(deal.getStageId() == 13 || deal.getStageId() == 14){
-//                    listaEvento.add(deal);
-//                }
-//
-//                if (addTime != null) {
-//                    // Procesar el caso donde addTime no es null
-//                    LocalDateTime dateTime = LocalDateTime.parse(addTime, formatter);
-//
-//                    // Restar 6 horas
-//                    LocalDateTime adjustedTime = dateTime.minusHours(6);
-//                    date = adjustedTime.toLocalDate();
-//
-//                    if (!date.isBefore(startDate) && !date.isAfter(endDate)) {
-//                        filteredDealsByStageChange.add(deal);
-//                    }
-//                }
-//            }
-//            start += LIMIT;
-//        }
+                }
+            }
+            start += LIMIT;
+        }
 
         Map<String, DashboardController.AdvisorStats> advisorStatsMap = new HashMap<>();
         Map<String, DashboardController.AdvisorStats> fuenteStatsMap = new HashMap<>();
@@ -693,9 +660,6 @@ public class DashboardController {
         private int negociacion;
         private int apartado;
         private int ganado;
-
-        private int interesadoEvento;
-        private int confirmadoEvento;
     }
 
     @Data
@@ -709,8 +673,6 @@ public class DashboardController {
         private int apartado;
         private int ganado;
 
-        private int interesadoEvento;
-        private int confirmadoEvento;
     }
 
     @Data
@@ -730,7 +692,5 @@ public class DashboardController {
         public int getApartado() { return apartado; }
         public int getGanado() { return ganado; }
 
-        public int getInteresadoEvento(){ return interesadoEvento; }
-        public int getConfirmadoEvento(){ return confirmadoEvento; }
     }
 }

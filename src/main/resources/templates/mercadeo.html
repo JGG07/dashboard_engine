@@ -74,8 +74,6 @@
         <th style="text-align: center;">Leads</th>
         <th style="text-align: center;">Interesados</th>
         <th style="text-align: center;">Contactados</th>
-        <th style="text-align: center;">Interesados Evento</th>
-        <th style="text-align: center;">Confirmados Evento</th>
         <th style="text-align: center;">Citas</th>
         <th style="text-align: center;">Visitas</th>
         <th style="text-align: center;">Negociaciones</th>
@@ -94,12 +92,6 @@
         </td>
         <td th:text="${entry.value['Contactado'] != null ? entry.value['Contactado'] : 0}" data-value="${entry.value['Contactado'] != null ? entry.value['Contactado'] : 0}" style="text-align: center;">0
         </td>
-
-        <td th:text="${entry.value['Interesado Evento'] != null ? entry.value['Interesado Evento'] : 0}" data-value="${entry.value['Interesado Evento'] != null ? entry.value['Interesado Evento'] : 0}" style="text-align: center;">0
-        </td>
-        <td th:text="${entry.value['Confirmado Evento'] != null ? entry.value['Confirmado Evento'] : 0}" data-value="${entry.value['Confirmado Evento'] != null ? entry.value['Confirmado Evento'] : 0}" style="text-align: center;">0
-        </td>
-
         <td th:text="${entry.value['Cita'] != null ? entry.value['Cita'] : 0}" data-value="${entry.value['Cita'] != null ? entry.value['Cita'] : 0}" style="text-align: center;">0
         </td>
         <td th:text="${entry.value['Visita'] != null ? entry.value['Visita'] : 0}" data-value="${entry.value['Visita'] != null ? entry.value['Visita'] : 0}" style="text-align: center;">0
@@ -123,8 +115,6 @@
         <td th:text="${totalDeals}" style="text-align: center; font-weight: bold;">0</td>
         <td th:text="${totalInteresados}" style="text-align: center; font-weight: bold ;">0</td>
         <td th:text="${totalContactado}" style="text-align: center; font-weight: bold ;">0</td>
-        <td th:text="${totalInteresadosEvento}" style="text-align: center; font-weight: bold ;">0</td>
-        <td th:text="${totalConfirmadosEvento}" style="text-align: center; font-weight: bold ;">0</td>
         <td th:text="${totalCitas}" style="text-align: center; font-weight: bold ;">0</td>
         <td th:text="${totalVisitas}" style="text-align: center; font-weight: bold ;">0</td>
         <td th:text="${totalNegociaciones}" style="text-align: center; font-weight: bold ;">0</td>
@@ -172,8 +162,6 @@
 <script th:inline="javascript">
     /*<![CDATA[*/
     var sortedLostReasons = /*[[${sortedLostReasons}]]*/ {};
-    var reasonsWithPercentages = /*[[${reasonsWithPercentages}]]*/ {};
-    var totalLostReasons = /*[[${totalLostReasons}]]*/ 0;
     /*]]>*/
 </script>
 
