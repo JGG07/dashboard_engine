@@ -607,7 +607,7 @@ public class DashboardController {
 //            System.out.println(fechas.get(i));
 //        }
 //
-//        model.addAttribute("series", series);
+       model.addAttribute("series", series);
 //        for(int i = 0; i < series.size(); i++){
 //            //System.out.println(series.get(i));
 //        }
