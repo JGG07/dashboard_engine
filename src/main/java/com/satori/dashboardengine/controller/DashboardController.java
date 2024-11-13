@@ -603,14 +603,8 @@ public class DashboardController {
         }
 
         model.addAttribute("fechas", fechas);
-//        for(int i = 0; i < fechas.size(); i++){
-//            System.out.println(fechas.get(i));
-//        }
-//
-//        model.addAttribute("series", series);
-//        for(int i = 0; i < series.size(); i++){
-//            //System.out.println(series.get(i));
-//        }
+        model.addAttribute("series", series);
+
         return "comercial";
     }
 

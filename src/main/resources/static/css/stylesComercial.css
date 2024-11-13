@@ -90,7 +90,7 @@ body {
     margin-bottom: 20px;
     /* Espacio entre el título y los KPIs */
     position: absolute;
-    margin-top: 250px;
+    margin-top: 440px;
     width: 45%;
     /* Asegura que el fondo cubra toda la anchura */
     color: #ffffff;
@@ -111,7 +111,7 @@ body {
     margin-bottom: 50px;
     /* Espacio entre el título y los KPIs */
     position: relative;
-    top: 380px;
+    top: 590px;
     width: 45%;
     /* Asegura que el fondo cubra toda la anchura */
     color: #ffffff;
@@ -138,11 +138,11 @@ body {
     /* Color de fondo del contenedor */
     padding: 10px;
     /* Espaciado interno */
-    top: 350px;
+    top: 550px;
 }
 
 /* Estilos para las tablas de fuentes */
-.source-table {
+.asesores-table {
     width: 60%;
     /* Ocupa el 100% del ancho del contenedor padre */
     border-collapse: collapse;
@@ -162,7 +162,7 @@ body {
     background-color: #333333;
 }
 
-.source-table th {
+.asesores-table th {
     border: 1px solid #333333;
     font-size: 14px;
     padding: 11px;
@@ -170,13 +170,13 @@ body {
     background-color: #333333;
 }
 
-.source-table td {
+.asesores-table td {
     border: 1px solid #bfbdbd;
     padding: 11px;
     text-align: center;
 }
 
-.source-table th {
+.asesores-table th {
     background-color: #a1725a;
     /* Fondo de la cabecera */
     color: white;
@@ -184,13 +184,13 @@ body {
     text-align: center;
 }
 
-.source-table td {
+.asesores-table td {
     text-align: left;
     background-color: #000000;
     color: #ffffff;
 }
 
-.source-table tr.highlight {
+.asesores-table tr.highlight {
     background-color: #ff6347;
     /* Color para filas resaltadas */
 }
@@ -420,7 +420,7 @@ body {
     /* Define el tamaño de la fuente dentro de la tabla */
     position: relative;
     /* Establece el posicionamiento de la tabla como relativo. Esto es útil si se aplican posicionamientos absolutos a elementos hijos */
-    top: 370px;
+    top: 590px;
     /* Añade un margen superior de 100 píxeles para separar la tabla del contenido superior */
     margin: 0 auto;
     /* Centra la tabla horizontalmente en su contenedor. La propiedad auto aplica márgenes automáticos a los lados izquierdo y derecho, mientras que el margen superior es de 0 píxeles */
@@ -460,4 +460,67 @@ body {
 .fuente-table tr.highlight {
     background-color: #ff6347;
     /* Color para filas resaltadas */
+}
+
+.custom-button-asesor {
+    display: flex;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #555555;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-left: auto;
+    margin-right: 30px;
+    margin-top: -210px;
+}
+
+.custom-button-asesor:hover {
+    background-color: #4a4a4a;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.custom-button-asesor:active {
+    background-color: #202321;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+}
+
+.custom-button-asesor i{
+    margin-right: 8px;
+}
+
+
+.custom-button-fuente {
+    display: flex;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #555555;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-left: auto;
+    margin-right: 30px;
+    margin-top: 180px;
+}
+
+.custom-button-fuente:hover {
+    background-color: #4a4a4a;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.custom-button-fuente:active {
+    background-color: #202321;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+}
+
+.custom-button-fuente i{
+    margin-right: 8px;
 }
