@@ -101,6 +101,7 @@
     </div>
 </div>
 
+<section>
 <!-- Título general para los KPIs -->
 <div>
     <h2 class="kpi-title-1">¿Qué hicieron los asesores este periodo?</h2>
@@ -155,8 +156,66 @@
         <i class="fas fa-file-csv"></i> Exportar a CSV
     </button>
 </div>
+</section>
 
+<section>
+<!-- Título general para los KPIs -->
+<div>
+    <h2 class="kpi-title-3">¿Qué hicieron los asesores este periodo?</h2>
+</div>
+<!-- Tabla para mostrar datos por asesor -->
+<div>
+    <table class="asesores-table-conversion">
+        <thead>
 
+        <tr>
+            <th>Asesor</th>
+            <th>Leads</th>
+            <th>Citas</th>
+            <th>Visitas</th>
+            <th>Negociaciones</th>
+            <th>Apartados</th>
+            <th>Ganados</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <!-- Iterar sobre la lista combinada de asesores y estadísticas -->
+        <tr th:each="entry : ${combinedAdvisorConversionStats}">
+            <td th:text="${entry.advisor}">Nombre del Asesor</td>
+            <td th:text="${entry.deals}" style="text-align: center;">Número de Deals</td>
+            <td th:text="${#numbers.formatDecimal(entry.cita, 0, 1)} + '%'" style="text-align: center;">Número de Citas</td>
+            <td th:text="${#numbers.formatDecimal(entry.visita, 0, 1)} + '%'" style="text-align: center;">Número de Visitas</td>
+            <td th:text="${#numbers.formatDecimal(entry.negociacion, 0, 1)} + '%'" style="text-align: center;">Número de Negociaciones</td>
+            <td th:text="${#numbers.formatDecimal(entry.apartado, 0, 1)} + '%'" style="text-align: center;">Número de Apartados</td>
+            <td th:text="${#numbers.formatDecimal(entry.ganado, 0, 1)} + '%'" style="text-align: center;">Número de Ganados</td>
+        </tr>
+        </tbody>
+        <tfoot>
+
+        <!-- Muestra los totales en el pie de la tabla -->
+        <tr>
+            <th>Total</th>
+            <td th:text="${totalDeals}" style="text-align: center; font-weight: bold;">0</td>
+            <td th:text="${#numbers.formatDecimal(citas, 0, 1)} + '%'" style="text-align: center; font-weight: bold;">0</td>
+            <td th:text="${#numbers.formatDecimal(visitas, 0, 1)} + '%'" style="text-align: center; font-weight: bold;">0</td>
+            <td th:text="${#numbers.formatDecimal(negociaciones, 0, 1)} + '%'" style="text-align: center; font-weight: bold;">0</td>
+            <td th:text="${#numbers.formatDecimal(apartados, 0 ,1)} + '%'" style="text-align: center; font-weight: bold;">0</td>
+            <td th:text="${#numbers.formatDecimal(wonDeals, 0, 1)} + '%'" style="text-align: center; font-weight: bold;">0</td>
+        </tr>
+        </tfoot>
+
+    </table>
+</div>
+
+<div>
+    <button id="botonExportarTablaAsesoresConversion" class="custom-button-asesor-conversion">
+        <i class="fas fa-file-csv"></i> Exportar a CSV
+    </button>
+</div>
+</section>
+
+<section>
 <!-- Título general para los KPIs -->
 <div>
     <h2 class="kpi-title-2">¿Cuántas actividades se realizaron este periodo?</h2>
@@ -168,11 +227,13 @@
 <!-- Contenedor para la gráfica -->
 <script th:inline="javascript">
     /*<![CDATA[*/
-    var fechas = /*[[${fechas}]]*/;
-    var series = /*[[${series}]]*/;
+    var fechas = /*[[${fechas}]]*/ [];
+    var series = /*[[${series}]]*/ [];
     /*]]>*/
 </script>
+</section>
 
+<section>
 <!-- Título general para los KPIs -->
 <div>
     <h2 class="kpi-title-4">¿Que fuentes fueron mas efectivas?</h2>
@@ -210,12 +271,12 @@
         <!-- Muestra los totales en el pie de la tabla -->
         <tr>
             <th>Total</th>
-            <td th:text="${totalDeals}" style="text-align: center; font-weight: bold;">0</td>
-            <td th:text="${totalCitas}" style="text-align: center; font-weight: bold;">0</td>
-            <td th:text="${totalVisitas}" style="text-align: center; font-weight: bold;">0</td>
-            <td th:text="${totalNegociaciones}" style="text-align: center; font-weight: bold;">0</td>
-            <td th:text="${totalApartados}" style="text-align: center; font-weight: bold;">0</td>
-            <td th:text="${totalWonDeals}" style="text-align: center; font-weight: bold;">0</td>
+            <td th:text="${totalDealsFuente}" style="text-align: center; font-weight: bold;">0</td>
+            <td th:text="${totalCitasFuente}" style="text-align: center; font-weight: bold;">0</td>
+            <td th:text="${totalVisitasFuente}" style="text-align: center; font-weight: bold;">0</td>
+            <td th:text="${totalNegociacionesFuente}" style="text-align: center; font-weight: bold;">0</td>
+            <td th:text="${totalApartadosFuente}" style="text-align: center; font-weight: bold;">0</td>
+            <td th:text="${totalWonDealsFuente}" style="text-align: center; font-weight: bold;">0</td>
         </tr>
         </tfoot>
 
@@ -227,5 +288,65 @@
         <i class="fas fa-file-csv"></i> Exportar a CSV
     </button>
 </div>
+
+</section>
+
+<section>
+    <!-- Título general para los KPIs -->
+    <div>
+        <h2 class="kpi-title-5">¿Que fuentes fueron mas efectivas?</h2>
+    </div>
+    <!-- Tabla para mostrar datos por asesor -->
+    <div>
+        <table class="fuente-table-conversion">
+            <thead>
+
+            <tr>
+                <th>Fuente</th>
+                <th>Leads</th>
+                <th>Citas</th>
+                <th>Visitas</th>
+                <th>Negociaciones</th>
+                <th>Apartados</th>
+                <th>Ganados</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <!-- Iterar sobre la lista combinada de fuente y estadísticas -->
+            <tr th:each="entry : ${combinedFuenteStatsConversion}">
+                <td th:text="${entry.fuente}">Nombre del Asesor</td>
+                <td th:text="${entry.deals}" style="text-align: center;">Número de Deals</td>
+                <td th:text="${#numbers.formatDecimal(entry.cita, 0, 1)} + '%'" style="text-align: center;">Número de Citas</td>
+                <td th:text="${#numbers.formatDecimal(entry.visita, 0, 1)} + '%'" style="text-align: center;">Número de Visitas</td>
+                <td th:text="${#numbers.formatDecimal(entry.negociacion, 0, 1)} + '%'" style="text-align: center;">Número de Negociaciones</td>
+                <td th:text="${#numbers.formatDecimal(entry.apartado, 0, 1)} + '%'" style="text-align: center;">Número de Apartados</td>
+                <td th:text="${#numbers.formatDecimal(entry.ganado, 0, 1)} + '%'" style="text-align: center;">Número de Ganados</td>
+            </tr>
+            </tbody>
+            <tfoot>
+
+            <!-- Muestra los totales en el pie de la tabla -->
+            <tr>
+                <th>Total</th>
+                <td th:text="${totalDealsFuente}" style="text-align: center; font-weight: bold;">0</td>
+                <td th:text="${#numbers.formatDecimal(citasFuente, 0, 1)} + '%'" style="text-align: center; font-weight: bold;">0</td>
+                <td th:text="${#numbers.formatDecimal(visitasFuente, 0, 1)} + '%'" style="text-align: center; font-weight: bold;">0</td>
+                <td th:text="${#numbers.formatDecimal(negociacionesFuente, 0, 1)} + '%'" style="text-align: center; font-weight: bold;">0</td>
+                <td th:text="${#numbers.formatDecimal(apartadosFuente, 0 ,1)} + '%'" style="text-align: center; font-weight: bold;">0</td>
+                <td th:text="${#numbers.formatDecimal(wonDealsFuente, 0, 1)} + '%'" style="text-align: center; font-weight: bold;">0</td>
+            </tr>
+            </tfoot>
+
+        </table>
+    </div>
+
+    <div>
+        <button id="botonExportarTablaFuenteConversion" class="custom-button-fuente-conversion">
+            <i class="fas fa-file-csv"></i> Exportar a CSV
+        </button>
+    </div>
+
+</section>
 </body>
 </html>

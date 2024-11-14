@@ -6,6 +6,7 @@ import com.satori.dashboardengine.dto.DealsData;
 import com.satori.dashboardengine.service.PipedriveService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -346,6 +347,8 @@ public class DashboardController {
             String advisor = deal.getOwnerName();  // Suponiendo que getOwnerName() devuelve el nombre del asesor
             dealsByAdvisor.put(advisor, dealsByAdvisor.getOrDefault(advisor, 0) + 1);
 
+            String fuente = pipedriveService.getFuenteName(deal.getFuente());
+            dealsByFuente.put(fuente, dealsByFuente.getOrDefault(fuente, 0) +1 );
 
         }
 
@@ -356,6 +359,14 @@ public class DashboardController {
                 .toList();
 
         model.addAttribute("sortedDealsByAdvisor", sortedDealsByAdvisor);
+
+        // Ordenar el mapa por número de deals en orden descendente
+        List<Map.Entry<String, Integer>> sortedDealsByFuente = dealsByFuente.entrySet()
+                .stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                .toList();
+
+        model.addAttribute("sortedDealsByFuente", sortedDealsByFuente);
 
         start = 0;
         List<DealsData> filteredDealsByStageChange = new ArrayList<>();
@@ -411,8 +422,6 @@ public class DashboardController {
             String advisor = deal.getOwnerName();
             String fuente = pipedriveService.getFuenteName(deal.getFuente());
 
-            dealsByFuente.put(fuente, dealsByFuente.getOrDefault(fuente, 0) + 1);
-
             stats = advisorStatsMap.getOrDefault(advisor, new DashboardController.AdvisorStats());
             statsFuente = fuenteStatsMap.getOrDefault(fuente, new DashboardController.AdvisorStats());
 
@@ -461,17 +470,14 @@ public class DashboardController {
             fuenteStatsMap.put(fuente, statsFuente);
         }
 
-        // Ordenar el mapa por número de deals en orden descendente
-        List<Map.Entry<String, Integer>> sortedDealsByFuente = dealsByFuente.entrySet()
-                .stream()
-                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
-                .toList();
-
-        model.addAttribute("sortedDealsByFuente", sortedDealsByFuente);
 
         // Crear una lista para almacenar la combinación de ambos
         List<CombinedAdvisorStats> combinedList = new ArrayList<>();
+        // Crear una lista para almacenar la combinación de ambos con conversiones
+        List<CombinedAdvisorConversionStats> combinedConversionList = new ArrayList<>();
+
         List<CombinedFuenteStats> combinedFuenteStatsList = new ArrayList<>();
+        List<CombinedFuenteConversionStats> combinedFuenteConversionStatsList = new ArrayList<>();
 
         for (Map.Entry<String, Integer> entry : sortedDealsByAdvisor) {
             String advisor = entry.getKey();
@@ -483,6 +489,17 @@ public class DashboardController {
                     stats.getCita(), stats.getVisita(), stats.getNegociacion(),
                     stats.getApartado(), stats.getGanado());
 
+            float cita = (float) stats.getCita()/dealsCount*100;
+            float visita = (float) stats.getVisita()/dealsCount*100;
+            float negociacion = (float) stats.getNegociacion()/dealsCount*100;
+            float apartado = (float) stats.getApartado()/dealsCount*100;
+            float ganado = (float) stats.getGanado()/dealsCount*100;
+
+            CombinedAdvisorConversionStats combinedStatsConversion = new DashboardController.CombinedAdvisorConversionStats(advisor, dealsCount,
+                    cita, visita, negociacion,
+                    apartado, ganado);
+
+            combinedConversionList.add(combinedStatsConversion);
             combinedList.add(combinedStats);
         }
 
@@ -497,12 +514,27 @@ public class DashboardController {
                     statsFuente.getCita(), statsFuente.getVisita(), statsFuente.getNegociacion(),
                     statsFuente.getApartado(), statsFuente.getGanado());
 
+            float cita = (float) statsFuente.getCita()/dealsCount*100;
+            float visita = (float) statsFuente.getVisita()/dealsCount*100;
+            float negociacion = (float) statsFuente.getNegociacion()/dealsCount*100;
+            float apartado = (float) statsFuente.getApartado()/dealsCount*100;
+            float ganado = (float) statsFuente.getGanado()/dealsCount*100;
+
+            CombinedFuenteConversionStats combinedStatsConversionFuente = new DashboardController.CombinedFuenteConversionStats(fuente, dealsCount,
+                    cita, visita, negociacion,
+                    apartado, ganado);
+
             combinedFuenteStatsList.add(combinedStats);
+            combinedFuenteConversionStatsList.add(combinedStatsConversionFuente);
+
         }
 
         // Pasar la lista combinada al modelo
         model.addAttribute("combinedAdvisorStats", combinedList);
+        model.addAttribute("combinedAdvisorConversionStats", combinedConversionList);
+
         model.addAttribute("combinedFuenteStats", combinedFuenteStatsList);
+        model.addAttribute("combinedFuenteStatsConversion", combinedFuenteConversionStatsList);
 
         // Inicializar los totales
         int totalDeals = 0;
@@ -520,8 +552,38 @@ public class DashboardController {
             totalNegociaciones += stat.getNegociacion();
             totalApartados += stat.getApartado();
             totalWonDeals += stat.getGanado();
-
         }
+
+        // Inicializar los totales
+        int totalDealsFuente = 0;
+        int totalCitasFuente = 0;
+        int totalVisitasFuente = 0;
+        int totalNegociacionesFuente = 0;
+        int totalApartadosFuente = 0;
+        int totalWonDealsFuente = 0;
+
+        for(DashboardController.CombinedFuenteStats stat : combinedFuenteStatsList){
+            totalDealsFuente += stat.getDeals();
+            totalCitasFuente += stat.getCita();
+            totalVisitasFuente += stat.getVisita();
+            totalNegociacionesFuente += stat.getNegociacion();
+            totalApartadosFuente += stat.getApartado();
+            totalWonDealsFuente += stat.getGanado();
+        }
+
+        // Inicializar los totales
+        float citas = (float) totalCitas/totalDeals*100 ;
+        float visitas = (float) totalVisitas/totalDeals*100;
+        float negociaciones = (float) totalNegociaciones/totalDeals*100;
+        float apartados = (float) totalApartados/totalDeals*100;
+        float wonDeals = (float) totalWonDeals/totalDeals*100;
+
+        // Inicializar los totales
+        float citasFuente = (float) totalCitasFuente/totalDealsFuente*100 ;
+        float visitasFuente = (float) totalVisitasFuente/totalDealsFuente*100;
+        float negociacionesFuente = (float) totalNegociacionesFuente/totalDealsFuente*100;
+        float apartadosFuente = (float) totalApartadosFuente/totalDealsFuente*100;
+        float wonDealsFuente = (float) totalWonDealsFuente/totalDealsFuente*100;
 
         // Pasar los totales al modelo
         model.addAttribute("totalDeals", totalDeals);
@@ -530,6 +592,26 @@ public class DashboardController {
         model.addAttribute("totalNegociaciones", totalNegociaciones);
         model.addAttribute("totalApartados", totalApartados);
         model.addAttribute("totalWonDeals", totalWonDeals);
+
+        // Pasar los totales al modelo
+        model.addAttribute("totalDealsFuente", totalDealsFuente);
+        model.addAttribute("totalCitasFuente", totalCitasFuente);
+        model.addAttribute("totalVisitasFuente", totalVisitasFuente);
+        model.addAttribute("totalNegociacionesFuente", totalNegociacionesFuente);
+        model.addAttribute("totalApartadosFuente", totalApartadosFuente);
+        model.addAttribute("totalWonDealsFuente", totalWonDealsFuente);
+
+        model.addAttribute("citas", citas);
+        model.addAttribute("visitas", visitas);
+        model.addAttribute("negociaciones", negociaciones);
+        model.addAttribute("apartados", apartados);
+        model.addAttribute("wonDeals", wonDeals);
+
+        model.addAttribute("citasFuente", citasFuente);
+        model.addAttribute("visitasFuente", visitasFuente);
+        model.addAttribute("negociacionesFuente", negociacionesFuente);
+        model.addAttribute("apartadosFuente", apartadosFuente);
+        model.addAttribute("wonDealsFuente", wonDealsFuente);
 
         // Recopilación de actividades por asesor y por fecha
         Map<String, Map<String, Integer>> actividadesPorAsesorYFecha = new HashMap<>();
@@ -622,6 +704,18 @@ public class DashboardController {
 
     @Data
     @AllArgsConstructor
+    public static class CombinedAdvisorConversionStats {
+        private String advisor;
+        private int deals;
+        private float cita;
+        private float visita;
+        private float negociacion;
+        private float apartado;
+        private float ganado;
+    }
+
+    @Data
+    @AllArgsConstructor
     public static class CombinedFuenteStats {
         private String fuente;
         private int deals;
@@ -633,6 +727,19 @@ public class DashboardController {
     }
 
     @Data
+    @AllArgsConstructor
+    public static class CombinedFuenteConversionStats {
+        private String fuente;
+        private int deals;
+        private float cita;
+        private float visita;
+        private float negociacion;
+        private float apartado;
+        private float ganado;
+    }
+
+    @Getter
+    @Data
     public static class AdvisorStats {
         public int cita = 0;
         public int visita = 0;
@@ -640,12 +747,6 @@ public class DashboardController {
         public int apartado = 0;
         public int ganado = 0;
 
-
-        public int getCita() { return cita; }
-        public int getVisita() { return visita; }
-        public int getNegociacion() { return negociacion; }
-        public int getApartado() { return apartado; }
-        public int getGanado() { return ganado; }
 
     }
 }
