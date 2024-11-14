@@ -102,3 +102,139 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
+
+
+function exportTableToCSV(filename = 'tabla-asesores.csv') {
+    const table = document.querySelector('.asesores-table');
+    const rows = Array.from(table.querySelectorAll('tr'));
+    const csvRows = [];
+
+    // Recorre cada fila de la tabla
+    rows.forEach(row => {
+        const cells = Array.from(row.querySelectorAll('th, td'));
+        const rowValues = cells.map(cell => `"${cell.innerText.replace(/"/g, '""')}"`); // Escapa comillas dobles
+        csvRows.push(rowValues.join(',')); // Unir celdas de la fila
+    });
+
+    // Crear el archivo Blob con los datos CSV
+    const csvString = csvRows.join('\n');
+    const blob = new Blob([csvString], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+
+    // Crear un enlace temporal para descargar el archivo
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+
+    // Limpiar
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+// Asocia el script a un botón de exportación
+document.getElementById('botonExportarTablaAsesores').addEventListener('click', () => exportTableToCSV());
+
+
+function exportTableToCSV(filename = 'tabla-fuente.csv') {
+    const table = document.querySelector('.fuente-table');
+    const rows = Array.from(table.querySelectorAll('tr'));
+    const csvRows = [];
+
+    // Recorre cada fila de la tabla
+    rows.forEach(row => {
+        const cells = Array.from(row.querySelectorAll('th, td'));
+        const rowValues = cells.map(cell => `"${cell.innerText.replace(/"/g, '""')}"`); // Escapa comillas dobles
+        csvRows.push(rowValues.join(',')); // Unir celdas de la fila
+    });
+
+    // Crear el archivo Blob con los datos CSV
+    const csvString = csvRows.join('\n');
+    const blob = new Blob([csvString], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+
+    // Crear un enlace temporal para descargar el archivo
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+
+    // Limpiar
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+// Asocia el script a un botón de exportación
+document.getElementById('botonExportarTablaFuente').addEventListener('click', () => exportTableToCSV());
+
+
+function exportTableToCSV(filename = 'tabla-fuente-conversion.csv') {
+    const table = document.querySelector('.fuente-table-conversion');
+    const rows = Array.from(table.querySelectorAll('tr'));
+    const csvRows = [];
+
+    // Recorre cada fila de la tabla
+    rows.forEach(row => {
+        const cells = Array.from(row.querySelectorAll('th, td'));
+        const rowValues = cells.map(cell => `"${cell.innerText.replace(/"/g, '""')}"`); // Escapa comillas dobles
+        csvRows.push(rowValues.join(',')); // Unir celdas de la fila
+    });
+
+    // Crear el archivo Blob con los datos CSV
+    const csvString = csvRows.join('\n');
+    const blob = new Blob([csvString], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+
+    // Crear un enlace temporal para descargar el archivo
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+
+    // Limpiar
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+// Asocia el script a un botón de exportación
+document.getElementById('botonExportarTablaFuenteConversion').addEventListener('click', () => exportTableToCSV());
+
+
+function exportTableToCSV(filename = 'tabla-asesores-conversion.csv') {
+    const table = document.querySelector('.asesores-table-conversion');
+    const rows = Array.from(table.querySelectorAll('tr'));
+    const csvRows = [];
+
+    // Recorre cada fila de la tabla
+    rows.forEach(row => {
+        const cells = Array.from(row.querySelectorAll('th, td'));
+        const rowValues = cells.map(cell => `"${cell.innerText.replace(/"/g, '""')}"`); // Escapa comillas dobles
+        csvRows.push(rowValues.join(',')); // Unir celdas de la fila
+    });
+
+    // Crear el archivo Blob con los datos CSV
+    const csvString = csvRows.join('\n');
+    const blob = new Blob([csvString], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+
+    // Crear un enlace temporal para descargar el archivo
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+
+    // Limpiar
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+// Asocia el script a un botón de exportación
+document.getElementById('botonExportarTablaAsesoresConversion').addEventListener('click', () => exportTableToCSV());

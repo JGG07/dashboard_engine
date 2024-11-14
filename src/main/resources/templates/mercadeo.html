@@ -5,8 +5,9 @@
 <div th:replace="~{home :: navbar}"></div>
 
 <!-- Título general para los KPIs -->
-<h2 class="kpi-title-1">¿La estrategia nos entrega suficientes Leads de calidad?</h2>
-
+<div>
+    <h2 class="kpi-title-1">¿La estrategia nos entrega suficientes Leads de calidad?</h2>
+</div>
 <!-- Contenedor para los cuadros KPI -->
 <div class="kpi-container">
     <!-- Cuadro para mostrar el total de tratos -->
@@ -64,9 +65,11 @@
 </script>
 
 <!-- Título general para los KPIs -->
-<h2 class="kpi-title-2">¿Cuales son las fuentes mas efectivas?</h2>
-
+<div>
+    <h2 class="kpi-title-2">¿Cuales son las fuentes mas efectivas?</h2>
+</div>
 <!-- Tabla para mostrar datos por fuente -->
+<div>
 <table class="source-table">
     <thead>
     <tr>
@@ -125,9 +128,21 @@
     </tr>
     </tfoot>
 </table>
+</div>
+<div>
+    <button id="botonExportarCSV" class="custom-button">
+        <i class="fas fa-file-csv"></i> Exportar a CSV
+    </button>
+</div>
 
 <!-- Título general para los KPIs -->
 <h2 class="kpi-title-3">¿Qué no está funcionando?</h2>
+
+<div>
+    <button id="botonExportarTablaReason" class="custom-button-reason">
+        <i class="fas fa-file-csv"></i> Exportar a CSV
+    </button>
+</div>
 
 <!-- Contenedor para la tabla y gráfica -->
 <div class="table-chart-container">
@@ -157,6 +172,7 @@
     <!-- Contenedor para la gráfica de pastel -->
     <div id="pie-container"></div>
 </div>
+
 <!-- Título general para los KPIs -->
 <h2 class="kpi-title-4">¿Qué no está funcionando?</h2>
 <script th:inline="javascript">

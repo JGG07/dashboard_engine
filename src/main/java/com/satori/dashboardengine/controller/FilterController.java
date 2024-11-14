@@ -635,6 +635,9 @@ public class FilterController {
         List<DashboardController.CombinedAdvisorStats> combinedList = new ArrayList<>();
         List<DashboardController.CombinedFuenteStats> combinedFuenteStatsList = new ArrayList<>();
 
+        List<DashboardController.CombinedAdvisorConversionStats> combinedConversionList = new ArrayList<>();
+        List<DashboardController.CombinedFuenteConversionStats> combinedFuenteConversionStatsList = new ArrayList<>();
+
         for (Map.Entry<String, Integer> entry : sortedDealsByAdvisor) {
             String advisor = entry.getKey();
             int dealsCount = entry.getValue();
@@ -645,6 +648,17 @@ public class FilterController {
                     stats.getCita(), stats.getVisita(), stats.getNegociacion(),
                     stats.getApartado(), stats.getGanado());
 
+            float cita = (float) stats.getCita()/dealsCount*100;
+            float visita = (float) stats.getVisita()/dealsCount*100;
+            float negociacion = (float) stats.getNegociacion()/dealsCount*100;
+            float apartado = (float) stats.getApartado()/dealsCount*100;
+            float ganado = (float) stats.getGanado()/dealsCount*100;
+
+            DashboardController.CombinedAdvisorConversionStats combinedStatsConversion = new DashboardController.CombinedAdvisorConversionStats(advisor, dealsCount,
+                    cita, visita, negociacion,
+                    apartado, ganado);
+
+            combinedConversionList.add(combinedStatsConversion);
             combinedList.add(combinedStats);
         }
 
@@ -659,11 +673,26 @@ public class FilterController {
                     statsFuente.getCita(), statsFuente.getVisita(), statsFuente.getNegociacion(),
                     statsFuente.getApartado(), statsFuente.getGanado());
 
+            float cita = (float) statsFuente.getCita()/dealsCount*100;
+            float visita = (float) statsFuente.getVisita()/dealsCount*100;
+            float negociacion = (float) statsFuente.getNegociacion()/dealsCount*100;
+            float apartado = (float) statsFuente.getApartado()/dealsCount*100;
+            float ganado = (float) statsFuente.getGanado()/dealsCount*100;
+
+            DashboardController.CombinedFuenteConversionStats combinedStatsConversionFuente = new DashboardController.CombinedFuenteConversionStats(fuente, dealsCount,
+                    cita, visita, negociacion,
+                    apartado, ganado);
+
             combinedFuenteStatsList.add(combinedStats);
+            combinedFuenteConversionStatsList.add(combinedStatsConversionFuente);
+
         }
         // Pasar la lista combinada al modelo
         model.addAttribute("combinedAdvisorStats", combinedList);
+        model.addAttribute("combinedAdvisorConversionStats", combinedConversionList);
+
         model.addAttribute("combinedFuenteStats", combinedFuenteStatsList);
+        model.addAttribute("combinedFuenteStatsConversion", combinedFuenteConversionStatsList);
 
         // Inicializar los totales
         int totalDeals = 0;
@@ -683,6 +712,38 @@ public class FilterController {
             totalWonDeals += stat.getGanado();
         }
 
+        // Inicializar los totales
+        int totalDealsFuente = 0;
+        int totalCitasFuente = 0;
+        int totalVisitasFuente = 0;
+        int totalNegociacionesFuente = 0;
+        int totalApartadosFuente = 0;
+        int totalWonDealsFuente = 0;
+
+        for(DashboardController.CombinedFuenteStats stat : combinedFuenteStatsList){
+            totalDealsFuente += stat.getDeals();
+            totalCitasFuente += stat.getCita();
+            totalVisitasFuente += stat.getVisita();
+            totalNegociacionesFuente += stat.getNegociacion();
+            totalApartadosFuente += stat.getApartado();
+            totalWonDealsFuente += stat.getGanado();
+        }
+
+        // Inicializar los totales
+        float citas = (float) totalCitas/totalDeals*100 ;
+        float visitas = (float) totalVisitas/totalDeals*100;
+        float negociaciones = (float) totalNegociaciones/totalDeals*100;
+        float apartados = (float) totalApartados/totalDeals*100;
+        float wonDeals = (float) totalWonDeals/totalDeals*100;
+
+        // Inicializar los totales
+        float citasFuente = (float) totalCitasFuente/totalDealsFuente*100 ;
+        float visitasFuente = (float) totalVisitasFuente/totalDealsFuente*100;
+        float negociacionesFuente = (float) totalNegociacionesFuente/totalDealsFuente*100;
+        float apartadosFuente = (float) totalApartadosFuente/totalDealsFuente*100;
+        float wonDealsFuente = (float) totalWonDealsFuente/totalDealsFuente*100;
+
+
 // Pasar los totales al modelo
         model.addAttribute("totalDeals", totalDeals);
         model.addAttribute("totalCitas", totalCitas);
@@ -690,6 +751,26 @@ public class FilterController {
         model.addAttribute("totalNegociaciones", totalNegociaciones);
         model.addAttribute("totalApartados", totalApartados);
         model.addAttribute("totalWonDeals", totalWonDeals);
+
+        // Pasar los totales al modelo
+        model.addAttribute("totalDealsFuente", totalDealsFuente);
+        model.addAttribute("totalCitasFuente", totalCitasFuente);
+        model.addAttribute("totalVisitasFuente", totalVisitasFuente);
+        model.addAttribute("totalNegociacionesFuente", totalNegociacionesFuente);
+        model.addAttribute("totalApartadosFuente", totalApartadosFuente);
+        model.addAttribute("totalWonDealsFuente", totalWonDealsFuente);
+
+        model.addAttribute("citas", citas);
+        model.addAttribute("visitas", visitas);
+        model.addAttribute("negociaciones", negociaciones);
+        model.addAttribute("apartados", apartados);
+        model.addAttribute("wonDeals", wonDeals);
+
+        model.addAttribute("citasFuente", citasFuente);
+        model.addAttribute("visitasFuente", visitasFuente);
+        model.addAttribute("negociacionesFuente", negociacionesFuente);
+        model.addAttribute("apartadosFuente", apartadosFuente);
+        model.addAttribute("wonDealsFuente", wonDealsFuente);
 
         // Recopilación de actividades por asesor y por fecha
         Map<String, Map<String, Integer>> actividadesPorAsesorYFecha = new HashMap<>();

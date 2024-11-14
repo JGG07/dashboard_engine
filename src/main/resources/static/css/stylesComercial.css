@@ -82,6 +82,25 @@ body {
     /* Espacio interior para mejorar la legibilidad */
 }
 
+.kpi-title-3 {
+    text-align: center;
+    /* Centra el título en la página */
+    font-size: 20px;
+    /* Tamaño de la fuente */
+    margin-bottom: 50px;
+    /* Espacio entre el título y los KPIs */
+    position: absolute;
+    top: 610px;
+    width: 45%;
+    /* Asegura que el fondo cubra toda la anchura */
+    color: #ffffff;
+    /* Color del texto */
+    background-color: #868686;
+    /* Color de fondo corregido */
+    padding: 20px 0;
+    /* Espacio interior para mejorar la legibilidad */
+}
+
 .kpi-title-2 {
     text-align: center;
     /* Centra el título en la página */
@@ -90,7 +109,7 @@ body {
     margin-bottom: 20px;
     /* Espacio entre el título y los KPIs */
     position: absolute;
-    margin-top: 250px;
+    margin-top: 460px;
     width: 45%;
     /* Asegura que el fondo cubra toda la anchura */
     color: #ffffff;
@@ -111,7 +130,26 @@ body {
     margin-bottom: 50px;
     /* Espacio entre el título y los KPIs */
     position: relative;
-    top: 380px;
+    top: 590px;
+    width: 45%;
+    /* Asegura que el fondo cubra toda la anchura */
+    color: #ffffff;
+    /* Color del texto */
+    background-color: #868686;
+    /* Color de fondo corregido */
+    padding: 20px 0;
+    /* Espacio interior para mejorar la legibilidad */
+}
+
+.kpi-title-5 {
+    text-align: center;
+    /* Centra el título en la página */
+    font-size: 20px;
+    /* Tamaño de la fuente */
+    margin-bottom: 50px;
+    /* Espacio entre el título y los KPIs */
+    position: relative;
+    top: 400px;
     width: 45%;
     /* Asegura que el fondo cubra toda la anchura */
     color: #ffffff;
@@ -138,11 +176,11 @@ body {
     /* Color de fondo del contenedor */
     padding: 10px;
     /* Espaciado interno */
-    top: 350px;
+    top: 560px;
 }
 
 /* Estilos para las tablas de fuentes */
-.source-table {
+.asesores-table {
     width: 60%;
     /* Ocupa el 100% del ancho del contenedor padre */
     border-collapse: collapse;
@@ -162,7 +200,7 @@ body {
     background-color: #333333;
 }
 
-.source-table th {
+.asesores-table th {
     border: 1px solid #333333;
     font-size: 14px;
     padding: 11px;
@@ -170,13 +208,13 @@ body {
     background-color: #333333;
 }
 
-.source-table td {
+.asesores-table td {
     border: 1px solid #bfbdbd;
     padding: 11px;
     text-align: center;
 }
 
-.source-table th {
+.asesores-table th {
     background-color: #a1725a;
     /* Fondo de la cabecera */
     color: white;
@@ -184,13 +222,66 @@ body {
     text-align: center;
 }
 
-.source-table td {
+.asesores-table td {
     text-align: left;
     background-color: #000000;
     color: #ffffff;
 }
 
-.source-table tr.highlight {
+.asesores-table tr.highlight {
+    background-color: #ff6347;
+    /* Color para filas resaltadas */
+}
+
+.asesores-table-conversion {
+    width: 60%;
+    /* Ocupa el 100% del ancho del contenedor padre */
+    border-collapse: collapse;
+    /* Colapsa los bordes de las celdas adyacentes para que no se dupliquen */
+    font-family: "Arial", sans-serif;
+    /* Establece la fuente de texto de la tabla como Arial */
+    font-size: 14px;
+    /* Define el tamaño de la fuente dentro de la tabla */
+    position: relative;
+    /* Establece el posicionamiento de la tabla como relativo. Esto es útil si se aplican posicionamientos absolutos a elementos hijos */
+    top: 520px;
+    /* Añade un margen superior de 100 píxeles para separar la tabla del contenido superior */
+    margin: 0 auto;
+    /* Centra la tabla horizontalmente en su contenedor. La propiedad auto aplica márgenes automáticos a los lados izquierdo y derecho, mientras que el margen superior es de 0 píxeles */
+    table-layout: fixed;
+    /* Establece el diseño de la tabla en modo fijo, lo que asegura que las columnas tengan un ancho uniforme basado en el ancho especificado de la tabla */
+    background-color: #333333;
+}
+
+.asesores-table-conversion th {
+    border: 1px solid #333333;
+    font-size: 14px;
+    padding: 11px;
+    text-align: center;
+    background-color: #333333;
+}
+
+.asesores-table-conversion td {
+    border: 1px solid #bfbdbd;
+    padding: 11px;
+    text-align: center;
+}
+
+.asesores-table-conversion th {
+    background-color: #a1725a;
+    /* Fondo de la cabecera */
+    color: white;
+    /* Color del texto de la cabecera */
+    text-align: center;
+}
+
+.asesores-table-conversion td {
+    text-align: left;
+    background-color: #000000;
+    color: #ffffff;
+}
+
+.asesores-table-conversion tr.highlight {
     background-color: #ff6347;
     /* Color para filas resaltadas */
 }
@@ -420,7 +511,7 @@ body {
     /* Define el tamaño de la fuente dentro de la tabla */
     position: relative;
     /* Establece el posicionamiento de la tabla como relativo. Esto es útil si se aplican posicionamientos absolutos a elementos hijos */
-    top: 370px;
+    top: 590px;
     /* Añade un margen superior de 100 píxeles para separar la tabla del contenido superior */
     margin: 0 auto;
     /* Centra la tabla horizontalmente en su contenedor. La propiedad auto aplica márgenes automáticos a los lados izquierdo y derecho, mientras que el margen superior es de 0 píxeles */
@@ -460,4 +551,186 @@ body {
 .fuente-table tr.highlight {
     background-color: #ff6347;
     /* Color para filas resaltadas */
+}
+
+
+
+.fuente-table-conversion {
+    width: 60%;
+    /* Ocupa el 100% del ancho del contenedor padre */
+    border-collapse: collapse;
+    /* Colapsa los bordes de las celdas adyacentes para que no se dupliquen */
+    font-family: "Arial";
+    /* Establece la fuente de texto de la tabla como Arial */
+    font-size: 14px;
+    /* Define el tamaño de la fuente dentro de la tabla */
+    position: relative;
+    /* Establece el posicionamiento de la tabla como relativo. Esto es útil si se aplican posicionamientos absolutos a elementos hijos */
+    top: 400px;
+    /* Añade un margen superior de 100 píxeles para separar la tabla del contenido superior */
+    margin: 0 auto;
+    /* Centra la tabla horizontalmente en su contenedor. La propiedad auto aplica márgenes automáticos a los lados izquierdo y derecho, mientras que el margen superior es de 0 píxeles */
+    table-layout: fixed;
+    /* Establece el diseño de la tabla en modo fijo, lo que asegura que las columnas tengan un ancho uniforme basado en el ancho especificado de la tabla */
+    background-color: #333333;
+}
+
+.fuente-table-conversion th {
+    border: 1px solid #333333;
+    font-size: 14px;
+    padding: 11px;
+    text-align: center;
+    background-color: #333333;
+}
+
+.fuente-table-conversion td {
+    border: 1px solid #bfbdbd;
+    padding: 11px;
+    text-align: center;
+}
+
+.fuente-table-conversion th {
+    background-color: #a1725a;
+    /* Fondo de la cabecera */
+    color: white;
+    /* Color del texto de la cabecera */
+    text-align: center;
+}
+
+.fuente-table-conversion td {
+    text-align: left;
+    background-color: #000000;
+    color: #ffffff;
+}
+
+.fuente-table-conversion tr.highlight {
+    background-color: #ff6347;
+    /* Color para filas resaltadas */
+}
+
+.custom-button-asesor {
+    display: flex;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #555555;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-left: auto;
+    margin-right: 30px;
+    margin-top: -210px;
+}
+
+.custom-button-asesor:hover {
+    background-color: #4a4a4a;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.custom-button-asesor:active {
+    background-color: #202321;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+}
+
+.custom-button-asesor i{
+    margin-right: 8px;
+}
+
+
+.custom-button-asesor-conversion {
+    display: flex;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #555555;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-left: auto;
+    margin-right: 30px;
+    margin-top: 70px;
+}
+
+.custom-button-asesor-conversion:hover {
+    background-color: #4a4a4a;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.custom-button-asesor-conversion:active {
+    background-color: #202321;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+}
+
+.custom-button-asesor-conversion i{
+    margin-right: 8px;
+}
+
+
+.custom-button-fuente {
+    display: flex;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #555555;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-left: auto;
+    margin-right: 30px;
+    margin-top: 230px;
+}
+
+.custom-button-fuente:hover {
+    background-color: #4a4a4a;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.custom-button-fuente:active {
+    background-color: #202321;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+}
+
+.custom-button-fuente i{
+    margin-right: 8px;
+}
+
+
+.custom-button-fuente-conversion {
+    display: flex;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #555555;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-left: auto;
+    margin-right: 30px;
+    margin-top: 30px;
+}
+
+.custom-button-fuente-conversion:hover {
+    background-color: #4a4a4a;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.custom-button-fuente-conversion:active {
+    background-color: #202321;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+}
+
+.custom-button-fuente-conversion i{
+    margin-right: 8px;
 }
