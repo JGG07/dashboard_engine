@@ -316,4 +316,22 @@ public class PipedriveBo {
         }
     }
 
+    public String getCampaignName(String campaign) {
+        // Retornar el nombre de la etapa basado en su ID
+        switch (campaign) {
+
+            case ", , none,  Facebook": return "Sitio Web";
+            case ", , none,  satoriresidencial.com": return "Sitio Web";
+            case ", , paid,  Google": return "Sitio Web";
+            case "cbo_leads, bo_leads, landing, landing, Lead+ad, Lead ad,  Facebook": return "Sitio Web";
+            case "cbo_leads, landing, Lead+ad,  Facebook": return "Sitio Web";
+            case "EAIaIQobChMIqaGZ4f2UigMV3XF_AB3bIBPwEAAYBCAAEgKaKPD_BwE, , , , ,": return "Sitio Web";
+            case "EAIaIQobChMIqLPXwviRigMVqG5_AB2qQR6DEAAYASAAEgJnY_D_BwE, , , , ,": return "Sitio Web";
+            case "Leads+%7C+1+%7C+General, Leads | 1 | General, landing, landing, Instagram_Reels, Instagram_Reels,  ig": return "Sitio Web";
+            case "Leads+%7C+2+%7C+6.6.MDP, Leads | 2 | 6.6.MDP, landing, landing, Instagram_Feed, Instagram_Feed,  ig": return "Sitio Web";
+            case "Leads+%7C+2+%7C+6.6.MDP. Leads | 2 | 6.6.MDP. landing, landing, Instagram Stories, Instagram Stories,  ig": return "Sitio Web";
+            default: return "Desconocido";
+        }
+    }
+
 }
