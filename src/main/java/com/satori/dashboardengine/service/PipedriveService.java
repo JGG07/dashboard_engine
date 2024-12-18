@@ -70,6 +70,10 @@ public class PipedriveService {
         return pipedriveBo.getFuenteName(sourceId);
     }
 
+    public String getCampaignName(String campaign){
+        return pipedriveBo.getCampaignName(campaign);
+    }
+
     public String getStageName(Integer stageId){
         return pipedriveBo.getStageName(stageId);
     }

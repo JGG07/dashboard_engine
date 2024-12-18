@@ -16,6 +16,8 @@ public class DealsData {
     private UserId userId;
     @JsonProperty("559fbdb1362314763f554be0f832dec60c65bb37")
     private String fuente;
+    @JsonProperty("147365f5c6ee5c87124bb1efac90d538cfca927d")
+    private String campaign;
     @JsonProperty("add_time")
     private String addTime;
     @JsonProperty("stage_id")
