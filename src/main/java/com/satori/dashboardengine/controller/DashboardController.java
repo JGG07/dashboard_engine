@@ -405,71 +405,62 @@ public class DashboardController {
 
         int start = 0;
         int LIMIT = 500;
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-        // Datos filtrados por fecha
-        List<DealsData> filteredDeals = new ArrayList<>();
-
-        // Datos filtrados por cambio de actividad
-        List<DealsData> filteredDealsByStageChange = new ArrayList<>();
-
+        List<DealsData> allDeals = new ArrayList<>();
 
         while (true) {
-            log.info("*************** FirstWhile ***************");
-
+            log.info("*************** allDeals ***************");
             Deals deals = pipedriveService.getDealsStart(start);
-            LocalDate date = null;
-
-            for (DealsData deal : deals.getData()) {
-                String addTime = deal.getAddTime();
-                LocalDateTime dateTime = LocalDateTime.parse(addTime, formatter);
-
-                // Restar 6 horas
-                LocalDateTime adjustedTime = dateTime.minusHours(6);
-                date = adjustedTime.toLocalDate();
-
-                if (!date.isBefore(startDate) && !date.isAfter(endDate)) {
-                    filteredDeals.add(deal);
-                }
-
-                // Tomará los won que estén dentro del rango de fechas
-                if(deal.getStatus().equalsIgnoreCase("won")){
-                    if(deal.getWonTime() != null){
-
-                        LocalDateTime wonTime = LocalDateTime.parse(deal.getWonTime(), formatter);
-                        // Restar 6 horas
-                        LocalDateTime adjustedWonTime = wonTime.minusHours(6);
-                        date = adjustedWonTime.toLocalDate();
-
-                        if(!date.isBefore(startDate) && !date.isAfter(endDate)){
-                            filteredDealsByStageChange.add(deal);
-                        }
-                    }
-                } else {
-                    if(deal.getStageChangeTime() != null) {
-                        String addTimeStage = deal.getStageChangeTime();
-
-                        // Procesar el caso donde addTime no es null
-                        dateTime = LocalDateTime.parse(addTimeStage, formatter);
-
-                        // Restar 6 horas
-                        adjustedTime = dateTime.minusHours(6);
-                        date = adjustedTime.toLocalDate();
-
-                        if (!date.isBefore(startDate) && !date.isAfter(endDate)) {
-                            filteredDealsByStageChange.add(deal);
-                        }
-                    }
-                }
-
-            }
-
-            assert date != null;
+            allDeals.addAll(deals.getData());
             if (!deals.getAdditionalData().getPagination().isMoreItems()) {
                 break;
             }
             start += LIMIT;
         }
+
+        List<DealsData> filteredDeals = allDeals.stream()
+                .filter(deal -> {
+                    if (deal.getStatus().equalsIgnoreCase("won")) {
+                        if (deal.getWonTime() != null) {
+                            LocalDateTime wonTime = LocalDateTime.parse(deal.getWonTime(), formatter);
+                            LocalDateTime adjustedWonTime = wonTime.minusHours(6);
+                            LocalDate date = adjustedWonTime.toLocalDate();
+                            return !date.isBefore(startDate) && !date.isAfter(endDate); // Incluir este `deal` en la lista filtrada
+                        }
+                    } else {
+                        LocalDateTime localDateTime = LocalDateTime.parse(deal.getAddTime(), formatter);
+                        LocalDateTime adjustedTime = localDateTime.minusHours(6);
+                        LocalDate addTime = adjustedTime.toLocalDate();
+                        return !addTime.isBefore(startDate) && !addTime.isAfter(endDate);
+                    }
+                    return false;
+                })
+                .toList();
+
+        System.out.println(filteredDeals.size());
+
+        List<DealsData> filteredDealsByStageChange = allDeals.stream()
+                .filter(deal -> {
+                    if (deal.getStatus().equalsIgnoreCase("won")) {
+                        if (deal.getWonTime() != null) {
+                            LocalDateTime wonTime = LocalDateTime.parse(deal.getWonTime(), formatter);
+                            LocalDateTime adjustedWonTime = wonTime.minusHours(6);
+                            LocalDate date = adjustedWonTime.toLocalDate();
+                            return !date.isBefore(startDate) && !date.isAfter(endDate); // Incluir este `deal` en la lista filtrada
+                        }
+                    } else {
+                        if(deal.getStageChangeTime() != null){
+                            LocalDateTime dateTime = LocalDateTime.parse(deal.getStageChangeTime(), formatter);
+                            LocalDateTime adjustedTime = dateTime.minusHours(6);
+                            LocalDate date = adjustedTime.toLocalDate();
+                            return !date.isBefore(startDate) && !date.isAfter(endDate);
+                        }
+                    }
+                    return false; // No incluir este `deal` en la lista filtrada
+                })
+                .toList();
 
         // Crear un mapa para almacenar la suma de deals por asesor
         Map<String, Integer> dealsByAdvisor = new HashMap<>();
@@ -514,46 +505,35 @@ public class DashboardController {
 
             if (deal.getStageId() == 8) {
                 stats.cita++;
-
                 statsFuente.cita++;
 
             }
 
             if (deal.getStageId() == 9) {
                 stats.cita++;
-                stats.visita++;
-
                 statsFuente.cita++;
+
+                stats.visita++;
                 statsFuente.visita++;
 
             }
             if (deal.getStageId() == 10) {
-                stats.cita++;
-                stats.visita++;
                 stats.negociacion++;
-
-                statsFuente.cita++;
-                statsFuente.visita++;
                 statsFuente.negociacion++;
 
             }
 
             if (deal.getStageId() == 11) {
-                stats.cita++;
-                stats.visita++;
                 stats.negociacion++;
-                stats.apartado++;
-
-                statsFuente.cita++;
-                statsFuente.visita++;
                 statsFuente.negociacion++;
+
+                stats.apartado++;
                 statsFuente.apartado++;
 
             }
 
             if (deal.getStatus().equals("won")) {
                 stats.ganado++;
-
                 statsFuente.ganado++;
 
             }
