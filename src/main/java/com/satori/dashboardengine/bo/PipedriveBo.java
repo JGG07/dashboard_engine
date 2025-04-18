@@ -49,37 +49,43 @@ public class PipedriveBo {
         List<ActivitiesData> activitiesDataList = new ArrayList<>();
 
         String url = pipedriveConfig.getApiUrl() + "/activities?api_token=" + pipedriveConfig.getApiToken() + "&start_date=" + startDate + "&end_date=" + endDate + "&user_id=" + userId + "&done=1";
+        System.out.println("urlActivities= " + url);
         Activities activities;
 
         int start = 0;
         while (active) {
             activities = restTemplate.getForObject(url + "&start=" + start, Activities.class);
-            List<ActivitiesData> fetchedActivities = activities.getData();
 
-            // Restar 6 horas a las fechas de update_time de cada actividad
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");  // Ajusta el formato si es necesario
-            fetchedActivities.forEach(activity -> {
-                try {
-                    // Parsear la fecha y hora de update_time
-                    LocalDateTime dateTime = LocalDateTime.parse(activity.getDoneTime(), formatter);
+            if(activities.getData() != null){
+                List<ActivitiesData> fetchedActivities = activities.getData();
 
-                    // Restar 6 horas
-                    dateTime = dateTime.minusHours(6);
+                // Restar 6 horas a las fechas de update_time de cada actividad
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");  // Ajusta el formato si es necesario
+                fetchedActivities.forEach(activity -> {
+                    try {
+                        // Parsear la fecha y hora de update_time
+                        LocalDateTime dateTime = LocalDateTime.parse(activity.getDoneTime(), formatter);
 
-                    // Actualizar la fecha ajustada en la actividad
-                    activity.getDoneTime(dateTime.format(formatter));
-                } catch (DateTimeParseException e) {
-                    log.error("Error al analizar la fecha: " + activity.getDoneTime(), e);
+                        // Restar 6 horas
+                        dateTime = dateTime.minusHours(6);
+
+                        // Actualizar la fecha ajustada en la actividad
+                        activity.getDoneTime(dateTime.format(formatter));
+                    } catch (DateTimeParseException e) {
+                        log.error("Error al analizar la fecha: " + activity.getDoneTime(), e);
+                    }
+                });
+
+                // Agregar las actividades ajustadas a la lista principal
+                activitiesDataList.addAll(fetchedActivities);
+
+                // Actualizar el valor de inicio y verificar si hay más elementos
+                start += activities.getAdditionalData().getPagination().getLimit();
+                if (!activities.getAdditionalData().getPagination().isMoreItems()) {
+                    active = false;
                 }
-            });
-
-            // Agregar las actividades ajustadas a la lista principal
-            activitiesDataList.addAll(fetchedActivities);
-
-            // Actualizar el valor de inicio y verificar si hay más elementos
-            start += activities.getAdditionalData().getPagination().getLimit();
-            if (!activities.getAdditionalData().getPagination().isMoreItems()) {
-                active = false;
+            } else {
+                break;
             }
         }
 
@@ -112,7 +118,7 @@ public class PipedriveBo {
      * @param endDate
      * @return
      */
-    public Map<String, Integer> getStageDealsByDate(List<DealsData> dealsDataList, Integer stageId, LocalDate startDate, LocalDate endDate){
+    public Map<String, Integer> getStageDealsByDate(List<DealsData> dealsDataList, List<Integer> stageId, LocalDate startDate, LocalDate endDate){
         return processStageDealsByDate(dealsDataList, stageId, startDate, endDate);
     }
 
@@ -218,7 +224,7 @@ public class PipedriveBo {
      * @param endDate
      * @return
      */
-    private Map<String, Integer> processStageDealsByDate(List<DealsData> dealsDataList, int stageId, LocalDate startDate, LocalDate endDate) {
+    private Map<String, Integer> processStageDealsByDate(List<DealsData> dealsDataList, List<Integer> stageId, LocalDate startDate, LocalDate endDate) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         Map<String, Integer> stageDealsCountByDate = new HashMap<>();
 
@@ -231,9 +237,13 @@ public class PipedriveBo {
             LocalDate adjustedDate = adjustedTime.toLocalDate();
 
             // Filtrar solo los tratos en el rango de fechas especificado y en la etapa especificada
-            if (!adjustedDate.isBefore(startDate) && !adjustedDate.isAfter(endDate) && dealsData.getStageId() == stageId) {
+            if (!adjustedDate.isBefore(startDate) && !adjustedDate.isAfter(endDate) && stageId.contains(dealsData.getStageId())) {
                 String dateString = adjustedDate.toString();
                 stageDealsCountByDate.put(dateString, stageDealsCountByDate.getOrDefault(dateString, 0) + 1);
+            }
+
+            if(dealsData.getUserId().equals(14810346)) {
+                System.out.println(dealsData.getOwnerName() + " " + dealsData.getPersonName() + " " + dealsData.getAddTime() + " " + dealsData.getStageId());
             }
         }
         return stageDealsCountByDate;
@@ -282,6 +292,9 @@ public class PipedriveBo {
             return "Desconocido";
         }
         switch (fuente) {
+            /*
+            Satori Santa Fe:
+
             case "20": return "Evento";
             case "69": return "Tapial Obra";
             case "28": return "Facebook";
@@ -299,6 +312,22 @@ public class PipedriveBo {
             case "71": return "Real Estate";
             case "114": return "LinkedIn";
             case "74": return "Convenios Empresas";
+
+             */
+
+            /*
+            Via Residence
+             */
+            case "79": return "WhatsApp";
+            case "125": return "Sitio Web";
+            case "127": return "Meta FB/IG";
+            case "77": return "Base Datos Reis";
+            case "40": return "Cartera";
+            case "46": return "Orgánico Sala";
+            case "85": return "Referido Cliente";
+            case "82": return "Reis Externo";
+            case "80": return "Walk In";
+
             default: return "Desconocido";
         }
     }
@@ -330,6 +359,8 @@ public class PipedriveBo {
             case "Leads+%7C+1+%7C+General, Leads | 1 | General, landing, landing, Instagram_Reels, Instagram_Reels,  ig": return "Sitio Web";
             case "Leads+%7C+2+%7C+6.6.MDP, Leads | 2 | 6.6.MDP, landing, landing, Instagram_Feed, Instagram_Feed,  ig": return "Sitio Web";
             case "Leads+%7C+2+%7C+6.6.MDP. Leads | 2 | 6.6.MDP. landing, landing, Instagram Stories, Instagram Stories,  ig": return "Sitio Web";
+            case "fb, CCP+ 7C+ELITE+ 7C+VIA+RESIDENCES+2024, , Facebook_Mobile_Reels, 120218048902140372, Anuncio+08+ 7C+CCP+ 7C+Marzo+2025+ 7C+ELITE+ 7C+V C3 8DA+RESIDENCES, https://viaresidences.mx/": return "Sitio Web";
+            case "Campaña de clientes potenciales-Enero 2023 HIR Residencial San Ángel": return "Campaña de clientes potenciales-Enero";
             default: return "Desconocido";
         }
     }

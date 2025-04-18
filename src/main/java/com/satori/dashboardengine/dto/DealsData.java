@@ -14,9 +14,11 @@ public class DealsData {
     private String personName;
     @JsonProperty("user_id")
     private UserId userId;
-    @JsonProperty("559fbdb1362314763f554be0f832dec60c65bb37")
+    // @JsonProperty("559fbdb1362314763f554be0f832dec60c65bb37") Satori Santa Fe
+    @JsonProperty("ceeb36730c92e423fd28b440047c5aa0e488f457") // Via Residence
     private String fuente;
-    @JsonProperty("147365f5c6ee5c87124bb1efac90d538cfca927d")
+    // @JsonProperty("147365f5c6ee5c87124bb1efac90d538cfca927d") Satori Santa Fe
+    @JsonProperty("d3295624c3d062c68892826c4d7ec8538ca20f34") // Via Residence
     private String campaign;
     @JsonProperty("add_time")
     private String addTime;

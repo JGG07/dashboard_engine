@@ -1,5 +1,6 @@
 package com.satori.dashboardengine.service;
 
+import com.satori.dashboardengine.bo.DashboardBo;
 import com.satori.dashboardengine.bo.PipedriveBo;
 import com.satori.dashboardengine.dto.Activities;
 import com.satori.dashboardengine.dto.ActivitiesData;
@@ -50,7 +51,7 @@ public class PipedriveService {
      * @param endDate
      * @return
      */
-    public Map<String, Integer> getStageDealsByDate(List<DealsData> dealsDataList, Integer stageId, LocalDate startDate, LocalDate endDate){
+    public Map<String, Integer> getStageDealsByDate(List<DealsData> dealsDataList, List<Integer> stageId, LocalDate startDate, LocalDate endDate){
         return pipedriveBo.getStageDealsByDate(dealsDataList, stageId, startDate, endDate);
     }
 
@@ -146,6 +147,5 @@ public class PipedriveService {
         chartData.put("series", series);
         return chartData;
     }
-
 
 }

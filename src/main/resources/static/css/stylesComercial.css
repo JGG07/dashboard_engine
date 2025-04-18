@@ -1,6 +1,6 @@
 /* Estilo general del cuerpo */
 body {
-    background-color: #323339;
+    background-color: #fff5e8;
     margin: 0;
     padding: 0;
     font-family: "Arial", sans-serif;
@@ -12,7 +12,7 @@ body {
 .navbar {
     margin: 0;
     padding: 0 20px;
-    background-color: #202321;
+    background-color: #000000;
     color: #fff;
     position: fixed;
     top: 0;
@@ -26,6 +26,11 @@ body {
     z-index: 9999999;
 }
 
+.navbar-container{
+    width: 100%;
+    margin: 80px auto;
+}
+
 /* Estilo de los elementos dentro de la navbar */
 .navbar .navbar-items {
     display: flex;
@@ -34,7 +39,7 @@ body {
 
 /* Estilo para los enlaces dentro de la navbar */
 .navbar .navbar-items a {
-    color: #fff;
+    color: #242423;
     text-decoratio: none;
     padding: 10px 15px;
     font-size: 16px;
@@ -42,7 +47,7 @@ body {
 }
 
 .navbar .navbar-items a:hover {
-    background-color: #555;
+    background-color: #000000;
     border-radius: 4px;
 }
 
@@ -50,7 +55,8 @@ body {
     width: 100%; /* 50% del ancho del contenedor */
     max-width: 150px; /* Limita el tamaño máximo */
     height: auto; /* Mantiene la proporción */
-    margin-left: 100px;
+    margin-left: 40px;
+    margin-top: 5px;
 }
 
 /* Aplica la fuente a los textos del gráfico */
@@ -63,254 +69,97 @@ body {
     /* Aplica la fuente */
 }
 
-.kpi-title-1 {
-    text-align: center;
-    /* Centra el título en la página */
-    font-size: 20px;
-    /* Tamaño de la fuente */
-    margin-bottom: 50px;
-    /* Espacio entre el título y los KPIs */
-    position: absolute;
-    top: 100px;
-    width: 45%;
-    /* Asegura que el fondo cubra toda la anchura */
-    color: #ffffff;
-    /* Color del texto */
-    background-color: #868686;
-    /* Color de fondo corregido */
-    padding: 20px 0;
-    /* Espacio interior para mejorar la legibilidad */
-}
-
-.kpi-title-3 {
-    text-align: center;
-    /* Centra el título en la página */
-    font-size: 20px;
-    /* Tamaño de la fuente */
-    margin-bottom: 50px;
-    /* Espacio entre el título y los KPIs */
-    position: absolute;
-    top: 650px;
-    width: 45%;
-    /* Asegura que el fondo cubra toda la anchura */
-    color: #ffffff;
-    /* Color del texto */
-    background-color: #868686;
-    /* Color de fondo corregido */
-    padding: 20px 0;
-    /* Espacio interior para mejorar la legibilidad */
-}
-
-.kpi-title-2 {
-    text-align: center;
-    /* Centra el título en la página */
-    font-size: 20px;
-    /* Tamaño de la fuente */
-    margin-bottom: 20px;
-    /* Espacio entre el título y los KPIs */
-    position: absolute;
-    margin-top: 460px;
-    width: 45%;
-    /* Asegura que el fondo cubra toda la anchura */
-    color: #ffffff;
-    /* Color del texto */
-    background-color: #868686;
-    /* Color de fondo corregido */
-    padding: 20px 0;
-    /* Espacio interior para mejorar la legibilidad */
-}
-
-
-
-.kpi-title-4 {
-    text-align: center;
-    /* Centra el título en la página */
-    font-size: 20px;
-    /* Tamaño de la fuente */
-    margin-bottom: 50px;
-    /* Espacio entre el título y los KPIs */
-    position: relative;
-    top: 590px;
-    width: 45%;
-    /* Asegura que el fondo cubra toda la anchura */
-    color: #ffffff;
-    /* Color del texto */
-    background-color: #868686;
-    /* Color de fondo corregido */
-    padding: 20px 0;
-    /* Espacio interior para mejorar la legibilidad */
-}
-
+.kpi-title-1,
+.kpi-title-2,
+.kpi-title-3,
+.kpi-title-4,
 .kpi-title-5 {
     text-align: center;
-    /* Centra el título en la página */
     font-size: 20px;
-    /* Tamaño de la fuente */
-    margin-bottom: 50px;
-    /* Espacio entre el título y los KPIs */
+    margin: 30px 0;
     position: relative;
-    top: 400px;
+    top: auto;
     width: 45%;
-    /* Asegura que el fondo cubra toda la anchura */
-    color: #ffffff;
-    /* Color del texto */
-    background-color: #868686;
-    /* Color de fondo corregido */
+    color: #242423;
+    background-color: #ffbe9f;
     padding: 20px 0;
-    /* Espacio interior para mejorar la legibilidad */
 }
 
 /* Estilo de la gráfica */
 .chart-container {
-    position: relative;
-    margin-top: 30px;
-    width: 70%;
-    /* Ajusta el ancho del contenedor a tu preferencia */
-    height: 350px;
-    /* La altura se ajustará automáticamente según el contenido */
     margin: 0px auto;
-    /* Centra el contenedor horizontalmente con margen */
+    margin-top: 70px;
+    width: 70%;
+    height: 350px;
     border-radius: 4px;
-    /* Bordes redondeados para el contenedor */
-    background-color: #1f1d1c;
-    /* Color de fondo del contenedor */
+    background-color: #242423;
     padding: 10px;
-    /* Espaciado interno */
     top: 560px;
 }
 
-/* Estilos para las tablas de fuentes */
-.asesores-table {
+.asesores-table,
+.asesores-table-conversion,
+.fuente-table,
+.fuente-table-conversion {
     width: 60%;
-    /* Ocupa el 100% del ancho del contenedor padre */
     border-collapse: collapse;
-    /* Colapsa los bordes de las celdas adyacentes para que no se dupliquen */
-    font-family: "Arial";
-    /* Establece la fuente de texto de la tabla como Arial */
+    font-family: "Arial", serif;
     font-size: 14px;
-    /* Define el tamaño de la fuente dentro de la tabla */
     position: relative;
-    /* Establece el posicionamiento de la tabla como relativo. Esto es útil si se aplican posicionamientos absolutos a elementos hijos */
-    top: 220px;
-    /* Añade un margen superior de 100 píxeles para separar la tabla del contenido superior */
+    top: auto;
     margin: 0 auto;
-    /* Centra la tabla horizontalmente en su contenedor. La propiedad auto aplica márgenes automáticos a los lados izquierdo y derecho, mientras que el margen superior es de 0 píxeles */
     table-layout: fixed;
-    /* Establece el diseño de la tabla en modo fijo, lo que asegura que las columnas tengan un ancho uniforme basado en el ancho especificado de la tabla */
-    background-color: #333333;
+    background-color: #242423;
+    min-width: 800px;
 }
 
-.asesores-table th {
-    border: 1px solid #333333;
+.asesores-table th,
+.asesores-table-conversion th,
+.fuente-table th,
+.fuente-table-conversion th {
+    border: 1px solid #242423;
     font-size: 14px;
     padding: 11px;
     text-align: center;
-    background-color: #333333;
+    background-color: #cbe8dd;
+    color: #242423;
 }
 
-.asesores-table td {
+.asesores-table td,
+.asesores-table-conversion td,
+.fuente-table-conversion td,
+.fuente-table td {
     border: 1px solid #bfbdbd;
     padding: 11px;
     text-align: center;
+    background-color: #242423;
+    color: #fff5e8;
 }
 
-.asesores-table th {
-    background-color: #a1725a;
-    /* Fondo de la cabecera */
-    color: white;
-    /* Color del texto de la cabecera */
-    text-align: center;
-}
-
-.asesores-table td {
-    text-align: left;
-    background-color: #000000;
-    color: #ffffff;
-}
-
-.asesores-table tr.highlight {
-    background-color: #ff6347;
-    /* Color para filas resaltadas */
-}
-
-.asesores-table-conversion {
-    width: 60%;
-    /* Ocupa el 100% del ancho del contenedor padre */
-    border-collapse: collapse;
-    /* Colapsa los bordes de las celdas adyacentes para que no se dupliquen */
-    font-family: "Arial", sans-serif;
-    /* Establece la fuente de texto de la tabla como Arial */
-    font-size: 14px;
-    /* Define el tamaño de la fuente dentro de la tabla */
-    position: relative;
-    /* Establece el posicionamiento de la tabla como relativo. Esto es útil si se aplican posicionamientos absolutos a elementos hijos */
-    top: 520px;
-    /* Añade un margen superior de 100 píxeles para separar la tabla del contenido superior */
-    margin: 0 auto;
-    /* Centra la tabla horizontalmente en su contenedor. La propiedad auto aplica márgenes automáticos a los lados izquierdo y derecho, mientras que el margen superior es de 0 píxeles */
-    table-layout: fixed;
-    /* Establece el diseño de la tabla en modo fijo, lo que asegura que las columnas tengan un ancho uniforme basado en el ancho especificado de la tabla */
-    background-color: #333333;
-}
-
-.asesores-table-conversion th {
-    border: 1px solid #333333;
-    font-size: 14px;
-    padding: 11px;
-    text-align: center;
-    background-color: #333333;
-}
-
-.asesores-table-conversion td {
-    border: 1px solid #bfbdbd;
-    padding: 11px;
-    text-align: center;
-}
-
-.asesores-table-conversion th {
-    background-color: #a1725a;
-    /* Fondo de la cabecera */
-    color: white;
-    /* Color del texto de la cabecera */
-    text-align: center;
-}
-
-.asesores-table-conversion td {
-    text-align: left;
-    background-color: #000000;
-    color: #ffffff;
-}
-
-.asesores-table-conversion tr.highlight {
-    background-color: #ff6347;
-    /* Color para filas resaltadas */
-}
-
-/* Estilos para el formulario de filtros */
 #filter-form {
     display: flex;
     align-items: center;
-    padding: 20px;
+    padding: 0;
     max-width: max-content;
     width: max-content;
-    margin: 100px auto;
+    margin: 0 auto;
     gap: 20px;
 }
 
 #filter-form select {
     width: auto;
     padding: 10px;
-    border: 1px solid #1f1d1c;
+    border: 1px solid #242423;
     color: #ffffff;
-    background: #1f1d1c;
+    background: #242423;
     border-radius: 4px;
     font-size: 16px;
     box-sizing: border-box;
 }
 
 #filter-form button {
-    background-color: #1f1d1c;
-    color: #fff;
+    background-color: #ffbe9f;
+    color: #242423;
     border: none;
     padding: 10px 20px;
     border-radius: 4px;
@@ -331,7 +180,7 @@ body {
     display: none;
     flex-direction: column;
     width: 200px;
-    background-color: #333;
+    background-color: #000000;
     position: absolute;
     top: 60px;
     left: 10px;
@@ -347,17 +196,17 @@ body {
 }
 
 .menu a:hover {
-    background-color: #555;
+    background-color: #242423;
 }
 
 .hamburger {
     cursor: pointer;
     padding: 15px;
-    background-color: #202321;
+    background-color: #000000;
     color: white;
     display: inline-block;
     border-radius: 5px;
-    margin: 10px;
+    margin-right: 200px;
     position: absolute;
 }
 
@@ -378,11 +227,8 @@ body {
 }
 
 .hamburger.active div:nth-child(3) {
-    transform: rotate(-45deg) translate(5px, 5px);
+    transform: rotate(-45deg) translate(5px, -5px);
 }
-
-
-
 
 .custom-select-source {
     position: relative;
@@ -393,51 +239,97 @@ body {
 
 #source-select {
     width: 100%;
-    padding: 13px;
-    padding-right: 0px;
+    padding: 13px 0 13px 13px;
     border-radius: 4px;
     cursor: pointer;
-    background-color: #1F1D1C;
+    background-color: #000000;
     color: white;
-    border: 0px;
+    border: 0;
 }
 
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: #1F1D1C;
-    width: 110%;
+    background-color: #000000;
+    min-width: 100%; /* Ancho mínimo igual al contenedor padre */
+    width: auto; /* Ancho según contenido */
+    max-width: 400px; /* Límite máximo opcional */
     z-index: 1;
     max-height: 600px;
     overflow-y: auto;
     border-radius: 6px;
+    white-space: nowrap; /* Evita saltos de línea */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
+/* Ajustar elementos internos */
 .dropdown-content label {
-    display: block;
-    padding: 8px;
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
     cursor: pointer;
-    background-color: #1F1D1C;
+    background-color: #000000;
+    transition: background 0.3s;
+    gap: 10px; /* Espacio entre checkbox y texto */
 }
 
 .dropdown-content label:hover {
-    background-color: #151716;
+    background-color: #333; /* Color hover más visible */
+}
+
+/* Texto de las opciones */
+.dropdown-content span {
+    font-family: "Arial", sans-serif;
+    font-size: 14px;
+    color: white;
+}
+
+/* Contenedor principal del dropdown */
+.custom-select-asesor {
+    position: relative;
+    display: inline-block;
+    width: auto; /* Ancho según contenido */
+    min-width: 200px; /* Ancho mínimo para el campo de selección */
+}
+
+/* Dropdown de asesores */
+#asesor-dropdown.dropdown-content {
+    width: auto;
+    min-width: 100%; /* Mismo ancho que el contenedor padre */
+    max-width: 400px; /* Límite máximo */
+    white-space: nowrap; /* Texto en una línea */
+    padding: 10px 0;
+}
+
+/* Elementos internos del dropdown */
+#asesor-dropdown label {
+    display: block;
+    padding: 8px 20px;
+    position: relative;
+}
+
+#asesor-dropdown input[type="checkbox"] {
+    margin-right: 12px;
+    vertical-align: middle;
+}
+
+#asesor-dropdown span {
+    display: inline-block;
+    vertical-align: middle;
+    max-width: calc(100% - 30px); /* Ajuste para texto largo */
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 #asesor-select {
     width: 100%;
-    padding: 13px;
-    padding-right: 0px;
+    padding: 13px 0 13px 13px;
     border-radius: 4px;
     cursor: pointer;
-    background-color: #1F1D1C;
+    background-color: #000000;
     color: white;
-    border: 0px;
+    border: 0;
 }
-
-
-
-
 
 /* Estilos para el campo de entrada de fecha */
 #dateRange {
@@ -447,7 +339,7 @@ body {
     border-radius: 4px;
     font-size: 14px;
     box-sizing: border-box;
-    background-color: #1F1D1C;
+    background-color: #000000;
     cursor: pointer;
     color: white;
 }
@@ -463,7 +355,7 @@ body {
     font-family: Arial, sans-serif;
     border-radius: 4px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    background-color: #1F1D1C; /* Fondo del calendario */
+    background-color: #000000; /* Fondo del calendario */
     color: white; /* Color del texto */
 }
 
@@ -500,237 +392,53 @@ body {
     background-color: #555; /* Color más claro para el estado hover de los botones */
 }
 
-.fuente-table {
-    width: 60%;
-    /* Ocupa el 100% del ancho del contenedor padre */
-    border-collapse: collapse;
-    /* Colapsa los bordes de las celdas adyacentes para que no se dupliquen */
-    font-family: "Arial";
-    /* Establece la fuente de texto de la tabla como Arial */
-    font-size: 14px;
-    /* Define el tamaño de la fuente dentro de la tabla */
-    position: relative;
-    /* Establece el posicionamiento de la tabla como relativo. Esto es útil si se aplican posicionamientos absolutos a elementos hijos */
-    top: 590px;
-    /* Añade un margen superior de 100 píxeles para separar la tabla del contenido superior */
-    margin: 0 auto;
-    /* Centra la tabla horizontalmente en su contenedor. La propiedad auto aplica márgenes automáticos a los lados izquierdo y derecho, mientras que el margen superior es de 0 píxeles */
-    table-layout: fixed;
-    /* Establece el diseño de la tabla en modo fijo, lo que asegura que las columnas tengan un ancho uniforme basado en el ancho especificado de la tabla */
-    background-color: #333333;
-}
-
-.fuente-table th {
-    border: 1px solid #333333;
-    font-size: 14px;
-    padding: 11px;
-    text-align: center;
-    background-color: #333333;
-}
-
-.fuente-table td {
-    border: 1px solid #bfbdbd;
-    padding: 11px;
-    text-align: center;
-}
-
-.fuente-table th {
-    background-color: #a1725a;
-    /* Fondo de la cabecera */
-    color: white;
-    /* Color del texto de la cabecera */
-    text-align: center;
-}
-
-.fuente-table td {
-    text-align: left;
-    background-color: #000000;
-    color: #ffffff;
-}
-
-.fuente-table tr.highlight {
-    background-color: #ff6347;
-    /* Color para filas resaltadas */
-}
-
-
-
-.fuente-table-conversion {
-    width: 60%;
-    /* Ocupa el 100% del ancho del contenedor padre */
-    border-collapse: collapse;
-    /* Colapsa los bordes de las celdas adyacentes para que no se dupliquen */
-    font-family: "Arial";
-    /* Establece la fuente de texto de la tabla como Arial */
-    font-size: 14px;
-    /* Define el tamaño de la fuente dentro de la tabla */
-    position: relative;
-    /* Establece el posicionamiento de la tabla como relativo. Esto es útil si se aplican posicionamientos absolutos a elementos hijos */
-    top: 400px;
-    /* Añade un margen superior de 100 píxeles para separar la tabla del contenido superior */
-    margin: 0 auto;
-    /* Centra la tabla horizontalmente en su contenedor. La propiedad auto aplica márgenes automáticos a los lados izquierdo y derecho, mientras que el margen superior es de 0 píxeles */
-    table-layout: fixed;
-    /* Establece el diseño de la tabla en modo fijo, lo que asegura que las columnas tengan un ancho uniforme basado en el ancho especificado de la tabla */
-    background-color: #333333;
-}
-
-.fuente-table-conversion th {
-    border: 1px solid #333333;
-    font-size: 14px;
-    padding: 11px;
-    text-align: center;
-    background-color: #333333;
-}
-
-.fuente-table-conversion td {
-    border: 1px solid #bfbdbd;
-    padding: 11px;
-    text-align: center;
-}
-
-.fuente-table-conversion th {
-    background-color: #a1725a;
-    /* Fondo de la cabecera */
-    color: white;
-    /* Color del texto de la cabecera */
-    text-align: center;
-}
-
-.fuente-table-conversion td {
-    text-align: left;
-    background-color: #000000;
-    color: #ffffff;
-}
-
-.fuente-table-conversion tr.highlight {
-    background-color: #ff6347;
-    /* Color para filas resaltadas */
-}
-
-.custom-button-asesor {
-    display: flex;
+.custom-button-asesor,
+.custom-button-asesor-conversion,
+.custom-button-fuente,
+.custom-button-fuente-conversion {
     padding: 10px 20px;
     font-size: 16px;
     font-weight: bold;
     color: #ffffff;
-    background-color: #555555;
+    background-color: #242423;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 30px;
     margin-left: auto;
-    margin-right: 30px;
-    margin-top: -210px;
+    display: block;
 }
 
-.custom-button-asesor:hover {
-    background-color: #4a4a4a;
+.custom-button-asesor-conversion:hover,
+.custom-button-fuente:hover,
+.custom-button-fuente-conversion:hover,
+.custom-button-asesor:hover{
+    background-color: #242423;
     box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
 }
 
+.custom-button-asesor-conversion:active,
+.custom-button-fuente:active ,
+.custom-button-fuente-conversion:active,
 .custom-button-asesor:active {
     background-color: #202321;
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
 }
 
-.custom-button-asesor i{
+.custom-button-asesor-conversion i,
+.custom-button-fuente-conversion i,
+.custom-button-fuente i,
+.custom-button-asesor i {
     margin-right: 8px;
 }
 
-
-.custom-button-asesor-conversion {
-    display: flex;
-    padding: 10px 20px;
-    font-size: 16px;
-    font-weight: bold;
-    color: #ffffff;
-    background-color: #555555;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin-left: auto;
-    margin-right: 30px;
-    margin-top: 70px;
-}
-
-.custom-button-asesor-conversion:hover {
-    background-color: #4a4a4a;
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
-}
-
-.custom-button-asesor-conversion:active {
-    background-color: #202321;
-    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
-}
-
-.custom-button-asesor-conversion i{
-    margin-right: 8px;
-}
-
-
-.custom-button-fuente {
-    display: flex;
-    padding: 10px 20px;
-    font-size: 16px;
-    font-weight: bold;
-    color: #ffffff;
-    background-color: #555555;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin-left: auto;
-    margin-right: 30px;
-    margin-top: 230px;
-}
-
-.custom-button-fuente:hover {
-    background-color: #4a4a4a;
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
-}
-
-.custom-button-fuente:active {
-    background-color: #202321;
-    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
-}
-
-.custom-button-fuente i{
-    margin-right: 8px;
-}
-
-
-.custom-button-fuente-conversion {
-    display: flex;
-    padding: 10px 20px;
-    font-size: 16px;
-    font-weight: bold;
-    color: #ffffff;
-    background-color: #555555;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin-left: auto;
-    margin-right: 30px;
-    margin-top: 30px;
-}
-
-.custom-button-fuente-conversion:hover {
-    background-color: #4a4a4a;
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
-}
-
-.custom-button-fuente-conversion:active {
-    background-color: #202321;
-    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
-}
-
-.custom-button-fuente-conversion i{
-    margin-right: 8px;
+.section-container {
+    padding: 20px 0;
+    margin: 0 0 0;
+    width: 100%;
+    background: #fff5e8;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-sizing: border-box;
 }

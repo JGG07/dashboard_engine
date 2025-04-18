@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -77,13 +78,15 @@ public class DashboardController {
             start += LIMIT;
         }
 
+        List<Integer> stageIdInteresados = Arrays.asList(6, 17);
+
         Map<String, Integer> dealsCountByDate = pipedriveService.getDealsCountByDate(filteredDeals, startDate, endDate);
-        Map<String, Integer> stageInteresados = pipedriveService.getStageDealsByDate(filteredDeals, 6, startDate, endDate);
-        Map<String, Integer> stageContactados = pipedriveService.getStageDealsByDate(filteredDeals, 7, startDate, endDate);
-        Map<String, Integer> stageCita = pipedriveService.getStageDealsByDate(filteredDeals, 8, startDate, endDate);
-        Map<String, Integer> stageVisita = pipedriveService.getStageDealsByDate(filteredDeals, 9, startDate, endDate);
-        Map<String, Integer> stageNegociacion = pipedriveService.getStageDealsByDate(filteredDeals, 10, startDate, endDate);
-        Map<String, Integer> stageApartado = pipedriveService.getStageDealsByDate(filteredDeals, 11, startDate, endDate);
+        Map<String, Integer> stageInteresados = pipedriveService.getStageDealsByDate(filteredDeals, stageIdInteresados, startDate, endDate);
+        Map<String, Integer> stageContactados = pipedriveService.getStageDealsByDate(filteredDeals, List.of(7), startDate, endDate);
+        Map<String, Integer> stageCita = pipedriveService.getStageDealsByDate(filteredDeals, List.of(8), startDate, endDate);
+        Map<String, Integer> stageVisita = pipedriveService.getStageDealsByDate(filteredDeals, List.of(9), startDate, endDate);
+        Map<String, Integer> stageNegociacion = pipedriveService.getStageDealsByDate(filteredDeals, List.of(10), startDate, endDate);
+        Map<String, Integer> stageApartado = pipedriveService.getStageDealsByDate(filteredDeals, List.of(11), startDate, endDate);
 
         Map<String, Integer> wonDealsCountByDate = pipedriveService.getDealsWonCountByDate(filteredDeals);
 
@@ -212,7 +215,9 @@ public class DashboardController {
         for (Integer count : contactados) {
             totalContactados += count;
         }
+
         for (Integer count : interesados) {
+            System.out.println("Interesado: " + count);
             totalInteresados += count;
         }
 
@@ -299,10 +304,13 @@ public class DashboardController {
         for(DealsData deal : filteredDeals) {
 
             if (deal.getCampaign() != null && deal.getCampaign().contains(",")) {
+                //System.out.println("campañas: " + deal.getCampaign());
                 campaign = pipedriveService.getCampaignName(deal.getCampaign());
             } else if (deal.getCampaign() != null && !deal.getCampaign().isEmpty()) {
+                //System.out.println("campañas: " + deal.getCampaign());
                 campaign = deal.getCampaign();
             } else {
+                System.out.println("campañas: " + deal.getCampaign());
                 campaign = "Desconocido";
             }
 
@@ -530,11 +538,15 @@ public class DashboardController {
                 stats.apartado++;
                 statsFuente.apartado++;
 
+                System.out.println(deal.getOwnerName() + " " + deal.getPersonName());
+
             }
 
             if (deal.getStatus().equals("won")) {
                 stats.ganado++;
                 statsFuente.ganado++;
+
+                System.out.println("won ------> " + deal.getPersonName());
 
             }
 
