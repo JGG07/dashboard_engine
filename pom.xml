@@ -113,17 +113,6 @@
                     </archive>
                 </configuration>
             </plugin>
-            <!-- Plugin de Google Cloud para despliegue en App Engine -->
-            <plugin>
-                <groupId>com.google.cloud.tools</groupId>
-                <artifactId>appengine-maven-plugin</artifactId>
-                <version>2.7.0</version>
-                <configuration>
-                    <projectId>pruebadashboard-429910</projectId>
-                    <version>v1</version>
-                    <stagingDirectory>${project.build.directory}/appengine-staging</stagingDirectory>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 

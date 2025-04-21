@@ -27,6 +27,11 @@ public class DashboardController {
     @Autowired
     private PipedriveService pipedriveService;
 
+    @GetMapping("/")
+    public String redirectRoot() {
+        return "redirect:/mercadeo";
+    }
+
     /**
      *
      * @param model
