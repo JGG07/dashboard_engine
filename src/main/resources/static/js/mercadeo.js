@@ -5,9 +5,12 @@ function toggleMenu() {
     hamburger.classList.toggle('active');
 }
 
+const series = window.series || [];  // Si `series` no está definida, asigna un array vacío
+const fechas = window.fechas || [];
+
 const seriesCapitalized = series.map(serie => ({
     ...serie,
-    name: capitalizeWords(serie.name) // esta función lo transforma solo visualmente
+    name: capitalizeWords(serie.name)
 }));
 
 function capitalizeWords(str) {
@@ -19,62 +22,9 @@ function capitalizeWords(str) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    Highcharts.chart('chart-container-comercial', {
-        chart: {
-            backgroundColor: '#1F1D1C',
-            type: 'line'
-        },
-        title: {
-            text: '',
-            style: {
-                color: '#FFFFFF'
-            }
-        },
-        xAxis: {
-            categories: fechas, // Array de fechas
-            labels: {
-                rotation: -90,
-                style: {
-                    color: '#FFFFFF'
-                }
-            }
-        },
-        yAxis: {
-            title: {
-                text: 'Actividades',
-                style: {
-                    color: '#FFFFFF'
-                }
-            },
-            labels: {
-                style: {
-                    color: '#FFFFFF'
-                }
-            }
-        },
-        legend: {
-            itemStyle: {
-                color: '#FFFFFF'
-            }
-        },
-        plotOptions: {
-            line: {
-                dataLabels: {
-                    enabled: true,
-                    style: {
-                        color: '#FFFFFF'
-                    }
-                },
-                enableMouseTracking: true
-            }
-        },
-        series: seriesCapitalized
-    });
-});
 
-
-document.addEventListener('DOMContentLoaded', function() {
-    chart = Highcharts.chart('chart-container', {
+    // Inicializar la segunda gráfica
+    Highcharts.chart('chart-container', {
         chart: {
             backgroundColor: '#1F1D1C',
             type: 'line'
@@ -88,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
         xAxis: {
             categories: dealsDates,
             labels: {
-                rotation: -90, // Opcional para evitar superposición
+                rotation: -90,
                 style: {
                     color: '#FFFFFF'
                 }
@@ -146,13 +96,8 @@ document.addEventListener('DOMContentLoaded', function() {
             data: apartados
         }]
     });
-});
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Variables Thymeleaf convertidas en formato JavaScript
-
-
-    // Preparar datos para la gráfica de pastel
+    // Inicializar la gráfica de pastel
     var pieData = Object.keys(sortedLostReasons).map(function(reason) {
         return {
             name: reason,
@@ -168,13 +113,13 @@ document.addEventListener('DOMContentLoaded', function() {
         title: {
             text: '',
             style: {
-                color: '#FFFFFF' // Color del título
+                color: '#FFFFFF'
             }
         },
         tooltip: {
             pointFormat: '{point.name}: <b>{point.percentage:.1f}%</b>',
             style: {
-                color: '#FFFFFF' // Color del texto del tooltip
+                color: '#FFFFFF'
             }
         },
         plotOptions: {
@@ -182,10 +127,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 allowPointSelect: true,
                 cursor: 'pointer',
                 dataLabels: {
-                    enabled: true, // Habilita las etiquetas de datos
+                    enabled: true,
                     format: '<b>{point.name}</b>: {point.percentage:.1f} %',
                     style: {
-                        color: '#FFFFFF' // Color del texto de los data labels
+                        color: '#FFFFFF'
                     }
                 }
             }
@@ -194,32 +139,20 @@ document.addEventListener('DOMContentLoaded', function() {
             name: 'Razón de Pérdida',
             colorByPoint: true,
             data: pieData,
-            colors: ['#FF6347', '#4682B4', '#32CD32', '#FFD700', '#FF69B4', '#8A2BE2', '#5F9EDC', '#D2691E', '#FF4500', '#6A5ACD'] // Colores personalizados para cada segmento
+            colors: ['#FF6347', '#4682B4', '#32CD32', '#FFD700', '#FF69B4', '#8A2BE2', '#5F9EDC', '#D2691E', '#FF4500', '#6A5ACD']
         }]
     });
-});
 
-document.addEventListener('DOMContentLoaded', function() {
-
+    // Inicializar la gráfica de barras
     Highcharts.chart('container', {
         chart: {
             type: 'bar',
-            backgroundColor: '#1F1D1C' // Color de fondo del gráfico
+            backgroundColor: '#1F1D1C'
         },
         title: {
             text: '',
-            align: 'left',
             style: {
-                color: '#FFFFFF', // Color del texto del título
-                fontFamily: '"Arial", monospace' // Aplica la fuente
-            }
-        },
-        subtitle: {
-            text: '',
-            align: 'left',
-            style: {
-                color: '#FFFFFF', // Color del texto del subtítulo
-                fontFamily: '"Arial", monospace' // Aplica la fuente
+                color: '#FFFFFF'
             }
         },
         xAxis: {
@@ -229,8 +162,7 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             labels: {
                 style: {
-                    color: '#FFFFFF', // Color del texto de las etiquetas del eje X
-                    fontFamily: '"Arial", monospace' // Aplica la fuente
+                    color: '#FFFFFF'
                 }
             }
         },
@@ -242,18 +174,16 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             labels: {
                 style: {
-                    color: '#FFFFFF', // Color del texto de las etiquetas del eje Y
-                    fontFamily: '"Arial", monospace' // Aplica la fuente
+                    color: '#FFFFFF'
                 }
             }
         },
         tooltip: {
             valueSuffix: '',
-            backgroundColor: '#1F1D1C', // Color de fondo del tooltip
-            borderColor: '#FFFFFF', // Color del borde del tooltip
+            backgroundColor: '#1F1D1C',
+            borderColor: '#FFFFFF',
             style: {
-                color: '#FFFFFF', // Color del texto del tooltip
-                fontFamily: '"Arial", monospace' // Aplica la fuente
+                color: '#FFFFFF'
             }
         },
         plotOptions: {
@@ -261,52 +191,35 @@ document.addEventListener('DOMContentLoaded', function() {
                 borderRadius: '50%',
                 dataLabels: {
                     enabled: true,
-                    color: '#FFFFFF', // Color del texto de las etiquetas de datos
+                    color: '#FFFFFF',
                     style: {
-                        fontFamily: '"Arial", monospace' // Aplica la fuente
+                        fontFamily: '"Arial", monospace'
                     }
                 },
                 groupPadding: 0.1
             }
         },
-        legend: {
-            layout: 'vertical',
-            align: 'right',
-            verticalAlign: 'top',
-            x: -5,
-            y: 5,
-            floating: false,
-            borderWidth: 1,
-            backgroundColor: '#1F1D1C',
-            itemStyle: {
-                color: '#FFFFFF', // Color del texto de la leyenda
-                fontFamily: '"Arial", monospace' // Aplica la fuente
-            }
-        },
-        credits: {
-            enabled: false
-        },
         series: [{
             name: 'Abiertos: ' + totalOpenDeals,
             data: openDeals,
-            color: '#7cb5ec' // Color para la serie 'Abiertos'
+            color: '#7cb5ec'
         }, {
             name: 'Perdidos: ' + totalLostDeals,
             data: lostDeals,
-            color: '#ff4040' // Color para la serie 'Perdidos'
+            color: '#ff4040'
         }, {
             name: 'Ganados: ' + totalWonDeals,
             data: wonDeals,
-            color: '#90ed7d' // Color para la serie 'Ganados'
+            color: '#90ed7d'
         }],
         exporting: {
             enabled: true,
             buttons: {
                 contextButton: {
-                    align: 'right',      // Alineación horizontal (left, center, right)
-                    verticalAlign: 'top',  // Alineación vertical (top, middle, bottom)
-                    x: 0,               // Ajuste en píxeles desde el borde especificado (horizontal)
-                    y: 352                // Ajuste en píxeles desde el borde especificado (vertical)
+                    align: 'right',
+                    verticalAlign: 'top',
+                    x: 0,
+                    y: 352
                 }
             }
         }

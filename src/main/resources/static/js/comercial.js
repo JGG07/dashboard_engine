@@ -6,7 +6,7 @@ function toggleMenu() {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    Highcharts.chart('chart-container', {
+    Highcharts.chart('chart-container-comercial', {
         chart: {
             backgroundColor: '#1F1D1C',
             type: 'line'
