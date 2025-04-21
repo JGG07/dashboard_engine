@@ -55,22 +55,38 @@
                     <div class="custom-select-source">
                         <input type="text" id="source-select" placeholder="Select fuente(s)" readonly onclick="toggleSourceDropdown()">
                         <div id="source-dropdown" class="dropdown-content">
-                            <label><input type="checkbox" name="source" value="67" /> Cartera Propia</label>
-                            <label><input type="checkbox" name="source" value="68" /> Espectacular</label>
-                            <label><input type="checkbox" name="source" value="20" /> Evento</label>
-                            <label><input type="checkbox" name="source" value="28" /> Facebook</label>
-                            <label><input type="checkbox" name="source" value="30" /> Instagram</label>
-                            <label><input type="checkbox" name="source" value="114" /> LinkedIn</label>
-                            <label><input type="checkbox" name="source" value="71" /> Real Estate</label>
-                            <label><input type="checkbox" name="source" value="23" /> Referido</label>
-                            <label><input type="checkbox" name="source" value="77" /> Sitio Web</label>
-                            <label><input type="checkbox" name="source" value="69" /> Tapial Obra</label>
-                            <label><input type="checkbox" name="source" value="70" /> Tapial ShowRoom</label>
-                            <label><input type="checkbox" name="source" value="87" /> TikTok</label>
-                            <label><input type="checkbox" name="source" value="73" /> Valla Publicitaria</label>
-                            <label><input type="checkbox" name="source" value="65" /> WhatsApp</label>
-                            <label><input type="checkbox" name="source" value="18" /> X</label>
-                            <label><input type="checkbox" name="source" value="26" /> YouTube</label>
+                            <label>
+                                <input type="checkbox" name="source" value="67" /> Cartera Propia</label>
+                            <label>
+                                <input type="checkbox" name="source" value="68" /> Espectacular</label>
+                            <label>
+                                <input type="checkbox" name="source" value="20" /> Evento</label>
+                            <label>
+                                <input type="checkbox" name="source" value="28" /> Facebook</label>
+                            <label>
+                                <input type="checkbox" name="source" value="30" /> Instagram</label>
+                            <label>
+                                <input type="checkbox" name="source" value="114" /> LinkedIn</label>
+                            <label>
+                                <input type="checkbox" name="source" value="71" /> Real Estate</label>
+                            <label>
+                                <input type="checkbox" name="source" value="23" /> Referido</label>
+                            <label>
+                                <input type="checkbox" name="source" value="77" /> Sitio Web</label>
+                            <label>
+                                <input type="checkbox" name="source" value="69" /> Tapial Obra</label>
+                            <label>
+                                <input type="checkbox" name="source" value="70" /> Tapial ShowRoom</label>
+                            <label>
+                                <input type="checkbox" name="source" value="87" /> TikTok</label>
+                            <label>
+                                <input type="checkbox" name="source" value="73" /> Valla Publicitaria</label>
+                            <label>
+                                <input type="checkbox" name="source" value="65" /> WhatsApp</label>
+                            <label>
+                                <input type="checkbox" name="source" value="18" /> X</label>
+                            <label>
+                                <input type="checkbox" name="source" value="26" /> YouTube</label>
                         </div>
                     </div>
 
@@ -78,7 +94,8 @@
                     <div class="custom-select-asesor">
                         <input type="text" id="asesor-select" placeholder="Select asesor(es)" readonly onclick="toggleAsesorDropdown()">
                         <div id="asesor-dropdown" class="dropdown-content">
-                            <label><input type="checkbox" name="ownerName" value="all" th:checked="${selectedOwner == 'all'}" /> Asesor</label>
+                            <label>
+                                <input type="checkbox" name="ownerName" value="all" th:checked="${selectedOwner == 'all'}" /> Asesor</label>
                             <th:block th:each="asesor : ${combinedAdvisorStats}">
                                 <label>
                                     <input type="checkbox" name="ownerName" th:value="${asesor.advisor}" th:checked="${selectedOwner == asesor.advisor}" />
@@ -102,192 +119,193 @@
 </div>
 
 <section>
-<!-- Título general para los KPIs -->
-<div>
-    <h2 class="kpi-title-1">¿Qué hicieron los asesores este periodo?</h2>
-</div>
-<!-- Tabla para mostrar datos por asesor -->
-<div>
-    <table class="asesores-table">
-        <thead>
+    <!-- Título general para los KPIs -->
+    <div>
+        <h2 class="kpi-title-1">¿Qué hicieron los asesores este periodo?</h2>
+    </div>
+    <!-- Tabla para mostrar datos por asesor -->
+    <div>
+        <table class="asesores-table">
+            <thead>
 
-        <tr>
-            <th>Asesor</th>
-            <th>Leads</th>
-            <th>Citas</th>
-            <th>Visitas</th>
-            <th>Negociaciones</th>
-            <th>Apartados</th>
-            <th>Ganados</th>
-        </tr>
-        </thead>
-        <tbody>
+            <tr>
+                <th>Asesor</th>
+                <th>Leads</th>
+                <th>Citas</th>
+                <th>Visitas</th>
+                <th>Negociaciones</th>
+                <th>Apartados</th>
+                <th>Ganados</th>
+            </tr>
+            </thead>
+            <tbody>
 
-        <!-- Iterar sobre la lista combinada de asesores y estadísticas -->
-        <tr th:each="entry : ${combinedAdvisorStats}">
-            <td th:text="${entry.advisor}">Nombre del Asesor</td>
-            <td th:text="${entry.deals}" style="text-align: center;">Número de Deals</td>
-            <td th:text="${entry.cita}" style="text-align: center;">Número de Citas</td>
-            <td th:text="${entry.visita}" style="text-align: center;">Número de Visitas</td>
-            <td th:text="${entry.negociacion}" style="text-align: center;">Número de Negociaciones</td>
-            <td th:text="${entry.apartado}" style="text-align: center;">Número de Apartados</td>
-            <td th:text="${entry.ganado}" style="text-align: center;">Número de Ganados</td>
-        </tr>
-        </tbody>
-        <tfoot>
+            <!-- Iterar sobre la lista combinada de asesores y estadísticas -->
+            <tr th:each="entry : ${combinedAdvisorStats}">
+                <td th:text="${entry.advisor}">Nombre del Asesor</td>
+                <td th:text="${entry.deals}" style="text-align: center;">Número de Deals</td>
+                <td th:text="${entry.cita}" style="text-align: center;">Número de Citas</td>
+                <td th:text="${entry.visita}" style="text-align: center;">Número de Visitas</td>
+                <td th:text="${entry.negociacion}" style="text-align: center;">Número de Negociaciones</td>
+                <td th:text="${entry.apartado}" style="text-align: center;">Número de Apartados</td>
+                <td th:text="${entry.ganado}" style="text-align: center;">Número de Ganados</td>
+            </tr>
+            </tbody>
+            <tfoot>
 
-        <!-- Muestra los totales en el pie de la tabla -->
-        <tr>
-            <th>Total</th>
-            <td th:text="${totalDeals}" style="text-align: center; font-weight: bold;">0</td>
-            <td th:text="${totalCitas}" style="text-align: center; font-weight: bold;">0</td>
-            <td th:text="${totalVisitas}" style="text-align: center; font-weight: bold;">0</td>
-            <td th:text="${totalNegociaciones}" style="text-align: center; font-weight: bold;">0</td>
-            <td th:text="${totalApartados}" style="text-align: center; font-weight: bold;">0</td>
-            <td th:text="${totalWonDeals}" style="text-align: center; font-weight: bold;">0</td>
-        </tr>
-        </tfoot>
+            <!-- Muestra los totales en el pie de la tabla -->
+            <tr>
+                <th>Total</th>
+                <td th:text="${totalDeals}" style="text-align: center; font-weight: bold;">0</td>
+                <td th:text="${totalCitas}" style="text-align: center; font-weight: bold;">0</td>
+                <td th:text="${totalVisitas}" style="text-align: center; font-weight: bold;">0</td>
+                <td th:text="${totalNegociaciones}" style="text-align: center; font-weight: bold;">0</td>
+                <td th:text="${totalApartados}" style="text-align: center; font-weight: bold;">0</td>
+                <td th:text="${totalWonDeals}" style="text-align: center; font-weight: bold;">0</td>
+            </tr>
+            </tfoot>
 
-    </table>
-</div>
+        </table>
+    </div>
 
-<div>
-    <button id="botonExportarTablaAsesores" class="custom-button-asesor">
-        <i class="fas fa-file-csv"></i> Exportar a CSV
-    </button>
-</div>
+    <div>
+        <button id="botonExportarTablaAsesores" class="custom-button-asesor">
+            <i class="fas fa-file-csv"></i> Exportar a CSV
+        </button>
+    </div>
 </section>
 
 <section>
-<!-- Título general para los KPIs -->
-<div>
-    <h2 class="kpi-title-3">¿Qué hicieron los asesores este periodo?</h2>
-</div>
-<!-- Tabla para mostrar datos por asesor -->
-<div>
-    <table class="asesores-table-conversion">
-        <thead>
+    <!-- Título general para los KPIs -->
+    <div>
+        <h2 class="kpi-title-3">¿Qué hicieron los asesores este periodo?</h2>
+    </div>
+    <!-- Tabla para mostrar datos por asesor -->
+    <div>
+        <table class="asesores-table-conversion">
+            <thead>
 
-        <tr>
-            <th>Asesor</th>
-            <th>Leads</th>
-            <th>Citas</th>
-            <th>Visitas</th>
-            <th>Negociaciones</th>
-            <th>Apartados</th>
-            <th>Ganados</th>
-        </tr>
-        </thead>
-        <tbody>
+            <tr>
+                <th>Asesor</th>
+                <th>Leads</th>
+                <th>Citas</th>
+                <th>Visitas</th>
+                <th>Negociaciones</th>
+                <th>Apartados</th>
+                <th>Ganados</th>
+            </tr>
+            </thead>
+            <tbody>
 
-        <!-- Iterar sobre la lista combinada de asesores y estadísticas -->
-        <tr th:each="entry : ${combinedAdvisorConversionStats}">
-            <td th:text="${entry.advisor}">Nombre del Asesor</td>
-            <td th:text="${entry.deals}" style="text-align: center;">Número de Deals</td>
-            <td th:text="${#numbers.formatDecimal(entry.cita, 0, 1)} + '%'" style="text-align: center;">Número de Citas</td>
-            <td th:text="${#numbers.formatDecimal(entry.visita, 0, 1)} + '%'" style="text-align: center;">Número de Visitas</td>
-            <td th:text="${#numbers.formatDecimal(entry.negociacion, 0, 1)} + '%'" style="text-align: center;">Número de Negociaciones</td>
-            <td th:text="${#numbers.formatDecimal(entry.apartado, 0, 1)} + '%'" style="text-align: center;">Número de Apartados</td>
-            <td th:text="${#numbers.formatDecimal(entry.ganado, 0, 1)} + '%'" style="text-align: center;">Número de Ganados</td>
-        </tr>
-        </tbody>
-        <tfoot>
+            <!-- Iterar sobre la lista combinada de asesores y estadísticas -->
+            <tr th:each="entry : ${combinedAdvisorConversionStats}">
+                <td th:text="${entry.advisor}">Nombre del Asesor</td>
+                <td th:text="${entry.deals}" style="text-align: center;">Número de Deals</td>
+                <td th:text="${#numbers.formatDecimal(entry.cita, 0, 1)} + '%'" style="text-align: center;">Número de Citas</td>
+                <td th:text="${#numbers.formatDecimal(entry.visita, 0, 1)} + '%'" style="text-align: center;">Número de Visitas</td>
+                <td th:text="${#numbers.formatDecimal(entry.negociacion, 0, 1)} + '%'" style="text-align: center;">Número de Negociaciones</td>
+                <td th:text="${#numbers.formatDecimal(entry.apartado, 0, 1)} + '%'" style="text-align: center;">Número de Apartados</td>
+                <td th:text="${#numbers.formatDecimal(entry.ganado, 0, 1)} + '%'" style="text-align: center;">Número de Ganados</td>
+            </tr>
+            </tbody>
+            <tfoot>
 
-        <!-- Muestra los totales en el pie de la tabla -->
-        <tr>
-            <th>Total</th>
-            <td th:text="${totalDeals}" style="text-align: center; font-weight: bold;">0</td>
-            <td th:text="${#numbers.formatDecimal(citas, 0, 1)} + '%'" style="text-align: center; font-weight: bold;">0</td>
-            <td th:text="${#numbers.formatDecimal(visitas, 0, 1)} + '%'" style="text-align: center; font-weight: bold;">0</td>
-            <td th:text="${#numbers.formatDecimal(negociaciones, 0, 1)} + '%'" style="text-align: center; font-weight: bold;">0</td>
-            <td th:text="${#numbers.formatDecimal(apartados, 0 ,1)} + '%'" style="text-align: center; font-weight: bold;">0</td>
-            <td th:text="${#numbers.formatDecimal(wonDeals, 0, 1)} + '%'" style="text-align: center; font-weight: bold;">0</td>
-        </tr>
-        </tfoot>
+            <!-- Muestra los totales en el pie de la tabla -->
+            <tr>
+                <th>Total</th>
+                <td th:text="${totalDeals}" style="text-align: center; font-weight: bold;">0</td>
+                <td th:text="${#numbers.formatDecimal(citas, 0, 1)} + '%'" style="text-align: center; font-weight: bold;">0</td>
+                <td th:text="${#numbers.formatDecimal(visitas, 0, 1)} + '%'" style="text-align: center; font-weight: bold;">0</td>
+                <td th:text="${#numbers.formatDecimal(negociaciones, 0, 1)} + '%'" style="text-align: center; font-weight: bold;">0</td>
+                <td th:text="${#numbers.formatDecimal(apartados, 0 ,1)} + '%'" style="text-align: center; font-weight: bold;">0</td>
+                <td th:text="${#numbers.formatDecimal(wonDeals, 0, 1)} + '%'" style="text-align: center; font-weight: bold;">0</td>
+            </tr>
+            </tfoot>
 
-    </table>
-</div>
+        </table>
+    </div>
 
-<div>
-    <button id="botonExportarTablaAsesoresConversion" class="custom-button-asesor-conversion">
-        <i class="fas fa-file-csv"></i> Exportar a CSV
-    </button>
-</div>
+    <div>
+        <button id="botonExportarTablaAsesoresConversion" class="custom-button-asesor-conversion">
+            <i class="fas fa-file-csv"></i> Exportar a CSV
+        </button>
+    </div>
 </section>
 
 <section>
-<!-- Título general para los KPIs -->
-<div>
-    <h2 class="kpi-title-2">¿Cuántas actividades se realizaron este periodo?</h2>
-</div>
+    <!-- Título general para los KPIs -->
+    <div>
+        <h2 class="kpi-title-2">¿Cuántas actividades se realizaron este periodo?</h2>
+    </div>
 
-<!-- Gráfica de tendencia -->
-<div id="chart-container" class="chart-container"></div>
+    <!-- Gráfica de tendencia -->
+    <div id="chart-container" class="chart-container"></div>
 
-<!-- Contenedor para la gráfica -->
-<script th:inline="javascript">
-    /*<![CDATA[*/
-    var fechas = /*[[${fechas}]]*/ [];
-    var series = /*[[${series}]]*/ [];
-    /*]]>*/
-</script>
+    <!-- Contenedor para la gráfica -->
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var fechas = /*[[${fechas}]]*/ [];
+        var series = /*[[${series}]]*/ [];
+        /*]]>*/
+
+    </script>
 </section>
 
 <section>
-<!-- Título general para los KPIs -->
-<div>
-    <h2 class="kpi-title-4">¿Que fuentes fueron mas efectivas?</h2>
-</div>
-<!-- Tabla para mostrar datos por asesor -->
-<div>
-    <table class="fuente-table">
-        <thead>
+    <!-- Título general para los KPIs -->
+    <div>
+        <h2 class="kpi-title-4">¿Que fuentes fueron mas efectivas?</h2>
+    </div>
+    <!-- Tabla para mostrar datos por asesor -->
+    <div>
+        <table class="fuente-table">
+            <thead>
 
-        <tr>
-            <th>Fuente</th>
-            <th>Leads</th>
-            <th>Citas</th>
-            <th>Visitas</th>
-            <th>Negociaciones</th>
-            <th>Apartados</th>
-            <th>Ganados</th>
-        </tr>
-        </thead>
-        <tbody>
+            <tr>
+                <th>Fuente</th>
+                <th>Leads</th>
+                <th>Citas</th>
+                <th>Visitas</th>
+                <th>Negociaciones</th>
+                <th>Apartados</th>
+                <th>Ganados</th>
+            </tr>
+            </thead>
+            <tbody>
 
-        <!-- Iterar sobre la lista combinada de fuente y estadísticas -->
-        <tr th:each="entry : ${combinedFuenteStats}">
-            <td th:text="${entry.fuente}">Nombre del Asesor</td>
-            <td th:text="${entry.deals}" style="text-align: center;">Número de Deals</td>
-            <td th:text="${entry.cita}" style="text-align: center;">Número de Citas</td>
-            <td th:text="${entry.visita}" style="text-align: center;">Número de Visitas</td>
-            <td th:text="${entry.negociacion}" style="text-align: center;">Número de Negociaciones</td>
-            <td th:text="${entry.apartado}" style="text-align: center;">Número de Apartados</td>
-            <td th:text="${entry.ganado}" style="text-align: center;">Número de Ganados</td>
-        </tr>
-        </tbody>
-        <tfoot>
+            <!-- Iterar sobre la lista combinada de fuente y estadísticas -->
+            <tr th:each="entry : ${combinedFuenteStats}">
+                <td th:text="${entry.fuente}">Nombre del Asesor</td>
+                <td th:text="${entry.deals}" style="text-align: center;">Número de Deals</td>
+                <td th:text="${entry.cita}" style="text-align: center;">Número de Citas</td>
+                <td th:text="${entry.visita}" style="text-align: center;">Número de Visitas</td>
+                <td th:text="${entry.negociacion}" style="text-align: center;">Número de Negociaciones</td>
+                <td th:text="${entry.apartado}" style="text-align: center;">Número de Apartados</td>
+                <td th:text="${entry.ganado}" style="text-align: center;">Número de Ganados</td>
+            </tr>
+            </tbody>
+            <tfoot>
 
-        <!-- Muestra los totales en el pie de la tabla -->
-        <tr>
-            <th>Total</th>
-            <td th:text="${totalDealsFuente}" style="text-align: center; font-weight: bold;">0</td>
-            <td th:text="${totalCitasFuente}" style="text-align: center; font-weight: bold;">0</td>
-            <td th:text="${totalVisitasFuente}" style="text-align: center; font-weight: bold;">0</td>
-            <td th:text="${totalNegociacionesFuente}" style="text-align: center; font-weight: bold;">0</td>
-            <td th:text="${totalApartadosFuente}" style="text-align: center; font-weight: bold;">0</td>
-            <td th:text="${totalWonDealsFuente}" style="text-align: center; font-weight: bold;">0</td>
-        </tr>
-        </tfoot>
+            <!-- Muestra los totales en el pie de la tabla -->
+            <tr>
+                <th>Total</th>
+                <td th:text="${totalDealsFuente}" style="text-align: center; font-weight: bold;">0</td>
+                <td th:text="${totalCitasFuente}" style="text-align: center; font-weight: bold;">0</td>
+                <td th:text="${totalVisitasFuente}" style="text-align: center; font-weight: bold;">0</td>
+                <td th:text="${totalNegociacionesFuente}" style="text-align: center; font-weight: bold;">0</td>
+                <td th:text="${totalApartadosFuente}" style="text-align: center; font-weight: bold;">0</td>
+                <td th:text="${totalWonDealsFuente}" style="text-align: center; font-weight: bold;">0</td>
+            </tr>
+            </tfoot>
 
-    </table>
-</div>
+        </table>
+    </div>
 
-<div>
-    <button id="botonExportarTablaFuente" class="custom-button-fuente">
-        <i class="fas fa-file-csv"></i> Exportar a CSV
-    </button>
-</div>
+    <div>
+        <button id="botonExportarTablaFuente" class="custom-button-fuente">
+            <i class="fas fa-file-csv"></i> Exportar a CSV
+        </button>
+    </div>
 
 </section>
 
@@ -349,4 +367,5 @@
 
 </section>
 </body>
+
 </html>

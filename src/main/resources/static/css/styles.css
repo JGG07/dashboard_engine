@@ -52,6 +52,9 @@ body {
     height: auto; /* Mantiene la proporción */
     margin-left: 100px;
 }
+.navbar-container{
+    height: 90px;
+}
 
 /* Estilo del contenedor principal de la gráfica */
 #container {
@@ -81,80 +84,16 @@ body {
     /* Aplica la fuente */
 }
 
-.kpi-title-1 {
+.kpi-title {
     text-align: center;
-    /* Centra el título en la página */
     font-size: 20px;
-    /* Tamaño de la fuente */
-    margin-bottom: 50px;
-    /* Espacio entre el título y los KPIs */
-    position: absolute;
-    top: 100px;
+    margin: 30px 0;
+    position: relative;
+    top: auto;
     width: 45%;
-    /* Asegura que el fondo cubra toda la anchura */
     color: #ffffff;
-    /* Color del texto */
     background-color: #bfbdbd;
-    /* Color de fondo corregido */
     padding: 20px 0;
-    /* Espacio interior para mejorar la legibilidad */
-}
-
-.kpi-title-2 {
-    text-align: center;
-    /* Centra el título en la página */
-    font-size: 20px;
-    /* Tamaño de la fuente */
-    margin-bottom: 50px;
-    /* Espacio entre el título y los KPIs */
-    position: absolute;
-    top: 650px;
-    width: 45%;
-    /* Asegura que el fondo cubra toda la anchura */
-    color: #ffffff;
-    /* Color del texto */
-    background-color: #bfbdbd;
-    /* Color de fondo corregido */
-    padding: 20px 0;
-    /* Espacio interior para mejorar la legibilidad */
-}
-
-.kpi-title-4 {
-    text-align: center;
-    /* Centra el título en la página */
-    font-size: 20px;
-    /* Tamaño de la fuente */
-    margin-bottom: 50px;
-    /* Espacio entre el título y los KPIs */
-    position: flex;
-    margin-top: 100px;
-    width: 45%;
-    /* Asegura que el fondo cubra toda la anchura */
-    color: #ffffff;
-    /* Color del texto */
-    background-color: #bfbdbd;
-    /* Color de fondo corregido */
-    padding: 20px 0;
-    /* Espacio interior para mejorar la legibilidad */
-}
-
-.kpi-title-3 {
-    text-align: center;
-    /* Centra el título en la página */
-    font-size: 20px;
-    /* Tamaño de la fuente */
-    margin-bottom: 50px;
-    /* Espacio entre el título y los KPIs */
-    position: flex;
-    margin-top: 400px;
-    width: 45%;
-    /* Asegura que el fondo cubra toda la anchura */
-    color: #ffffff;
-    /* Color del texto */
-    background-color: #bfbdbd;
-    /* Color de fondo corregido */
-    padding: 20px 0;
-    /* Espacio interior para mejorar la legibilidad */
 }
 
 /* Estilos para el contenedor de los KPI */
@@ -163,11 +102,8 @@ body {
     flex-wrap: wrap;
     justify-content: center;
     gap: 125px;
-    margin-bottom: 12px;
     position: absolute;
-    /* También puedes usar 'fixed' si lo prefieres */
-    top: 255px;
-    /* Ajusta este valor para bajar los contenedores */
+    top: 266px;
     left: 0;
     right: 0;
     z-index: 9999;
@@ -177,22 +113,15 @@ body {
     width: 110px;
     height: 70px;
     background-color: #a1725a;
-    /* Fondo del cuadrado */
     color: #ffffff;
-    /* Color del texto */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     border-radius: 6px;
-    /* Bordes redondeados */
     box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
-    /* Sombra */
-    font-family: "Arial";
-    /* Fuente */
+    font-family: "Arial", sans-serif;
     margin: -56px;
-    /*margin-top: 100px; /* Ajusta este valor para bajar los contenedores */
-    /*z-index: 9999; /* Un valor alto asegura que esté al frente de otros elementos */
     padding: 3px;
     text-align: center;
 }
@@ -215,20 +144,13 @@ body {
 /* Estilo de la gráfica */
 .chart-container {
     position: relative;
-    top: 30px;
-    width: 50%;
-    /* Ajusta el ancho del contenedor a tu preferencia */
-    height: 350px;
-    /* La altura se ajustará automáticamente según el contenido */
     margin: 20px auto;
-    /* Centra el contenedor horizontalmente con margen */
-    border-radius: 4px;
-    /* Bordes redondeados para el contenedor */
+    top: 38px;
+    width: 53%;
+    height: 385px;
+    border-radius: 12px;
     background-color: #1f1d1c;
-    /* Color de fondo del contenedor */
-    padding: 10px;
-    /* Espaciado interno */
-    top: 250px;
+    padding: 15px;
 }
 
 /* Contenedor centrado para las tablas */
@@ -243,28 +165,19 @@ body {
 }
 
 /* Estilos para las tablas de fuentes */
-.source-table {
+.leads-table {
     width: 95%;
-    /* Ocupa el 100% del ancho del contenedor padre */
     border-collapse: collapse;
-    /* Colapsa los bordes de las celdas adyacentes para que no se dupliquen */
-    font-family: "Arial";
-    /* Establece la fuente de texto de la tabla como Arial */
+    font-family: "Arial", sans-serif;
     font-size: 14px;
-    /* Define el tamaño de la fuente dentro de la tabla */
-    position: relative;
-    /* Establece el posicionamiento de la tabla como relativo. Esto es útil si se aplican posicionamientos absolutos a elementos hijos */
     top: 360px;
-    /* Añade un margen superior de 100 píxeles para separar la tabla del contenido superior */
     margin: 0 auto;
-    /* Centra la tabla horizontalmente en su contenedor. La propiedad auto aplica márgenes automáticos a los lados izquierdo y derecho, mientras que el margen superior es de 0 píxeles */
     table-layout: fixed;
-    /* Establece el diseño de la tabla en modo fijo, lo que asegura que las columnas tengan un ancho uniforme basado en el ancho especificado de la tabla */
     background-color: #000000;
     text-align: center;
 }
 
-.source-table td {
+.leads-table td {
     border: 1px solid #bfbdbd; /* Borde gris claro */
     padding: 11px; /* Relleno de 11px */
     text-align: left; /* Alineación del texto a la izquierda */
@@ -272,82 +185,48 @@ body {
     color: #ffffff; /* Texto blanco */
 }
 
-.source-table th {
+.leads-table th {
     border: 1px solid #333333;
     padding: 10px;
-    text-align: center;
     background-color: #a1725a;
-    /* Fondo de la cabecera */
     color: white;
-    /* Color del texto de la cabecera */
     text-align: left;
 }
 
 .source-table-reason {
-    width: 50%;
-    /* Ocupa el 45% del ancho del contenedor padre */
+    width: 100%;
     border-collapse: collapse;
-    font-family: "Arial";
+    font-family: "Arial", sans-serif;
     font-size: 12px;
-    /* Tamaño de fuente reducido */
     position: relative;
-    margin-top: 100px;
-    margin: 0 auto;
+    margin: auto;
     table-layout: fixed;
+    background-color: #000000;
 }
-
 
 .source-table-reason th {
     border: 1px solid #333333;
-    padding: 8px;
+    padding: 10px;
+    background-color: #a1725a;
+    color: #ffffff;
     text-align: left;
-    background-color: #333333;
 }
 
 .source-table-reason td {
     border: 1px solid #bfbdbd;
-    padding: 8px;
+    padding: 11px;
     text-align: left;
-}
-
-.source-table-reason th {
-    background-color: #a1725a;
-    /* Fondo de la cabecera */
-    color: white;
-    /* Color del texto de la cabecera */
-    text-align: left;
-}
-
-.source-table-reason td {
-    text-align: left;
-    color: #ffffff;
     background-color: #000000;
+    color: #ffffff;
 }
 
-.source-table tr.highlight {
-    background-color: #ff6347;
-    /* Color para filas resaltadas */
-}
-
-.source-table-reason tr.highlight {
-    background-color: #ff6347;
-    /* Color para filas resaltadas */
-}
-
-/* Estilo del contenedor del gráfico circular */
 #pie-container {
-    width: 45%;
-    /* Ajusta el ancho del contenedor */
-    height: 650px;
-    /* Ajusta la altura según sea necesario */
+    width: 100%;
+    height: 480px !important;
     margin: 0 auto;
-    /* Centra el gráfico horizontalmente con margen */
     background-color: #1f1d1c;
-    /* Color de fondo del gráfico */
     font-family: "Arial", monospace;
-    /* Aplica la fuente */
     border-radius: 4px;
-    /* Bordes redondeados */
 }
 
 /* Estilos para el formulario de filtros */
@@ -460,55 +339,68 @@ body {
 
 #source-select {
     width: 100%;
-    padding: 13px;
-    padding-right: 0px;
+    padding: 13px 0 13px 13px;
     border-radius: 4px;
     cursor: pointer;
     background-color: #1F1D1C;
     color: white;
-    border: 0px;
+    border: 0;
 }
 
 .dropdown-content {
     display: none;
     position: absolute;
     background-color: #1F1D1C;
-    width: 110%;
+    min-width: 100%;
+    width: auto;
+    max-width: 400px;
     z-index: 1;
     max-height: 600px;
     overflow-y: auto;
     border-radius: 6px;
+    white-space: nowrap;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
 .dropdown-content label {
-    display: block;
-    padding: 8px;
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
     cursor: pointer;
     background-color: #1F1D1C;
+    transition: background 0.3s;
+    gap: 10px;
 }
 
 .dropdown-content label:hover {
     background-color: #151716;
 }
 
+.dropdown-content span {
+    font-family: "Arial", sans-serif;
+    font-size: 14px;
+    color: white;
+}
+
+.custom-select-asesor {
+    position: relative;
+    display: inline-block;
+    width: auto; /* Ancho según contenido */
+    min-width: 200px; /* Ancho mínimo para el campo de selección */
+}
+
 #asesor-select {
     width: 100%;
-    padding: 13px;
-    padding-right: 0px;
+    padding: 13px 0 13px 13px;
     border-radius: 4px;
     cursor: pointer;
     background-color: #1F1D1C;
     color: white;
-    border: 0px;
+    border: 0;
 }
 
-
-
-
-
-/* Estilos para el campo de entrada de fecha */
 #dateRange {
-    width: 100%; /* Asegúrate de que el campo de entrada tiene suficiente ancho */
+    width: 100%;
     padding: 10px;
     border: 0;
     border-radius: 4px;
@@ -567,10 +459,7 @@ body {
     background-color: #555; /* Color más claro para el estado hover de los botones */
 }
 
-
-
 .custom-button {
-    display: flex;
     padding: 10px 20px;
     font-size: 16px;
     font-weight: bold;
@@ -581,8 +470,8 @@ body {
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin-left: auto;
-    margin-right: 30px;
+    margin: 30px 30px 30px auto;
+    display: block;
 }
 
 .custom-button:hover {
@@ -629,106 +518,26 @@ body {
     margin-right: 8px;
 }
 
-
-.campaign-table {
-    width: 60%;
-    /* Ocupa el 100% del ancho del contenedor padre */
-    border-collapse: collapse;
-    /* Colapsa los bordes de las celdas adyacentes para que no se dupliquen */
-    font-family: "Arial";
-    /* Establece la fuente de texto de la tabla como Arial */
-    font-size: 14px;
-    /* Define el tamaño de la fuente dentro de la tabla */
-    position: relative;
-    /* Establece el posicionamiento de la tabla como relativo. Esto es útil si se aplican posicionamientos absolutos a elementos hijos */
-    top: 50px;
-    /* Añade un margen superior de 100 píxeles para separar la tabla del contenido superior */
-    margin: 0 auto;
-    /* Centra la tabla horizontalmente en su contenedor. La propiedad auto aplica márgenes automáticos a los lados izquierdo y derecho, mientras que el margen superior es de 0 píxeles */
-    table-layout: fixed;
-    /* Establece el diseño de la tabla en modo fijo, lo que asegura que las columnas tengan un ancho uniforme basado en el ancho especificado de la tabla */
-    background-color: #333333;
-}
-
-.campaign-table th {
-    border: 1px solid #333333;
-    font-size: 14px;
-    padding: 11px;
-    text-align: center;
-    background-color: #333333;
-}
-
-.campaign-table td {
-    border: 1px solid #bfbdbd;
-    padding: 11px;
-    text-align: center;
-}
-
-.campaign-table th {
-    background-color: #a1725a;
-    /* Fondo de la cabecera */
-    color: white;
-    /* Color del texto de la cabecera */
-    text-align: center;
-}
-
-.campaign-table td {
-    text-align: left;
-    background-color: #000000;
-    color: #ffffff;
-}
-
-.campaign-table tr.highlight {
-    background-color: #ff6347;
-    /* Color para filas resaltadas */
-}
-
-.custom-button-campaign {
-    display: flex;
-    padding: 10px 20px;
-    font-size: 16px;
-    font-weight: bold;
-    color: #ffffff;
-    background-color: #555555;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin-left: auto;
-    margin-right: 30px;
-
-}
-
-.custom-button-campaign:hover {
-    background-color: #4a4a4a;
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
-}
-
-.custom-button-campaign:active {
-    background-color: #202321;
-    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
-}
-
-.custom-button-campaign i{
-    margin-right: 8px;
-}
-
-.kpi-title-6 {
-    text-align: center;
-    /* Centra el título en la página */
-    font-size: 20px;
-    /* Tamaño de la fuente */
-    margin-bottom: 50px;
-    /* Espacio entre el título y los KPIs */
-    position: relative;
-    top: 50px;
-    width: 45%;
-    /* Asegura que el fondo cubra toda la anchura */
-    color: #ffffff;
-    /* Color del texto */
-    background-color: #868686;
-    /* Color de fondo corregido */
+.section-container {
     padding: 20px 0;
-    /* Espacio interior para mejorar la legibilidad */
+    margin: 0 0 0;
+    width: 100%;
+    background: #323339;
+}
+
+.section {
+    margin-bottom: 40px;
+}
+
+/* CSS */
+.table-chart-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 10px;
+    align-items: start;
+    width: 100%;
+}
+
+.chart-column {
+    padding: 20px;
 }

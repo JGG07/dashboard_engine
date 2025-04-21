@@ -4,247 +4,278 @@
 <body>
 <div th:replace="~{home :: navbar}"></div>
 
-<!-- Título general para los KPIs -->
-<div>
-    <h2 class="kpi-title-1">¿La estrategia nos entrega suficientes Leads de calidad?</h2>
-</div>
-<!-- Contenedor para los cuadros KPI -->
-<div class="kpi-container">
-    <!-- Cuadro para mostrar el total de tratos -->
-    <div class="kpi-box">
-        <div class="kpi-label">Deals</div>
-        <div class="kpi-value" th:text="${totalDeals}">0</div>
+<section>
+    <div class="section-container">
+        <h2 class="kpi-title">¿La estrategia nos entrega suficientes Leads de calidad?</h2>
+        <!-- Contenedor para los cuadros KPI -->
+        <div class="kpi-container">
+            <!-- Cuadro para mostrar el total de tratos -->
+            <div class="kpi-box">
+                <div class="kpi-label">Leads</div>
+                <div class="kpi-value" th:text="${totalDeals}">0</div>
+            </div>
+            <!-- Cuadro para mostrar el total de Interesados -->
+            <div class="kpi-box">
+                <div class="kpi-label">Interesados</div>
+                <div class="kpi-value" th:text="${totalInteresados}">0</div>
+            </div>
+            <!-- Cuadro para mostrar el total de Contactados -->
+            <div class="kpi-box">
+                <div class="kpi-label">Contactados</div>
+                <div class="kpi-value" th:text="${totalContactado}">0</div>
+            </div>
+            <!-- Cuadro para mostrar el total de citas -->
+            <div class="kpi-box">
+                <div class="kpi-label">Citas</div>
+                <div class="kpi-value" th:text="${totalCitas}">0</div>
+            </div>
+            <!-- Cuadro para mostrar el total de visitas -->
+            <div class="kpi-box">
+                <div class="kpi-label">Visitas</div>
+                <div class="kpi-value" th:text="${totalVisitas}">0</div>
+            </div>
+            <!-- Cuadro para mostrar el total de negociaciones -->
+            <div class="kpi-box">
+                <div class="kpi-label">Negociaciones</div>
+                <div class="kpi-value" th:text="${totalNegociaciones}">0</div>
+            </div>
+            <!-- Cuadro para mostrar el total de apartados -->
+            <div class="kpi-box">
+                <div class="kpi-label">Apartados</div>
+                <div class="kpi-value" th:text="${totalApartados}">0</div>
+            </div>
+        </div>
+
+        <!-- Contenedor para la gráfica -->
+        <div id="chart-container" class="chart-container"></div>
+
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+            let chart;
+            var dealsDates = /*[[${dealsDates}]]*/
+            var dealsCounts = /*[[${dealsCounts}]]*/;
+            var interesados = /*[[${interesados}]]*/
+            var contactados = /*[[${contactados}]]*/
+            var citas = /*[[${citas}]]*/
+            var visitas = /*[[${visitas}]]*/
+            var negociaciones = /*[[${negociaciones}]]*/
+            var apartados = /*[[${apartados}]]*/
+            /*]]>*/
+        </script>
     </div>
-    <!-- Cuadro para mostrar el total de Interesados -->
-    <div class="kpi-box">
-        <div class="kpi-label">Interesados</div>
-        <div class="kpi-value" th:text="${totalInteresados}">0</div>
-    </div>
-    <!-- Cuadro para mostrar el total de Contactados -->
-    <div class="kpi-box">
-        <div class="kpi-label">Contactados</div>
-        <div class="kpi-value" th:text="${totalContactado}">0</div>
-    </div>
-    <!-- Cuadro para mostrar el total de citas -->
-    <div class="kpi-box">
-        <div class="kpi-label">Citas</div>
-        <div class="kpi-value" th:text="${totalCitas}">0</div>
-    </div>
-    <!-- Cuadro para mostrar el total de visitas -->
-    <div class="kpi-box">
-        <div class="kpi-label">Visitas</div>
-        <div class="kpi-value" th:text="${totalVisitas}">0</div>
-    </div>
-    <!-- Cuadro para mostrar el total de negociaciones -->
-    <div class="kpi-box">
-        <div class="kpi-label">Negociaciones</div>
-        <div class="kpi-value" th:text="${totalNegociaciones}">0</div>
-    </div>
-    <!-- Cuadro para mostrar el total de apartados -->
-    <div class="kpi-box">
-        <div class="kpi-label">Apartados</div>
-        <div class="kpi-value" th:text="${totalApartados}">0</div>
-    </div>
-</div>
+</section>
 
-<!-- Contenedor para la gráfica -->
-<div id="chart-container" class="chart-container"></div>
+<section>
+    <div class="section-container">
+        <h2 class="kpi-title">¿Cuales son las fuentes más efectivas?</h2>
 
-<script th:inline="javascript">
-    /*<![CDATA[*/
-    let chart;
-    var dealsDates = /*[[${dealsDates}]]*/
-    var dealsCounts = /*[[${dealsCounts}]]*/;
-    var interesados = /*[[${interesados}]]*/
-    var contactados = /*[[${contactados}]]*/
-    var citas = /*[[${citas}]]*/
-    var visitas = /*[[${visitas}]]*/
-    var negociaciones = /*[[${negociaciones}]]*/
-    var apartados = /*[[${apartados}]]*/
-    /*]]>*/
-</script>
 
-<!-- Título general para los KPIs -->
-<div>
-    <h2 class="kpi-title-2">¿Cuales son las fuentes mas efectivas?</h2>
-</div>
-<!-- Tabla para mostrar datos por fuente -->
-<div>
-<table class="source-table">
-    <thead>
-    <tr>
-        <th style="text-align: center;">Fuente</th>
-        <th style="text-align: center;">Leads</th>
-        <th style="text-align: center;">Interesados</th>
-        <th style="text-align: center;">Contactados</th>
-        <th style="text-align: center;">Citas</th>
-        <th style="text-align: center;">Visitas</th>
-        <th style="text-align: center;">Negociaciones</th>
-        <th style="text-align: center;">Apartados</th>
-        <th style="text-align: center;">Abiertos</th>
-        <th style="text-align: center;">Perdidos</th>
-        <th style="text-align: center;">Ganados</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="entry : ${dealsBySource}">
-        <td th:text="${entry.key}">Fuente</td>
-        <td th:text="${totalDealsBySource[entry.key] != null ? totalDealsBySource[entry.key] : 0}" data-value="${totalDealsBySource[entry.key] != null ? totalDealsBySource[entry.key] : 0}" style="text-align: center;">0
-        </td>
-        <td th:text="${entry.value['Interesado'] != null ? entry.value['Interesado'] : 0}" data-value="${entry.value['Interesado'] != null ? entry.value['Interesado'] : 0}" style="text-align: center;">0
-        </td>
-        <td th:text="${entry.value['Contactado'] != null ? entry.value['Contactado'] : 0}" data-value="${entry.value['Contactado'] != null ? entry.value['Contactado'] : 0}" style="text-align: center;">0
-        </td>
-        <td th:text="${entry.value['Cita'] != null ? entry.value['Cita'] : 0}" data-value="${entry.value['Cita'] != null ? entry.value['Cita'] : 0}" style="text-align: center;">0
-        </td>
-        <td th:text="${entry.value['Visita'] != null ? entry.value['Visita'] : 0}" data-value="${entry.value['Visita'] != null ? entry.value['Visita'] : 0}" style="text-align: center;">0
-        </td>
-        <td th:text="${entry.value['Negociación'] != null ? entry.value['Negociación'] : 0}" data-value="${entry.value['Negociación'] != null ? entry.value['Negociación'] : 0}" style="text-align: center;">0
-        </td>
-        <td th:text="${entry.value['Apartado'] != null ? entry.value['Apartado'] : 0}" data-value="${entry.value['Apartado'] != null ? entry.value['Apartado'] : 0}" style="text-align: center;">0
-        </td>
-        <td th:text="${openDealsBySource[entry.key] != null ? openDealsBySource[entry.key] : 0}" data-value="${openDealsBySource[entry.key] != null ? openDealsBySource[entry.key] : 0}" style="text-align: center;">0
-        </td>
-        <td th:text="${lostDealsBySource[entry.key] != null ? lostDealsBySource[entry.key] : 0}" data-value="${lostDealsBySource[entry.key] != null ? lostDealsBySource[entry.key] : 0}" style="text-align: center;">0
-        </td>
-        <td th:text="${wonDealsBySource[entry.key] != null ? wonDealsBySource[entry.key] : 0}" data-value="${wonDealsBySource[entry.key] != null ? wonDealsBySource[entry.key] : 0}" style="text-align: center;">0
-        </td>
-    </tr>
-    </tbody>
+        <button id="botonExportarCSV" class="custom-button">
+            <i class="fas fa-file-csv"></i> Exportar a CSV
+        </button>
 
-    <tfoot>
-    <tr>
-        <th style="text-align: center; font-weight: bold;">Total</th>
-        <td th:text="${totalDeals}" style="text-align: center; font-weight: bold;">0</td>
-        <td th:text="${totalInteresados}" style="text-align: center; font-weight: bold ;">0</td>
-        <td th:text="${totalContactado}" style="text-align: center; font-weight: bold ;">0</td>
-        <td th:text="${totalCitas}" style="text-align: center; font-weight: bold ;">0</td>
-        <td th:text="${totalVisitas}" style="text-align: center; font-weight: bold ;">0</td>
-        <td th:text="${totalNegociaciones}" style="text-align: center; font-weight: bold ;">0</td>
-        <td th:text="${totalApartados}" style="text-align: center; font-weight: bold ;">0</td>
-        <td th:text="${totalOpenDeals}" style="text-align: center; font-weight: bold ;">0</td>
-        <td th:text="${totalLostDeals}" style="text-align: center; font-weight: bold ;">0</td>
-        <td th:text="${totalWonDeals}" style="text-align: center; font-weight: bold ;">0</td>
-    </tr>
-    </tfoot>
-</table>
-</div>
-<div>
-    <button id="botonExportarCSV" class="custom-button">
-        <i class="fas fa-file-csv"></i> Exportar a CSV
-    </button>
-</div>
+        <!-- Tabla para mostrar datos por fuente -->
 
-<!-- Título general para los KPIs -->
-<h2 class="kpi-title-3">¿Qué no está funcionando?</h2>
-
-<div>
-    <button id="botonExportarTablaReason" class="custom-button-reason">
-        <i class="fas fa-file-csv"></i> Exportar a CSV
-    </button>
-</div>
-
-<!-- Contenedor para la tabla y gráfica -->
-<div class="table-chart-container">
-    <!-- Tabla de razones de pérdida -->
-    <table class="source-table-reason">
-        <thead>
-        <tr>
-            <th style="text-align: center; font-weight: bold ;">Razón de Pérdida</th>
-            <th style="text-align: center; font-weight: bold ;">Total</th>
-            <th style="text-align: center; font-weight: bold ;">Porcentaje</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="entry : ${sortedLostReasons}" style="text-align: left;">
-            <td th:text="${entry.key}" style="text-align: left;"></td>
-            <td th:text="${entry.value}" style="text-align: center;"></td>
-            <td th:text="${reasonsWithPercentages[entry.key]}" style="text-align: center;"></td>
-        </tr>
-        <tr class="total">
-            <td style="background-color: #a1725a; font-weight: bold ;"><strong>Total</strong></td>
-            <td th:text="${totalLostReasons}" style="text-align: center; font-weight: bold ;">0</td>
-            <td style="text-align: center; font-weight: bold ;">100%</td>
-        </tr>
-        </tbody>
-    </table>
-
-    <!-- Contenedor para la gráfica de pastel -->
-    <div id="pie-container"></div>
-</div>
-
-<!-- Título general para los KPIs -->
-<h2 class="kpi-title-4">¿Qué no está funcionando?</h2>
-<script th:inline="javascript">
-    /*<![CDATA[*/
-    var sortedLostReasons = /*[[${sortedLostReasons}]]*/ {};
-    /*]]>*/
-</script>
-
-<div id="container" style="width: 50%; height: 400px;"></div>
-<script th:inline="javascript">
-    /*<![CDATA[*/
-    const openDeals = /*[[${orderedOpenDeals}]]*/ [];
-    const lostDeals = /*[[${orderedLostDeals}]]*/ [];
-    const wonDeals = /*[[${orderedWonDeals}]]*/ [];
-    const totalOpenDeals = /*[[${totalOpenDeals}]]*/ [];
-    const totalLostDeals = /*[[${totalLostDeals}]]*/ [];
-    const totalWonDeals = /*[[${totalWonDeals}]]*/ [];
-    /*]]>*/
-</script>
-    <!-- Título general para los KPIs -->
-    <div>
-        <h2 class="kpi-title-6">¿Que campaña es más efectiva?</h2>
-    </div>
-<div>
-    <button id="customButtonCampaign" class="custom-button-campaign">
-        <i class="fas fa-file-csv"></i> Exportar a CSV
-    </button>
-</div>
-    <!-- Tabla para mostrar datos por asesor -->
-    <div>
-        <table class="campaign-table">
+        <table class="leads-table">
             <thead>
-
             <tr>
-                <th>Campaña</th>
-                <th>Leads</th>
-                <th>Citas</th>
-                <th>Visitas</th>
-                <th>Negociaciones</th>
-                <th>Apartados</th>
-                <th>Ganados</th>
+                <th style="text-align: center;">Fuente</th>
+                <th style="text-align: center;">Leads</th>
+                <th style="text-align: center;">Interesados</th>
+                <th style="text-align: center;">Contactados</th>
+                <th style="text-align: center;">Citas</th>
+                <th style="text-align: center;">Visitas</th>
+                <th style="text-align: center;">Negociaciones</th>
+                <th style="text-align: center;">Apartados</th>
+                <th style="text-align: center;">Abiertos</th>
+                <th style="text-align: center;">Perdidos</th>
+                <th style="text-align: center;">Ganados</th>
             </tr>
             </thead>
             <tbody>
-
-            <!-- Iterar sobre la lista combinada de fuente y estadísticas -->
-            <tr th:each="entry : ${combinedCampaign}">
-                <td th:text="${entry.campaign}">Campaña</td>
-                <td th:text="${entry.deals}" style="text-align: center;">Número de Deals</td>
-                <td th:text="${entry.cita}" style="text-align: center;">Número de Citas</td>
-                <td th:text="${entry.visita}" style="text-align: center;">Número de Visitas</td>
-                <td th:text="${entry.negociacion}" style="text-align: center;">Número de Negociaciones</td>
-                <td th:text="${entry.apartado}" style="text-align: center;">Número de Apartados</td>
-                <td th:text="${entry.ganado}" style="text-align: center;">Número de Ganados</td>
+            <tr th:each="entry : ${dealsBySource}">
+                <td th:text="${entry.key}">Fuente</td>
+                <td th:text="${totalDealsBySource[entry.key] != null ? totalDealsBySource[entry.key] : 0}"
+                    data-value="${totalDealsBySource[entry.key] != null ? totalDealsBySource[entry.key] : 0}"
+                    style="text-align: center;">0
+                </td>
+                <td th:text="${entry.value['Interesado'] != null ? entry.value['Interesado'] : 0}"
+                    data-value="${entry.value['Interesado'] != null ? entry.value['Interesado'] : 0}"
+                    style="text-align: center;">0
+                </td>
+                <td th:text="${entry.value['Contactado'] != null ? entry.value['Contactado'] : 0}"
+                    data-value="${entry.value['Contactado'] != null ? entry.value['Contactado'] : 0}"
+                    style="text-align: center;">0
+                </td>
+                <td th:text="${entry.value['Cita'] != null ? entry.value['Cita'] : 0}"
+                    data-value="${entry.value['Cita'] != null ? entry.value['Cita'] : 0}" style="text-align: center;">0
+                </td>
+                <td th:text="${entry.value['Visita'] != null ? entry.value['Visita'] : 0}"
+                    data-value="${entry.value['Visita'] != null ? entry.value['Visita'] : 0}"
+                    style="text-align: center;">0
+                </td>
+                <td th:text="${entry.value['Negociación'] != null ? entry.value['Negociación'] : 0}"
+                    data-value="${entry.value['Negociación'] != null ? entry.value['Negociación'] : 0}"
+                    style="text-align: center;">0
+                </td>
+                <td th:text="${entry.value['Apartado'] != null ? entry.value['Apartado'] : 0}"
+                    data-value="${entry.value['Apartado'] != null ? entry.value['Apartado'] : 0}"
+                    style="text-align: center;">0
+                </td>
+                <td th:text="${openDealsBySource[entry.key] != null ? openDealsBySource[entry.key] : 0}"
+                    data-value="${openDealsBySource[entry.key] != null ? openDealsBySource[entry.key] : 0}"
+                    style="text-align: center;">0
+                </td>
+                <td th:text="${lostDealsBySource[entry.key] != null ? lostDealsBySource[entry.key] : 0}"
+                    data-value="${lostDealsBySource[entry.key] != null ? lostDealsBySource[entry.key] : 0}"
+                    style="text-align: center;">0
+                </td>
+                <td th:text="${wonDealsBySource[entry.key] != null ? wonDealsBySource[entry.key] : 0}"
+                    data-value="${wonDealsBySource[entry.key] != null ? wonDealsBySource[entry.key] : 0}"
+                    style="text-align: center;">0
+                </td>
             </tr>
             </tbody>
-            <tfoot>
 
-            <!-- Muestra los totales en el pie de la tabla -->
+            <tfoot>
             <tr>
-                <th>Total</th>
-                <td th:text="${totalDealsCampaign}" style="text-align: center; font-weight: bold;">0</td>
-                <td th:text="${totalCitasCampaign}" style="text-align: center; font-weight: bold;">0</td>
-                <td th:text="${totalVisitasCampaign}" style="text-align: center; font-weight: bold;">0</td>
-                <td th:text="${totalNegociacionesCampaign}" style="text-align: center; font-weight: bold;">0</td>
-                <td th:text="${totalApartadosCampaign}" style="text-align: center; font-weight: bold;">0</td>
-                <td th:text="${totalWonDealsCampaign}" style="text-align: center; font-weight: bold;">0</td>
+                <th style="text-align: center; font-weight: bold;">Total</th>
+                <td th:text="${totalDeals}" style="text-align: center; font-weight: bold;">0</td>
+                <td th:text="${totalInteresados}" style="text-align: center; font-weight: bold ;">0</td>
+                <td th:text="${totalContactado}" style="text-align: center; font-weight: bold ;">0</td>
+                <td th:text="${totalCitas}" style="text-align: center; font-weight: bold ;">0</td>
+                <td th:text="${totalVisitas}" style="text-align: center; font-weight: bold ;">0</td>
+                <td th:text="${totalNegociaciones}" style="text-align: center; font-weight: bold ;">0</td>
+                <td th:text="${totalApartados}" style="text-align: center; font-weight: bold ;">0</td>
+                <td th:text="${totalOpenDeals}" style="text-align: center; font-weight: bold ;">0</td>
+                <td th:text="${totalLostDeals}" style="text-align: center; font-weight: bold ;">0</td>
+                <td th:text="${totalWonDeals}" style="text-align: center; font-weight: bold ;">0</td>
             </tr>
             </tfoot>
-
         </table>
     </div>
+</section>
+
+<section>
+    <div class="section-container">
+        <h2 class="kpi-title">¿Qué no está funcionando?</h2>
+
+        <button id="botonExportarTablaReason" class="custom-button-reason">
+            <i class="fas fa-file-csv"></i> Exportar a CSV
+        </button>
+
+        <div class="table-chart-wrapper">
+            <!-- Columna izquierda - Tabla -->
+            <div class="chart-column table-column">
+                <table class="source-table-reason">
+                    <thead>
+                    <tr>
+                        <th>Razón de Pérdida</th>
+                        <th>Total</th>
+                        <th>Porcentaje</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="entry : ${sortedLostReasons}">
+                        <td th:text="${entry.key}"></td>
+                        <td th:text="${entry.value}" style="text-align: center"></td>
+                        <td th:text="${reasonsWithPercentages[entry.key]}" style="text-align: center"></td>
+                    </tr>
+                    <tr class="total">
+                        <td style="background: #cbe8dd; color: #242423">Total</td>
+                        <td th:text="${totalLostReasons}" style="text-align: center;">0</td>
+                        <td style="text-align: center">100%</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Columna derecha - Gráfica -->
+            <div class="chart-column graph-column">
+                <div id="pie-container" style="height: 400px;"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="section-container">
+        <!-- Título general para los KPIs -->
+        <h2 class="kpi-title">¿Qué no está funcionando?</h2>
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+            var sortedLostReasons = /*[[${sortedLostReasons}]]*/ {};
+            /*]]>*/
+        </script>
+
+        <div id="container" style="width: 50%; height: 400px;"></div>
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+            const openDeals = /*[[${orderedOpenDeals}]]*/ [];
+            const lostDeals = /*[[${orderedLostDeals}]]*/ [];
+            const wonDeals = /*[[${orderedWonDeals}]]*/ [];
+            const totalOpenDeals = /*[[${totalOpenDeals}]]*/ [];
+            const totalLostDeals = /*[[${totalLostDeals}]]*/ [];
+            const totalWonDeals = /*[[${totalWonDeals}]]*/ [];
+            /*]]>*/
+        </script>
+    </div>
+</section>
+
+<section>
+    <div class="section-container">
+        <!-- Título general para los KPIs -->
+
+        <h2 class="kpi-title">¿Que campaña es más efectiva?</h2>
+        <button id="customButtonCampaign" class="custom-button">
+            <i class="fas fa-file-csv"></i> Exportar a CSV
+        </button>
+        <!-- Tabla para mostrar datos por asesor -->
+        <div>
+            <table class="leads-table">
+                <thead>
+
+                <tr>
+                    <th>Campaña</th>
+                    <th>Leads</th>
+                    <th>Citas</th>
+                    <th>Visitas</th>
+                    <th>Negociaciones</th>
+                    <th>Apartados</th>
+                    <th>Ganados</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <!-- Iterar sobre la lista combinada de fuente y estadísticas -->
+                <tr th:each="entry : ${combinedCampaign}">
+                    <td th:text="${entry.campaign}">Campaña</td>
+                    <td th:text="${entry.deals}" style="text-align: center;">Número de Deals</td>
+                    <td th:text="${entry.cita}" style="text-align: center;">Número de Citas</td>
+                    <td th:text="${entry.visita}" style="text-align: center;">Número de Visitas</td>
+                    <td th:text="${entry.negociacion}" style="text-align: center;">Número de Negociaciones</td>
+                    <td th:text="${entry.apartado}" style="text-align: center;">Número de Apartados</td>
+                    <td th:text="${entry.ganado}" style="text-align: center;">Número de Ganados</td>
+                </tr>
+                </tbody>
+                <tfoot>
+
+                <!-- Muestra los totales en el pie de la tabla -->
+                <tr>
+                    <th>Total</th>
+                    <td th:text="${totalDealsCampaign}" style="text-align: center; font-weight: bold;">0</td>
+                    <td th:text="${totalCitasCampaign}" style="text-align: center; font-weight: bold;">0</td>
+                    <td th:text="${totalVisitasCampaign}" style="text-align: center; font-weight: bold;">0</td>
+                    <td th:text="${totalNegociacionesCampaign}" style="text-align: center; font-weight: bold;">0</td>
+                    <td th:text="${totalApartadosCampaign}" style="text-align: center; font-weight: bold;">0</td>
+                    <td th:text="${totalWonDealsCampaign}" style="text-align: center; font-weight: bold;">0</td>
+                </tr>
+                </tfoot>
+
+            </table>
+        </div>
+    </div>
+</section>
 </body>
 
 </html>
