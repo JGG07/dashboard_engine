@@ -1,6 +1,6 @@
 /* Estilo general del cuerpo */
 body {
-    background-color: #fff5e8;
+    background-color: #282828;
     margin: 0;
     padding: 0;
     font-family: "Arial", sans-serif;
@@ -12,7 +12,7 @@ body {
 .navbar {
     margin: 0;
     padding: 0 20px;
-    background-color: #000000;
+    background-color: #b9babb;
     color: #ffffff;
     position: fixed;
     top: 0;
@@ -53,10 +53,10 @@ body {
 
 .navbar-logo a img{
     width: 100%; /* 50% del ancho del contenedor */
-    max-width: 150px; /* Limita el tamaño máximo */
+    max-width: 204px; /* Limita el tamaño máximo */
     height: auto; /* Mantiene la proporción */
-    margin-left: 40px;
-    margin-top: 5px;
+    margin-left: 48px;
+    margin-top: 6px;
 }
 
 /* Estilo del contenedor principal de la gráfica */
@@ -67,7 +67,7 @@ body {
     /* Ajusta la altura según sea necesario */
     margin: 20px auto;
     /* Centra el gráfico horizontalmente con margen */
-    background-color: #242423;
+    background-color: #1f1d1c;
     /* Color de fondo del gráfico */
     font-family: "Arial", monospace;
     /* Aplica la fuente */
@@ -99,8 +99,8 @@ body {
     position: relative;
     top: auto;
     width: 45%;
-    color: #242423;
-    background-color: #ffbe9f;
+    color: #e8e8e8;
+    background-color: #6d6d6d;
     padding: 20px 0;
 }
 
@@ -120,9 +120,9 @@ body {
 .kpi-box {
     width: 110px;
     height: 70px;
-    background-color: #ffbe9f;
+    background-color: #6d6d6d;
     /* Fondo del cuadrado */
-    color: #242423;
+    color: #e8e8e8;
     /* Color del texto */
     display: flex;
     flex-direction: column;
@@ -144,7 +144,7 @@ body {
 .kpi-box .kpi-label {
     font-size: 15px;
     font-weight: 500px;
-    color: #242423;
+    color: #fbfbfb;
     /* Color del texto */
     border-radius: 5px;
     /* Bordes redondeados */
@@ -164,7 +164,7 @@ body {
     width: 53%;
     height: 385px;
     border-radius: 12px;
-    background-color: #242423;
+    background-color: #1f1d1c;
     padding: 15px;
 }
 
@@ -189,7 +189,7 @@ body {
     top: 360px;
     margin: 0 auto;
     table-layout: fixed;
-    background-color: #242423;
+    background-color: #343434;
     text-align: center;
 }
 
@@ -198,7 +198,7 @@ body {
     border: 1px solid #bfbdbd; /* Borde gris claro */
     padding: 11px; /* Relleno de 11px */
     text-align: left; /* Alineación del texto a la izquierda */
-    background-color: #242423; /* Fondo negro */
+    background-color: #343434; /* Fondo negro */
     color: #fff5e8; /* Texto blanco */
 }
 
@@ -206,7 +206,7 @@ body {
 .campaign-table th {
     border: 1px solid #242423;
     padding: 10px;
-    background-color: #cbe8dd;
+    background-color: #e4eac7;
     color: #242423;
     text-align: center;
 }
@@ -226,7 +226,7 @@ body {
 .source-table-reason th {
     border: 1px solid #242423;
     padding: 10px;
-    background-color: #cbe8dd;
+    background-color: #e4eac7;
     color: #242423;
     text-align: center;
 }
@@ -277,7 +277,7 @@ body {
 }
 
 #filter-form button {
-    background-color: #ffbe9f;
+    background-color: #fbfbfb;
     color: #242423;
     border: none;
     padding: 10px 20px;
@@ -321,7 +321,7 @@ body {
 .hamburger {
     cursor: pointer;
     padding: 15px;
-    background-color: #000000;
+    background-color: #b9babb;
     color: white;
     display: inline-block;
     border-radius: 5px;
@@ -361,7 +361,7 @@ body {
     padding: 13px 0 13px 13px;
     border-radius: 4px;
     cursor: pointer;
-    background-color: #000000;
+    background-color: #fbfbfb;
     color: white;
     border: 0;
 }
@@ -369,7 +369,7 @@ body {
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: #000000;
+    background-color: #b9babb;
     min-width: 100%; /* Ancho mínimo igual al contenedor padre */
     width: auto; /* Ancho según contenido */
     max-width: 400px; /* Límite máximo opcional */
@@ -387,7 +387,7 @@ body {
     align-items: center;
     padding: 10px 15px;
     cursor: pointer;
-    background-color: #000000;
+    background-color: #b9babb;
     transition: background 0.3s;
     gap: 10px; /* Espacio entre checkbox y texto */
 }
@@ -417,7 +417,7 @@ body {
     padding: 13px 0 13px 13px;
     border-radius: 4px;
     cursor: pointer;
-    background-color: #000000;
+    background-color: #fbfbfb;
     color: white;
     border: 0;
 }
@@ -551,7 +551,7 @@ body {
     padding: 20px 0;
     margin: 0 0 0;
     width: 100%;
-    background: #fff5e8;
+    background: #282828;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     box-sizing: border-box;
 }

@@ -291,6 +291,7 @@ public class PipedriveBo {
         if (fuente == null){
             return "Desconocido";
         }
+        System.out.println("Fuente: " + fuente);
         switch (fuente) {
             /*
             Satori Santa Fe:
@@ -317,7 +318,7 @@ public class PipedriveBo {
 
             /*
             Via Residence
-             */
+
             case "79": return "WhatsApp";
             case "125": return "Sitio Web";
             case "127": return "Meta FB/IG";
@@ -327,6 +328,13 @@ public class PipedriveBo {
             case "85": return "Referido Cliente";
             case "82": return "Reis Externo";
             case "80": return "Walk In";
+            */
+
+            /*
+            Satélite
+             */
+            case "fb": return "Facebook";
+            case "ig": return "Instagram";
 
             default: return "Desconocido";
         }
