@@ -1,131 +1,19 @@
 <!DOCTYPE html>
-<html lang="es" xmlns="http://www.w3.org/1999/html">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Cache-Control" content="no-store">
-    <title>Satori Dashboard</title>
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
-    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" th:href="@{/css/stylesComercial.css}">
-
-    <!-- Highcharts -->
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
-
-    <!-- Custom JavaScript -->
-    <script src="/js/comercial.js" defer></script>
-
-</head>
-
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{home :: head('Home', null)}"></head>
 <body>
-
-<div th:fragment="navbar">
-    <div class="navbar-container">
-        <nav class="navbar">
-            <div class="navbar-logo">
-                <a href="/home">
-                    <img th:src="@{/img/satorilogo.png}" alt="Satori Logo">
-                </a>
-            </div>
-
-            <div class="hamburger" onclick="toggleMenu()">
-                <div></div>
-                <div></div>
-                <div></div>
-            </div>
-            <div class="menu" id="menu">
-                <a href="/home">Inicio</a>
-                <a href="/mercadeo">Mercadeo</a>
-                <a href="/comercial">Comercial</a>
-            </div>
-            <div class="container">
-                <form id="filter-form" action="/filterComercial" method="post">
-
-                    <div class="custom-select-source">
-                        <input type="text" id="source-select" placeholder="Select fuente(s)" readonly onclick="toggleSourceDropdown()">
-                        <div id="source-dropdown" class="dropdown-content">
-                            <label>
-                                <input type="checkbox" name="source" value="67" /> Cartera Propia</label>
-                            <label>
-                                <input type="checkbox" name="source" value="68" /> Espectacular</label>
-                            <label>
-                                <input type="checkbox" name="source" value="20" /> Evento</label>
-                            <label>
-                                <input type="checkbox" name="source" value="28" /> Facebook</label>
-                            <label>
-                                <input type="checkbox" name="source" value="30" /> Instagram</label>
-                            <label>
-                                <input type="checkbox" name="source" value="114" /> LinkedIn</label>
-                            <label>
-                                <input type="checkbox" name="source" value="71" /> Real Estate</label>
-                            <label>
-                                <input type="checkbox" name="source" value="23" /> Referido</label>
-                            <label>
-                                <input type="checkbox" name="source" value="77" /> Sitio Web</label>
-                            <label>
-                                <input type="checkbox" name="source" value="69" /> Tapial Obra</label>
-                            <label>
-                                <input type="checkbox" name="source" value="70" /> Tapial ShowRoom</label>
-                            <label>
-                                <input type="checkbox" name="source" value="87" /> TikTok</label>
-                            <label>
-                                <input type="checkbox" name="source" value="73" /> Valla Publicitaria</label>
-                            <label>
-                                <input type="checkbox" name="source" value="65" /> WhatsApp</label>
-                            <label>
-                                <input type="checkbox" name="source" value="18" /> X</label>
-                            <label>
-                                <input type="checkbox" name="source" value="26" /> YouTube</label>
-                        </div>
-                    </div>
-
-
-                    <div class="custom-select-asesor">
-                        <input type="text" id="asesor-select" placeholder="Select asesor(es)" readonly onclick="toggleAsesorDropdown()">
-                        <div id="asesor-dropdown" class="dropdown-content">
-                            <label>
-                                <input type="checkbox" name="ownerName" value="all" th:checked="${selectedOwner == 'all'}" /> Asesor</label>
-                            <th:block th:each="asesor : ${combinedAdvisorStats}">
-                                <label>
-                                    <input type="checkbox" name="ownerName" th:value="${asesor.advisor}" th:checked="${selectedOwner == asesor.advisor}" />
-                                    <span th:text="${asesor.advisor}"></span>
-                                </label>
-                            </th:block>
-                        </div>
-                    </div>
-
-                    <label for="startDate"></label>
-                    <input type="date" id="startDate" name="startDate" th:value="${startDate}">
-
-                    <label for="endDate"></label>
-                    <input type="date" id="endDate" name="endDate" th:value="${endDate}">
-
-                    <button type="submit">Filtrar</button>
-                </form>
-            </div>
-        </nav>
-    </div>
-</div>
+<div th:replace="~{home :: navbar}"></div>
 
 <section>
-    <!-- Título general para los KPIs -->
-    <div>
-        <h2 class="kpi-title-1">¿Qué hicieron los asesores este periodo?</h2>
-    </div>
-    <!-- Tabla para mostrar datos por asesor -->
-    <div>
-        <table class="asesores-table">
+    <div class="section-container">
+
+        <h2 class="kpi-title">¿Qué hicieron los asesores este periodo?</h2>
+
+        <button id="botonExportarTablaAsesores" class="custom-button">
+            <i class="fas fa-file-csv"></i> Exportar a CSV
+        </button>
+
+        <table class="leads-table">
             <thead>
 
             <tr>
@@ -140,9 +28,8 @@
             </thead>
             <tbody>
 
-            <!-- Iterar sobre la lista combinada de asesores y estadísticas -->
             <tr th:each="entry : ${combinedAdvisorStats}">
-                <td th:text="${entry.advisor}">Nombre del Asesor</td>
+                <td th:text="${#strings.toLowerCase(entry.advisor)}" style="text-transform: capitalize">Nombre del Asesor</td>
                 <td th:text="${entry.deals}" style="text-align: center;">Número de Deals</td>
                 <td th:text="${entry.cita}" style="text-align: center;">Número de Citas</td>
                 <td th:text="${entry.visita}" style="text-align: center;">Número de Visitas</td>
@@ -153,7 +40,6 @@
             </tbody>
             <tfoot>
 
-            <!-- Muestra los totales en el pie de la tabla -->
             <tr>
                 <th>Total</th>
                 <td th:text="${totalDeals}" style="text-align: center; font-weight: bold;">0</td>
@@ -167,22 +53,17 @@
 
         </table>
     </div>
-
-    <div>
-        <button id="botonExportarTablaAsesores" class="custom-button-asesor">
-            <i class="fas fa-file-csv"></i> Exportar a CSV
-        </button>
-    </div>
 </section>
 
 <section>
-    <!-- Título general para los KPIs -->
-    <div>
-        <h2 class="kpi-title-3">¿Qué hicieron los asesores este periodo?</h2>
-    </div>
-    <!-- Tabla para mostrar datos por asesor -->
-    <div>
-        <table class="asesores-table-conversion">
+    <div class="section-container">
+        <h2 class="kpi-title">¿Qué hicieron los asesores este periodo?</h2>
+
+        <button id="botonExportarTablaAsesoresConversion" class="custom-button">
+            <i class="fas fa-file-csv"></i> Exportar a CSV
+        </button>
+
+        <table class="leads-table">
             <thead>
 
             <tr>
@@ -199,7 +80,7 @@
 
             <!-- Iterar sobre la lista combinada de asesores y estadísticas -->
             <tr th:each="entry : ${combinedAdvisorConversionStats}">
-                <td th:text="${entry.advisor}">Nombre del Asesor</td>
+                <td th:text="${#strings.toLowerCase(entry.advisor)}" style="text-transform: capitalize">Nombre del Asesor</td>
                 <td th:text="${entry.deals}" style="text-align: center;">Número de Deals</td>
                 <td th:text="${#numbers.formatDecimal(entry.cita, 0, 1)} + '%'" style="text-align: center;">Número de Citas</td>
                 <td th:text="${#numbers.formatDecimal(entry.visita, 0, 1)} + '%'" style="text-align: center;">Número de Visitas</td>
@@ -224,41 +105,41 @@
 
         </table>
     </div>
+</section>
 
-    <div>
-        <button id="botonExportarTablaAsesoresConversion" class="custom-button-asesor-conversion">
+<section>
+    <!-- Título general para los KPIs -->
+    <div class="section-container">
+        <h2 class="kpi-title">¿Cuántas actividades se realizaron este periodo?</h2>
+
+
+        <!-- Gráfica de tendencia -->
+        <div id="chart-container-comercial" class="chart-container-comercial">
+
+        </div>
+
+        <!-- Contenedor para la gráfica -->
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+            var fechas = /*[[${fechas}]]*/ [];
+            var series = /*[[${series}]]*/ [];
+            /*]]>*/
+        </script>
+    </div>
+</section>
+
+<section>
+
+    <div class="section-container">
+        <h2 class="kpi-title">
+            ¿Que fuentes fueron mas efectivas?
+        </h2>
+
+        <button id="botonExportarTablaFuente" class="custom-button">
             <i class="fas fa-file-csv"></i> Exportar a CSV
         </button>
-    </div>
-</section>
 
-<section>
-    <!-- Título general para los KPIs -->
-    <div>
-        <h2 class="kpi-title-2">¿Cuántas actividades se realizaron este periodo?</h2>
-    </div>
-
-    <!-- Gráfica de tendencia -->
-    <div id="chart-container" class="chart-container"></div>
-
-    <!-- Contenedor para la gráfica -->
-    <script th:inline="javascript">
-        /*<![CDATA[*/
-        var fechas = /*[[${fechas}]]*/ [];
-        var series = /*[[${series}]]*/ [];
-        /*]]>*/
-
-    </script>
-</section>
-
-<section>
-    <!-- Título general para los KPIs -->
-    <div>
-        <h2 class="kpi-title-4">¿Que fuentes fueron mas efectivas?</h2>
-    </div>
-    <!-- Tabla para mostrar datos por asesor -->
-    <div>
-        <table class="fuente-table">
+        <table class="leads-table">
             <thead>
 
             <tr>
@@ -273,7 +154,6 @@
             </thead>
             <tbody>
 
-            <!-- Iterar sobre la lista combinada de fuente y estadísticas -->
             <tr th:each="entry : ${combinedFuenteStats}">
                 <td th:text="${entry.fuente}">Nombre del Asesor</td>
                 <td th:text="${entry.deals}" style="text-align: center;">Número de Deals</td>
@@ -300,23 +180,18 @@
 
         </table>
     </div>
-
-    <div>
-        <button id="botonExportarTablaFuente" class="custom-button-fuente">
-            <i class="fas fa-file-csv"></i> Exportar a CSV
-        </button>
-    </div>
-
 </section>
 
 <section>
     <!-- Título general para los KPIs -->
-    <div>
-        <h2 class="kpi-title-5">¿Que fuentes fueron mas efectivas?</h2>
-    </div>
-    <!-- Tabla para mostrar datos por asesor -->
-    <div>
-        <table class="fuente-table-conversion">
+    <div class="section-container">
+        <h2 class="kpi-title">¿Que fuentes fueron mas efectivas?</h2>
+
+        <button id="botonExportarTablaFuenteConversion" class="custom-button">
+            <i class="fas fa-file-csv"></i> Exportar a CSV
+        </button>
+
+        <table class="leads-table">
             <thead>
 
             <tr>
@@ -355,16 +230,8 @@
                 <td th:text="${#numbers.formatDecimal(wonDealsFuente, 0, 1)} + '%'" style="text-align: center; font-weight: bold;">0</td>
             </tr>
             </tfoot>
-
         </table>
     </div>
-
-    <div>
-        <button id="botonExportarTablaFuenteConversion" class="custom-button-fuente-conversion">
-            <i class="fas fa-file-csv"></i> Exportar a CSV
-        </button>
-    </div>
-
 </section>
 </body>
 

@@ -161,7 +161,7 @@ body {
 }
 
 /* Estilo de la gráfica */
-.chart-container {
+.chart-container-comercial{
     position: relative;
     margin-top: 30px;
     width: 70%;

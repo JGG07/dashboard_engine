@@ -153,6 +153,22 @@ body {
     padding: 15px;
 }
 
+.chart-container-comercial{
+    position: relative;
+    margin: 20px auto;
+    width: 70%;
+    /* Ajusta el ancho del contenedor a tu preferencia */
+    height: 350px;
+    /* La altura se ajustará automáticamente según el contenido */
+    /* Centra el contenedor horizontalmente con margen */
+    border-radius: 4px;
+    /* Bordes redondeados para el contenedor */
+    background-color: #1f1d1c;
+    /* Color de fondo del contenedor */
+    padding: 10px;
+    /* Espaciado interno */
+}
+
 /* Contenedor centrado para las tablas */
 .table-chart-container {
     width: 80%;

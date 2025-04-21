@@ -5,6 +5,74 @@ function toggleMenu() {
     hamburger.classList.toggle('active');
 }
 
+const seriesCapitalized = series.map(serie => ({
+    ...serie,
+    name: capitalizeWords(serie.name) // esta función lo transforma solo visualmente
+}));
+
+function capitalizeWords(str) {
+    return str
+        .toLowerCase()
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    Highcharts.chart('chart-container-comercial', {
+        chart: {
+            backgroundColor: '#1F1D1C',
+            type: 'line'
+        },
+        title: {
+            text: '',
+            style: {
+                color: '#FFFFFF'
+            }
+        },
+        xAxis: {
+            categories: fechas, // Array de fechas
+            labels: {
+                rotation: -90,
+                style: {
+                    color: '#FFFFFF'
+                }
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Actividades',
+                style: {
+                    color: '#FFFFFF'
+                }
+            },
+            labels: {
+                style: {
+                    color: '#FFFFFF'
+                }
+            }
+        },
+        legend: {
+            itemStyle: {
+                color: '#FFFFFF'
+            }
+        },
+        plotOptions: {
+            line: {
+                dataLabels: {
+                    enabled: true,
+                    style: {
+                        color: '#FFFFFF'
+                    }
+                },
+                enableMouseTracking: true
+            }
+        },
+        series: seriesCapitalized
+    });
+});
+
+
 document.addEventListener('DOMContentLoaded', function() {
     chart = Highcharts.chart('chart-container', {
         chart: {

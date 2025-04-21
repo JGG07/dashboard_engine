@@ -71,11 +71,14 @@
                     <div class="custom-select-asesor">
                         <input type="text" id="asesor-select" placeholder="Select asesor(es)" readonly onclick="toggleAsesorDropdown()">
                         <div id="asesor-dropdown" class="dropdown-content">
-                            <label><input type="checkbox" name="ownerName" value="all" th:checked="${selectedOwner == 'all'}" /> Asesor</label>
+                            <label>
+                                <input type="checkbox" name="ownerName" value="all" th:checked="${selectedOwner == 'all'}" />
+                                Asesor
+                            </label>
                             <th:block th:each="asesor : ${asesores}">
                                 <label>
                                     <input type="checkbox" name="ownerName" th:value="${asesor}" th:checked="${selectedOwner == asesor}" />
-                                    <span th:text="${asesor}"></span>
+                                    <span style="text-transform: capitalize" th:text="${#strings.toLowerCase(asesor)}"></span>
                                 </label>
                             </th:block>
                         </div>

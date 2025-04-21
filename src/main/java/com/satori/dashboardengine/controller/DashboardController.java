@@ -439,6 +439,13 @@ public class DashboardController {
                 })
                 .toList();
 
+        List<String> listAsesores = filteredDeals.stream()
+                .map(DealsData::getOwnerName)
+                .distinct()
+                .toList();
+
+        model.addAttribute("asesores", listAsesores);
+
         System.out.println(filteredDeals.size());
 
         List<DealsData> filteredDealsByStageChange = allDeals.stream()
