@@ -206,7 +206,7 @@ body {
     padding: 10px;
     background-color: #a1725a;
     color: white;
-    text-align: left;
+    text-align: center;
 }
 
 .source-table-reason {
@@ -225,7 +225,7 @@ body {
     padding: 10px;
     background-color: #a1725a;
     color: #ffffff;
-    text-align: left;
+    text-align: center;
 }
 
 .source-table-reason td {
