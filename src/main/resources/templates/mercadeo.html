@@ -15,36 +15,55 @@
             <div class="kpi-box">
                 <div class="kpi-label">Deals</div>
                 <div class="kpi-value" th:text="${totalDeals}">0</div>
+                <div class="kpi-percentage" style="font-size: small">100%</div> <!-- Base del 100% -->
             </div>
             <!-- Cuadro para mostrar el total de Interesados -->
             <div class="kpi-box">
                 <div class="kpi-label">Interesados</div>
                 <div class="kpi-value" th:text="${totalInteresados}">0</div>
+                <div th:text="${#numbers.formatDecimal(
+    (totalInteresados * 100.0 / totalDeals), 1, 2) + '%'}" style="font-size: small">
+                </div>
             </div>
             <!-- Cuadro para mostrar el total de Contactados -->
             <div class="kpi-box">
                 <div class="kpi-label">Contactados</div>
                 <div class="kpi-value" th:text="${totalContactado}">0</div>
+                <div th:text="${#numbers.formatDecimal(
+    (totalContactado * 100.0 / totalDeals), 1, 2) + '%'}" style="font-size: small">
+                </div>
             </div>
             <!-- Cuadro para mostrar el total de citas -->
             <div class="kpi-box">
                 <div class="kpi-label">Citas</div>
                 <div class="kpi-value" th:text="${totalCitas}">0</div>
+                <div th:text="${#numbers.formatDecimal(
+    (totalCitas * 100.0 / totalDeals), 1, 2) + '%'}" style="font-size: small">
+                </div>
             </div>
             <!-- Cuadro para mostrar el total de visitas -->
             <div class="kpi-box">
                 <div class="kpi-label">Visitas</div>
                 <div class="kpi-value" th:text="${totalVisitas}">0</div>
+                <div th:text="${#numbers.formatDecimal(
+    (totalVisitas * 100.0 / totalDeals), 1, 2) + '%'}" style="font-size: small">
+                </div>
             </div>
             <!-- Cuadro para mostrar el total de negociaciones -->
             <div class="kpi-box">
                 <div class="kpi-label">Negociaciones</div>
                 <div class="kpi-value" th:text="${totalNegociaciones}">0</div>
+                <div th:text="${#numbers.formatDecimal(
+    (totalNegociaciones * 100.0 / totalDeals), 1, 2) + '%'}" style="font-size: small">
+                </div>
             </div>
             <!-- Cuadro para mostrar el total de apartados -->
             <div class="kpi-box">
                 <div class="kpi-label">Apartados</div>
                 <div class="kpi-value" th:text="${totalApartados}">0</div>
+                <div th:text="${#numbers.formatDecimal(
+    (totalApartados * 100.0 / totalDeals), 1, 2) + '%'}" style="font-size: small">
+                </div>
             </div>
         </div>
 
@@ -69,75 +88,177 @@
 
 <!-- Título general para los KPIs -->
 <section>
-<div class="section-container">
-    <h2 class="kpi-title-2">¿Cuales son las fuentes mas efectivas?</h2>
+    <div class="section-container">
+        <h2 class="kpi-title-2">¿Cuales son las fuentes mas efectivas?</h2>
 
 
-    <button id="botonExportarCSV" class="custom-button">
-        <i class="fas fa-file-csv"></i> Exportar a CSV
-    </button>
+        <button id="botonExportarCSV" class="custom-button">
+            <i class="fas fa-file-csv"></i> Exportar a CSV
+        </button>
 
-<!-- Tabla para mostrar datos por fuente -->
+        <!-- Tabla para mostrar datos por fuente -->
 
-<table class="source-table">
-    <thead>
-    <tr>
-        <th style="text-align: center;">Fuente</th>
-        <th style="text-align: center;">Leads</th>
-        <th style="text-align: center;">Interesados</th>
-        <th style="text-align: center;">Contactados</th>
-        <th style="text-align: center;">Citas</th>
-        <th style="text-align: center;">Visitas</th>
-        <th style="text-align: center;">Negociaciones</th>
-        <th style="text-align: center;">Apartados</th>
-        <th style="text-align: center;">Abiertos</th>
-        <th style="text-align: center;">Perdidos</th>
-        <th style="text-align: center;">Ganados</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="entry : ${dealsBySource}">
-        <td th:text="${entry.key}">Fuente</td>
-        <td th:text="${totalDealsBySource[entry.key] != null ? totalDealsBySource[entry.key] : 0}" data-value="${totalDealsBySource[entry.key] != null ? totalDealsBySource[entry.key] : 0}" style="text-align: center;">0
-        </td>
-        <td th:text="${entry.value['Interesado'] != null ? entry.value['Interesado'] : 0}" data-value="${entry.value['Interesado'] != null ? entry.value['Interesado'] : 0}" style="text-align: center;">0
-        </td>
-        <td th:text="${entry.value['Contactado'] != null ? entry.value['Contactado'] : 0}" data-value="${entry.value['Contactado'] != null ? entry.value['Contactado'] : 0}" style="text-align: center;">0
-        </td>
-        <td th:text="${entry.value['Cita'] != null ? entry.value['Cita'] : 0}" data-value="${entry.value['Cita'] != null ? entry.value['Cita'] : 0}" style="text-align: center;">0
-        </td>
-        <td th:text="${entry.value['Visita'] != null ? entry.value['Visita'] : 0}" data-value="${entry.value['Visita'] != null ? entry.value['Visita'] : 0}" style="text-align: center;">0
-        </td>
-        <td th:text="${entry.value['Negociación'] != null ? entry.value['Negociación'] : 0}" data-value="${entry.value['Negociación'] != null ? entry.value['Negociación'] : 0}" style="text-align: center;">0
-        </td>
-        <td th:text="${entry.value['Apartado'] != null ? entry.value['Apartado'] : 0}" data-value="${entry.value['Apartado'] != null ? entry.value['Apartado'] : 0}" style="text-align: center;">0
-        </td>
-        <td th:text="${openDealsBySource[entry.key] != null ? openDealsBySource[entry.key] : 0}" data-value="${openDealsBySource[entry.key] != null ? openDealsBySource[entry.key] : 0}" style="text-align: center;">0
-        </td>
-        <td th:text="${lostDealsBySource[entry.key] != null ? lostDealsBySource[entry.key] : 0}" data-value="${lostDealsBySource[entry.key] != null ? lostDealsBySource[entry.key] : 0}" style="text-align: center;">0
-        </td>
-        <td th:text="${wonDealsBySource[entry.key] != null ? wonDealsBySource[entry.key] : 0}" data-value="${wonDealsBySource[entry.key] != null ? wonDealsBySource[entry.key] : 0}" style="text-align: center;">0
-        </td>
-    </tr>
-    </tbody>
+        <table class="source-table">
+            <thead>
+            <tr>
+                <th style="text-align: center;">Fuente</th>
+                <th style="text-align: center;">Leads</th>
+                <th style="text-align: center;">Interesados</th>
+                <th style="text-align: center;">Contactados</th>
+                <th style="text-align: center;">Citas</th>
+                <th style="text-align: center;">Visitas</th>
+                <th style="text-align: center;">Negociaciones</th>
+                <th style="text-align: center;">Apartados</th>
+                <th style="text-align: center;">Abiertos</th>
+                <th style="text-align: center;">Perdidos</th>
+                <th style="text-align: center;">Ganados</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="entry : ${dealsBySource}">
+                <td th:text="${entry.key}">Fuente</td>
+                <td th:with="
+     value = ${totalDealsBySource[entry.key] ?: 0},
+     deals = ${totalDeals ?: 1},
+     percentage = ${deals == 0 ? 0 : (value / deals) * 100}"
+                    style="text-align: center;"
+                    data-value="${value}"
+                    th:text="${value} + ' - ' + ${#numbers.formatDecimal(percentage, 1, 2) + '%'}">
+                    0 - 0.00%
+                </td>
+                <!-- Para las celdas que requieren valor + porcentaje -->
+                <td th:with="
+     value = ${entry.value['Interesado'] ?: 0},
+     totalDealsSafe = ${totalDeals ?: 1}"
+                    style="text-align: center;"
+                    data-value="${value}"
+                    th:text="${value} + ' - ' + ${#numbers.formatDecimal((value * 100 / totalDealsSafe), 1, 2) + '%'}">
+                    0 - 0.00%
+                </td>
 
-    <tfoot>
-    <tr>
-        <th style="text-align: center; font-weight: bold;">Total</th>
-        <td th:text="${totalDeals}" style="text-align: center; font-weight: bold;">0</td>
-        <td th:text="${totalInteresados}" style="text-align: center; font-weight: bold ;">0</td>
-        <td th:text="${totalContactado}" style="text-align: center; font-weight: bold ;">0</td>
-        <td th:text="${totalCitas}" style="text-align: center; font-weight: bold ;">0</td>
-        <td th:text="${totalVisitas}" style="text-align: center; font-weight: bold ;">0</td>
-        <td th:text="${totalNegociaciones}" style="text-align: center; font-weight: bold ;">0</td>
-        <td th:text="${totalApartados}" style="text-align: center; font-weight: bold ;">0</td>
-        <td th:text="${totalOpenDeals}" style="text-align: center; font-weight: bold ;">0</td>
-        <td th:text="${totalLostDeals}" style="text-align: center; font-weight: bold ;">0</td>
-        <td th:text="${totalWonDeals}" style="text-align: center; font-weight: bold ;">0</td>
-    </tr>
-    </tfoot>
-</table>
-</div>
+                <td th:with="
+     value = ${entry.value['Contactado'] ?: 0},
+     totalDealsSafe = ${totalDeals ?: 1}"
+                    style="text-align: center;"
+                    data-value="${value}"
+                    th:text="${value} + ' - ' + ${#numbers.formatDecimal((value * 100 / totalDealsSafe), 1, 2) + '%'}">
+                    0 - 0.00%
+                </td>
+
+                <td th:with="
+     value = ${entry.value['Cita'] ?: 0},
+     totalDealsSafe = ${totalDeals ?: 1}"
+                    style="text-align: center;"
+                    data-value="${value}"
+                    th:text="${value} + ' - ' + ${#numbers.formatDecimal((value * 100 / totalDealsSafe), 1, 2) + '%'}">
+                    0 - 0.00%
+                </td>
+
+                <td th:with="
+     value = ${entry.value['Visita'] ?: 0},
+     totalDealsSafe = ${totalDeals ?: 1}"
+                    style="text-align: center;"
+                    data-value="${value}"
+                    th:text="${value} + ' - ' + ${#numbers.formatDecimal((value * 100 / totalDealsSafe), 1, 2) + '%'}">
+                    0 - 0.00%
+                </td>
+
+                <td th:with="
+     value = ${entry.value['Negociación'] ?: 0},
+     totalDealsSafe = ${totalDeals ?: 1}"
+                    style="text-align: center;"
+                    data-value="${value}"
+                    th:text="${value} + ' - ' + ${#numbers.formatDecimal((value * 100 / totalDealsSafe), 1, 2) + '%'}">
+                    0 - 0.00%
+                </td>
+
+                <td th:with="
+     value = ${entry.value['Apartado'] ?: 0},
+     totalDealsSafe = ${totalDeals ?: 1}"
+                    style="text-align: center;"
+                    data-value="${value}"
+                    th:text="${value} + ' - ' + ${#numbers.formatDecimal((value * 100 / totalDealsSafe), 1, 2) + '%'}">
+                    0 - 0.00%
+                </td>
+
+                <!-- Open Deals con porcentaje -->
+                <td th:with="
+     value = ${openDealsBySource[entry.key] ?: 0},
+     totalDealsSafe = ${totalDeals ?: 1}"
+                    style="text-align: center;"
+                    data-value="${value}"
+                    th:text="${value} + ' - ' + ${#numbers.formatDecimal((value * 100 / totalDealsSafe), 1, 2) + '%'}">
+                    0 - 0.00%
+                </td>
+
+                <!-- Lost Deals con porcentaje -->
+                <td th:with="
+     value = ${lostDealsBySource[entry.key] ?: 0},
+     totalDealsSafe = ${totalDeals ?: 1}"
+                    style="text-align: center;"
+                    data-value="${value}"
+                    th:text="${value} + ' - ' + ${#numbers.formatDecimal((value * 100 / totalDealsSafe), 1, 2) + '%'}">
+                    0 - 0.00%
+                </td>
+
+                <!-- Won Deals con porcentaje -->
+                <td th:with="
+     value = ${wonDealsBySource[entry.key] ?: 0},
+     totalDealsSafe = ${totalDeals ?: 1}"
+                    style="text-align: center;"
+                    data-value="${value}"
+                    th:text="${value} + ' - ' + ${#numbers.formatDecimal((value * 100 / totalDealsSafe), 1, 2) + '%'}">
+                    0 - 0.00%
+                </td>
+            </tr>
+            </tbody>
+
+            <tfoot>
+            <tr>
+                <th style="text-align: center; font-weight: bold;">Total</th>
+                <td th:text="${totalDeals} + ' - 100%'" style="text-align: center; font-weight: bold;">0</td>
+                <!-- Columnas con valor y porcentaje -->
+                <td style="text-align: center; font-weight: bold;"
+                    th:text="${totalInteresados} + ' - ' + (${#numbers.formatDecimal((totalInteresados * 100 / totalDeals), 1, 2) + '%'})">
+                    0 - 0.00%
+                </td>
+
+                <td
+                        style="text-align: center; font-weight: bold;"
+                        th:text="${totalContactado} + ' - ' + (${#numbers.formatDecimal((totalContactado * 100 / totalDeals), 1, 2) + '%'})">
+                    0 - 0.00%
+                </td>
+
+                <td
+                        style="text-align: center; font-weight: bold;"
+                        th:text="${totalCitas} + ' - ' + (${#numbers.formatDecimal((totalCitas * 100 / totalDeals), 1, 2) + '%'})">
+                    0 - 0.00%
+                </td>
+
+                <td
+                        style="text-align: center; font-weight: bold;"
+                        th:text="${totalVisitas} + ' - ' + (${#numbers.formatDecimal((totalVisitas * 100 / totalDeals), 1, 2) + '%'})">
+                    0 - 0.00%
+                </td>
+
+                <td
+                        style="text-align: center; font-weight: bold;"
+                        th:text="${totalNegociaciones} + ' - ' + (${#numbers.formatDecimal((totalNegociaciones * 100 / totalDeals), 1, 2) + '%'})">
+                    0 - 0.00%
+                </td>
+
+                <td
+                        style="text-align: center; font-weight: bold;"
+                        th:text="${totalApartados} + ' - ' + (${#numbers.formatDecimal((totalApartados * 100 / totalDeals), 1, 2) + '%'})">
+                    0 - 0.00%
+                </td>
+                <td th:text="${totalOpenDeals} + ' - ' + (${#numbers.formatDecimal((totalOpenDeals * 100 / totalDeals), 1, 2) + '%'})" style="text-align: center; font-weight: bold ;">0</td>
+                <td th:text="${totalLostDeals} + ' - ' + (${#numbers.formatDecimal((totalLostDeals * 100 / totalDeals), 1, 2) + '%'})" style="text-align: center; font-weight: bold ;">0</td>
+                <td th:text="${totalWonDeals} + ' - ' + (${#numbers.formatDecimal((totalWonDeals * 100 / totalDeals), 1, 2) + '%'})" style="text-align: center; font-weight: bold ;">0</td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
 </section>
 
 <!-- Título general para los KPIs -->
@@ -167,7 +288,7 @@
                         <td th:text="${reasonsWithPercentages[entry.key]}" style="text-align: center"></td>
                     </tr>
                     <tr class="total">
-                        <td style="background: #cbe8dd; color: #242423">Total</td>
+                        <td style="background: #e4eac7; color: #242423">Total</td>
                         <td th:text="${totalLostReasons}" style="text-align: center;">0</td>
                         <td style="text-align: center">100%</td>
                     </tr>
@@ -209,13 +330,13 @@
 
 <section>
     <div class="section-container">
-    <!-- Título general para los KPIs -->
+        <!-- Título general para los KPIs -->
 
         <h2 class="kpi-title-6">¿Que campaña es más efectiva?</h2>
         <button id="customButtonCampaign" class="custom-button-campaign">
             <i class="fas fa-file-csv"></i> Exportar a CSV
         </button>
-    <!-- Tabla para mostrar datos por asesor -->
+        <!-- Tabla para mostrar datos por asesor -->
         <div>
             <table class="campaign-table">
                 <thead>
@@ -235,12 +356,12 @@
                 <!-- Iterar sobre la lista combinada de fuente y estadísticas -->
                 <tr th:each="entry : ${combinedCampaign}">
                     <td th:text="${entry.campaign}">Campaña</td>
-                    <td th:text="${entry.deals}" style="text-align: center;">Número de Deals</td>
-                    <td th:text="${entry.cita}" style="text-align: center;">Número de Citas</td>
-                    <td th:text="${entry.visita}" style="text-align: center;">Número de Visitas</td>
-                    <td th:text="${entry.negociacion}" style="text-align: center;">Número de Negociaciones</td>
-                    <td th:text="${entry.apartado}" style="text-align: center;">Número de Apartados</td>
-                    <td th:text="${entry.ganado}" style="text-align: center;">Número de Ganados</td>
+                    <td th:text="${entry.deals}  + ' - ' + (${#numbers.formatDecimal((entry.deals * 100 / entry.deals), 1, 2) + '%'})" style="text-align: center;">Número de Deals</td>
+                    <td th:text="${entry.cita}  + ' - ' + (${#numbers.formatDecimal((entry.cita * 100 / entry.deals), 1, 2) + '%'})" style="text-align: center;">Número de Citas</td>
+                    <td th:text="${entry.visita}  + ' - ' + (${#numbers.formatDecimal((entry.visita * 100 / entry.deals), 1, 2) + '%'})" style="text-align: center;">Número de Visitas</td>
+                    <td th:text="${entry.negociacion}  + ' - ' + (${#numbers.formatDecimal((entry.negociacion * 100 / entry.deals), 1, 2) + '%'})" style="text-align: center;">Número de Negociaciones</td>
+                    <td th:text="${entry.apartado}  + ' - ' + (${#numbers.formatDecimal((entry.apartado * 100 / entry.deals), 1, 2) + '%'})" style="text-align: center;">Número de Apartados</td>
+                    <td th:text="${entry.ganado}  + ' - ' + (${#numbers.formatDecimal((entry.ganado * 100 / entry.deals), 1, 2) + '%'})" style="text-align: center;">Número de Ganados</td>
                 </tr>
                 </tbody>
                 <tfoot>
@@ -248,12 +369,12 @@
                 <!-- Muestra los totales en el pie de la tabla -->
                 <tr>
                     <th>Total</th>
-                    <td th:text="${totalDealsCampaign}" style="text-align: center; font-weight: bold;">0</td>
-                    <td th:text="${totalCitasCampaign}" style="text-align: center; font-weight: bold;">0</td>
-                    <td th:text="${totalVisitasCampaign}" style="text-align: center; font-weight: bold;">0</td>
-                    <td th:text="${totalNegociacionesCampaign}" style="text-align: center; font-weight: bold;">0</td>
-                    <td th:text="${totalApartadosCampaign}" style="text-align: center; font-weight: bold;">0</td>
-                    <td th:text="${totalWonDealsCampaign}" style="text-align: center; font-weight: bold;">0</td>
+                    <td th:text="${totalDealsCampaign} + ' - 100%'" style="text-align: center; font-weight: bold;">0</td>
+                    <td th:text="${totalCitasCampaign} + ' - ' + (${#numbers.formatDecimal((totalCitasCampaign * 100 / totalDeals), 1, 2) + '%'})" style="text-align: center; font-weight: bold;">0</td>
+                    <td th:text="${totalVisitasCampaign} + ' - ' + (${#numbers.formatDecimal((totalVisitasCampaign * 100 / totalDeals), 1, 2) + '%'})" style="text-align: center; font-weight: bold;">0</td>
+                    <td th:text="${totalNegociacionesCampaign} + ' - ' + (${#numbers.formatDecimal((totalNegociacionesCampaign * 100 / totalDeals), 1, 2) + '%'})" style="text-align: center; font-weight: bold;">0</td>
+                    <td th:text="${totalApartadosCampaign} + ' - ' + (${#numbers.formatDecimal((totalApartadosCampaign * 100 / totalDeals), 1, 2) + '%'})" style="text-align: center; font-weight: bold;">0</td>
+                    <td th:text="${totalWonDealsCampaign} + ' - ' + (${#numbers.formatDecimal((totalWonDealsCampaign * 100 / totalDeals), 1, 2) + '%'})" style="text-align: center; font-weight: bold;">0</td>
                 </tr>
                 </tfoot>
 
