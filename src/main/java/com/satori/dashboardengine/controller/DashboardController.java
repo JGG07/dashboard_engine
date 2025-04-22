@@ -316,7 +316,7 @@ public class DashboardController {
                 campaign = deal.getCampaign();
             } else {
                 System.out.println("campañas: " + deal.getCampaign());
-                campaign = "Desconocido";
+                campaign = "Fuente";
             }
 
             dealsByCampaign.put(campaign, dealsByCampaign.getOrDefault(campaign, 0) + 1);
