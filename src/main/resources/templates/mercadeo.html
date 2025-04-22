@@ -120,7 +120,7 @@
                 <td th:with="
      value = ${totalDealsBySource[entry.key] ?: 0},
      deals = ${totalDeals ?: 1},
-     percentage = ${deals == 0 ? 0 : (value / deals) * 100}"
+     percentage = ${deals == 0 ? 0 : (value * 100 / deals)}"
                     style="text-align: center;"
                     data-value="${value}"
                     th:text="${value} + ' - ' + ${#numbers.formatDecimal(percentage, 1, 2) + '%'}">
