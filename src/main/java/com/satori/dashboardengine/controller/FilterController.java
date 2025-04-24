@@ -317,6 +317,7 @@ public class FilterController {
         model.addAttribute("totalNegociaciones", totalNegociaciones);
         model.addAttribute("totalApartados", totalApartados);
         model.addAttribute("dealsBySource", sortedDealsBySource);
+        System.out.println("*******************" + totalDealsBySource);
         model.addAttribute("totalDealsBySource", totalDealsBySource);
         model.addAttribute("openDealsBySource", openDealsBySource);
         model.addAttribute("lostDealsBySource", lostDealsBySource);
@@ -347,7 +348,7 @@ public class FilterController {
             } else if (deal.getCampaign() != null && !deal.getCampaign().isEmpty()) {
                 campaign = deal.getCampaign();
             } else {
-                campaign = "Desconocido";
+                campaign = "Fuente";
             }
 
             dealsByCampaign.put(campaign, dealsByCampaign.getOrDefault(campaign, 0) + 1);
@@ -370,7 +371,7 @@ public class FilterController {
                 campaign = deal.getCampaign();
 
             } else {
-                campaign = "Desconocido";
+                campaign = "Fuente";
             }
             statsCampaign = campaignStatsMap.getOrDefault(campaign, new DashboardController.AdvisorStats());
 

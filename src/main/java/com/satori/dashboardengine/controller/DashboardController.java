@@ -339,7 +339,7 @@ public class DashboardController {
                 campaign = deal.getCampaign();
 
             } else {
-                campaign = "Desconocido";
+                campaign = "Fuente";
             }
 
             statsCampaign = campaignStatsMap.getOrDefault(campaign, new AdvisorStats());
