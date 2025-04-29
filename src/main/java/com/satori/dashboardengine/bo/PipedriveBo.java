@@ -339,6 +339,7 @@ public class PipedriveBo {
             case "WEBSITE", "website": return "Web Site";
             case "WHATSAPP", "whatsapp": return "WhatsApp";
             case "VENTA CRUZADA", "venta cruzada": return "Venta Cruzada";
+            case "WALKING", "walking": return "Walking";
 
             default: return "Desconocido";
         }
