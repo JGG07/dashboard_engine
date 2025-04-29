@@ -671,21 +671,38 @@ public class FilterController {
                 statsFuente.visita++;
             }
             if (deal.getStageId() == 10) {
+                stats.visita++;
+                statsFuente.visita++;
+
                 stats.negociacion++;
                 statsFuente.negociacion++;
+
             }
 
             if (deal.getStageId() == 11) {
+                stats.visita++;
+                statsFuente.visita++;
+
                 stats.negociacion++;
                 statsFuente.negociacion++;
 
                 stats.apartado++;
                 statsFuente.apartado++;
+
             }
 
             if(deal.getWonTime() != null) {
                 LocalDate dateTime = LocalDate.parse(deal.getWonTime(), formatter);
                 if (!dateTime.isBefore(startDate) && !dateTime.isAfter(endDate)) {
+                    stats.visita++;
+                    statsFuente.visita++;
+
+                    stats.negociacion++;
+                    statsFuente.negociacion++;
+
+                    stats.apartado++;
+                    statsFuente.apartado++;
+
                     stats.ganado++;
                     statsFuente.ganado++;
                 }
