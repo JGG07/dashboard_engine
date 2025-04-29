@@ -333,8 +333,12 @@ public class PipedriveBo {
             /*
             Satélite
              */
-            case "fb": return "Facebook";
-            case "ig": return "Instagram";
+            case "fb", "fb-inbox", "FB", "Fb": return "Facebook";
+            case "ig", "IG": return "Instagram";
+            case "LLAMADA": return "Llamada";
+            case "WEBSITE": return "Web Site";
+            case "WHATSAPP": return "WhatsApp";
+            case "VENTA CRUZADA": return "Venta Cruzada";
 
             default: return "Desconocido";
         }
