@@ -335,10 +335,10 @@ public class PipedriveBo {
              */
             case "fb", "fb-inbox", "FB", "Fb": return "Facebook";
             case "ig", "IG": return "Instagram";
-            case "LLAMADA": return "Llamada";
-            case "WEBSITE": return "Web Site";
-            case "WHATSAPP": return "WhatsApp";
-            case "VENTA CRUZADA": return "Venta Cruzada";
+            case "LLAMADA", "llamada": return "Llamada";
+            case "WEBSITE", "website": return "Web Site";
+            case "WHATSAPP", "whatsapp": return "WhatsApp";
+            case "VENTA CRUZADA", "venta cruzada": return "Venta Cruzada";
 
             default: return "Desconocido";
         }
