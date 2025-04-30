@@ -115,13 +115,13 @@ public class FilterController {
 
         List<Integer> stageIdInteresados = Arrays.asList(6, 17);
 
-        Map<String, Integer> dealsCountByDate = pipedriveService.getDealsCountByDate(filteredDeals, startDate, endDate);
-        Map<String, Integer> stageInteresados = pipedriveService.getStageDealsByDate(filteredDeals, stageIdInteresados, startDate, endDate);
-        Map<String, Integer> stageContactados = pipedriveService.getStageDealsByDate(filteredDeals, List.of(7), startDate, endDate);
-        Map<String, Integer> stageCita = pipedriveService.getStageDealsByDate(filteredDeals, List.of(8), startDate, endDate);
-        Map<String, Integer> stageVisita = pipedriveService.getStageDealsByDate(filteredDeals, List.of(9), startDate, endDate);
-        Map<String, Integer> stageNegociacion = pipedriveService.getStageDealsByDate(filteredDeals, List.of(10), startDate, endDate);
-        Map<String, Integer> stageApartado = pipedriveService.getStageDealsByDate(filteredDeals, List.of(11), startDate, endDate);
+        Map<String, Integer> dealsCountByDate = pipedriveService.getDealsCountByDate(finalFilteredDeals, startDate, endDate);
+        Map<String, Integer> stageInteresados = pipedriveService.getStageDealsByDate(finalFilteredDeals, stageIdInteresados, startDate, endDate);
+        Map<String, Integer> stageContactados = pipedriveService.getStageDealsByDate(finalFilteredDeals, List.of(7), startDate, endDate);
+        Map<String, Integer> stageCita = pipedriveService.getStageDealsByDate(finalFilteredDeals, List.of(8), startDate, endDate);
+        Map<String, Integer> stageVisita = pipedriveService.getStageDealsByDate(finalFilteredDeals, List.of(9), startDate, endDate);
+        Map<String, Integer> stageNegociacion = pipedriveService.getStageDealsByDate(finalFilteredDeals, List.of(10), startDate, endDate);
+        Map<String, Integer> stageApartado = pipedriveService.getStageDealsByDate(finalFilteredDeals, List.of(11), startDate, endDate);
 
         Map<String, Integer> wonDealsCountByDate = pipedriveService.getDealsWonCountByDate(finalFilteredDeals);
 
@@ -341,7 +341,7 @@ public class FilterController {
 
         Map<String, Integer> dealsByCampaign = new HashMap<>();
         String campaign = "";
-        for(DealsData deal : filteredDeals) {
+        for(DealsData deal : finalFilteredDeals) {
 
             if (deal.getCampaign() != null && deal.getCampaign().contains(",")) {
                 campaign = pipedriveService.getCampaignName(deal.getCampaign());
@@ -363,7 +363,7 @@ public class FilterController {
 
         List<DashboardController.CombinedCampaign> combinedCampaignList = new ArrayList<>();
 
-        for(DealsData deal : filteredDeals){
+        for(DealsData deal : finalFilteredDeals){
             if (deal.getCampaign() != null && deal.getCampaign().contains(",")) {
                 campaign = pipedriveService.getCampaignName(deal.getCampaign());
 
