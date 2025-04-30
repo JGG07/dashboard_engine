@@ -531,27 +531,37 @@ public class DashboardController {
 
             }
             if (deal.getStageId() == 10) {
+                stats.visita++;
+                statsFuente.visita++;
                 stats.negociacion++;
                 statsFuente.negociacion++;
 
             }
 
             if (deal.getStageId() == 11) {
+                stats.visita++;
+                statsFuente.visita++;
                 stats.negociacion++;
                 statsFuente.negociacion++;
 
                 stats.apartado++;
                 statsFuente.apartado++;
 
-                System.out.println(deal.getOwnerName() + " " + deal.getPersonName());
+                //System.out.println(deal.getOwnerName() + " " + deal.getPersonName());
 
             }
 
             if (deal.getStatus().equals("won")) {
+                stats.visita++;
+                statsFuente.visita++;
+                stats.negociacion++;
+                statsFuente.negociacion++;
+                stats.apartado++;
+                statsFuente.apartado++;
                 stats.ganado++;
                 statsFuente.ganado++;
 
-                System.out.println("won ------> " + deal.getPersonName());
+                //System.out.println("won ------> " + deal.getPersonName());
 
             }
 
