@@ -43,7 +43,7 @@
                 <a href="/comercial">Comercial</a>
             </div>
             <div class="container">
-                <form id="filter-form" action="/mercadeoFilter" method="post">
+                <form id="filter-form" th:action="@{${filterAction}}" method="post">
 
                     <div class="custom-select-source">
                         <input type="text" id="source-select" placeholder="Select fuente(s)" readonly onclick="toggleSourceDropdown()">

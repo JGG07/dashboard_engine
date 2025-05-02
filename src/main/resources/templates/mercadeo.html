@@ -2,7 +2,7 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{home :: head('Home', null)}"></head>
 <body>
-<div th:replace="~{home :: navbar}"></div>
+<div th:replace="~{home :: navbar(filterAction='/mercadeoFilter')}"></div>
 
 <section>
     <div class="section-container">
