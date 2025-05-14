@@ -299,6 +299,7 @@ public class PipedriveBo {
             case "71": return "Real Estate";
             case "114": return "LinkedIn";
             case "74": return "Convenios Empresas";
+            case "24": return "Clientes Casa";
             default: return "Desconocido";
         }
     }
