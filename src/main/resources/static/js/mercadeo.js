@@ -270,14 +270,14 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-
-function exportTableToCSV(filename = 'tabla-leads.csv') {
-    const table = document.querySelector('.source-table');
+function exportTableToCSV(filename) {
+    const table = document.querySelector(filename);
     const rows = Array.from(table.querySelectorAll('tr'));
     const csvRows = [];
 
     // Recorre cada fila de la tabla
     rows.forEach(row => {
+        console.log('nullos', row);
         const cells = Array.from(row.querySelectorAll('th, td'));
         const rowValues = cells.map(cell => `"${cell.innerText.replace(/"/g, '""')}"`); // Escapa comillas dobles
         csvRows.push(rowValues.join(',')); // Unir celdas de la fila
@@ -302,72 +302,17 @@ function exportTableToCSV(filename = 'tabla-leads.csv') {
 }
 
 // Asocia el script a un botón de exportación
-document.getElementById('botonExportarCSV').addEventListener('click', () => exportTableToCSV());
-
-
-
-function exportTableToCSV(filename = 'tabla-razon-perdida.csv') {
-    const table = document.querySelector('.source-table-reason');
-    const rows = Array.from(table.querySelectorAll('tr'));
-    const csvRows = [];
-
-    // Recorre cada fila de la tabla
-    rows.forEach(row => {
-        const cells = Array.from(row.querySelectorAll('th, td'));
-        const rowValues = cells.map(cell => `"${cell.innerText.replace(/"/g, '""')}"`); // Escapa comillas dobles
-        csvRows.push(rowValues.join(',')); // Unir celdas de la fila
-    });
-
-    // Crear el archivo Blob con los datos CSV
-    const csvString = csvRows.join('\n');
-    const blob = new Blob([csvString], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-
-    // Crear un enlace temporal para descargar el archivo
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    a.style.display = 'none';
-    document.body.appendChild(a);
-    a.click();
-
-    // Limpiar
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-}
+document.getElementById('botonExportarCSV').addEventListener('click', () => exportTableToCSV('.leads-table'));
+// Asocia el script a un botón de exportación
+document.getElementById('botonExportarTablaReason').addEventListener('click', () => exportTableToCSV('.source-table-reason'));
+// Asocia el script a un botón de exportación
+document.getElementById('customButtonCampaign').addEventListener('click', () => exportTableToCSV('.leads-campaign-table'));
 
 // Asocia el script a un botón de exportación
-document.getElementById('botonExportarTablaReason').addEventListener('click', () => exportTableToCSV());
-
-function exportTableToCSV(filename = 'campaign-table.csv') {
-    const table = document.querySelector('.campaign-table');
-    const rows = Array.from(table.querySelectorAll('tr'));
-    const csvRows = [];
-
-    // Recorre cada fila de la tabla
-    rows.forEach(row => {
-        const cells = Array.from(row.querySelectorAll('th, td'));
-        const rowValues = cells.map(cell => `"${cell.innerText.replace(/"/g, '""')}"`); // Escapa comillas dobles
-        csvRows.push(rowValues.join(',')); // Unir celdas de la fila
-    });
-
-    // Crear el archivo Blob con los datos CSV
-    const csvString = csvRows.join('\n');
-    const blob = new Blob([csvString], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-
-    // Crear un enlace temporal para descargar el archivo
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    a.style.display = 'none';
-    document.body.appendChild(a);
-    a.click();
-
-    // Limpiar
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-}
-
+document.getElementById('botonExportarTablaAsesores').addEventListener('click', () => exportTableToCSV('.leads-table'));
 // Asocia el script a un botón de exportación
-document.getElementById('customButtonCampaign').addEventListener('click', () => exportTableToCSV());
+document.getElementById('botonExportarTablaAsesoresConversion').addEventListener('click', () => exportTableToCSV('.leads-campaign-table'));
+// Asocia el script a un botón de exportación
+document.getElementById('botonExportarTablaFuente').addEventListener('click', () => exportTableToCSV('.source-table-reason'));
+// Asocia el script a un botón de exportación
+document.getElementById('botonExportarTablaFuenteConversion').addEventListener('click', () => exportTableToCSV('.asesores-table-conversion'));

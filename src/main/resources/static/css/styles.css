@@ -209,6 +209,34 @@ body {
     text-align: center;
 }
 
+.leads-campaign-table {
+    width: 95%;
+    border-collapse: collapse;
+    font-family: "Arial", sans-serif;
+    font-size: 14px;
+    top: 360px;
+    margin: 0 auto;
+    table-layout: fixed;
+    background-color: #000000;
+    text-align: center;
+}
+
+.leads-campaign-table td {
+    border: 1px solid #bfbdbd; /* Borde gris claro */
+    padding: 11px; /* Relleno de 11px */
+    text-align: left; /* Alineación del texto a la izquierda */
+    background-color: #000000; /* Fondo negro */
+    color: #ffffff; /* Texto blanco */
+}
+
+.leads-campaign-table th {
+    border: 1px solid #333333;
+    padding: 10px;
+    background-color: #a1725a;
+    color: white;
+    text-align: center;
+}
+
 .source-table-reason {
     width: 100%;
     border-collapse: collapse;
@@ -229,6 +257,33 @@ body {
 }
 
 .source-table-reason td {
+    border: 1px solid #bfbdbd;
+    padding: 11px;
+    text-align: left;
+    background-color: #000000;
+    color: #ffffff;
+}
+
+.asesores-table-conversion {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: "Arial", sans-serif;
+    font-size: 12px;
+    position: relative;
+    margin: auto;
+    table-layout: fixed;
+    background-color: #000000;
+}
+
+.asesores-table-conversion th {
+    border: 1px solid #333333;
+    padding: 10px;
+    background-color: #a1725a;
+    color: #ffffff;
+    text-align: center;
+}
+
+.asesores-table-conversion td {
     border: 1px solid #bfbdbd;
     padding: 11px;
     text-align: left;

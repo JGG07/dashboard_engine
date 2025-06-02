@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{home :: head('Home', null)}"></head>
+<head th:replace="~{home :: head('Home', null)}"</head>
 <body>
 <div th:replace="~{home :: navbar(filterAction='/filterComercial')}"></div>
 
@@ -63,7 +63,7 @@
             <i class="fas fa-file-csv"></i> Exportar a CSV
         </button>
 
-        <table class="leads-table">
+        <table class="leads-campaign-table">
             <thead>
 
             <tr>
@@ -125,8 +125,6 @@
             var series = /*[[${series}]]*/ [];
             /*]]>*/
         </script>
-
-        <script th:src="@{/js/comercial.js}"></script>
     </div>
 </section>
 
@@ -141,7 +139,7 @@
             <i class="fas fa-file-csv"></i> Exportar a CSV
         </button>
 
-        <table class="leads-table">
+        <table class="source-table-reason">
             <thead>
 
             <tr>
@@ -193,7 +191,7 @@
             <i class="fas fa-file-csv"></i> Exportar a CSV
         </button>
 
-        <table class="leads-table">
+        <table class="asesores-table-conversion">
             <thead>
 
             <tr>
@@ -235,6 +233,8 @@
         </table>
     </div>
 </section>
+<script th:src="@{/js/comercial.js}"></script>
+<link rel="stylesheet" th:href="@{/css/comercial.css}">
 </body>
 
 </html>
