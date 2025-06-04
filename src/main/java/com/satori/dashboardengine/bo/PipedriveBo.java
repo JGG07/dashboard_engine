@@ -59,17 +59,19 @@ public class PipedriveBo {
             // Restar 6 horas a las fechas de update_time de cada actividad
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");  // Ajusta el formato si es necesario
             fetchedActivities.forEach(activity -> {
-                try {
-                    // Parsear la fecha y hora de update_time
-                    LocalDateTime dateTime = LocalDateTime.parse(activity.getDoneTime(), formatter);
+                if(activity != null) {
+                    try {
+                        // Parsear la fecha y hora de update_time
+                        LocalDateTime dateTime = LocalDateTime.parse(activity.getDoneTime(), formatter);
 
-                    // Restar 6 horas
-                    dateTime = dateTime.minusHours(6);
+                        // Restar 6 horas
+                        dateTime = dateTime.minusHours(6);
 
-                    // Actualizar la fecha ajustada en la actividad
-                    activity.getDoneTime(dateTime.format(formatter));
-                } catch (DateTimeParseException e) {
-                    log.error("Error al analizar la fecha: " + activity.getDoneTime(), e);
+                        // Actualizar la fecha ajustada en la actividad
+                        activity.getDoneTime(dateTime.format(formatter));
+                    } catch (DateTimeParseException e) {
+                        log.error("Error al analizar la fecha: " + activity.getDoneTime(), e);
+                    }
                 }
             });
 
