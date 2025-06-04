@@ -54,34 +54,42 @@ public class PipedriveBo {
         int start = 0;
         while (active) {
             activities = restTemplate.getForObject(url + "&start=" + start, Activities.class);
-            List<ActivitiesData> fetchedActivities = activities.getData();
+            log.info(url);
+            if(activities.getData() == null){
+                log.info("Sin actividades del usuario: " + userId);
+                break;
+            } else {
+                List<ActivitiesData> fetchedActivities = activities.getData();
 
-            // Restar 6 horas a las fechas de update_time de cada actividad
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");  // Ajusta el formato si es necesario
-            fetchedActivities.forEach(activity -> {
-                if(activity != null) {
-                    try {
-                        // Parsear la fecha y hora de update_time
-                        LocalDateTime dateTime = LocalDateTime.parse(activity.getDoneTime(), formatter);
+                // Restar 6 horas a las fechas de update_time de cada actividad
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");  // Ajusta el formato si es necesario
+                fetchedActivities.forEach(activity -> {
+                    if (activity != null) {
+                        try {
+                            // Parsear la fecha y hora de update_time
+                            LocalDateTime dateTime = LocalDateTime.parse(activity.getDoneTime(), formatter);
 
-                        // Restar 6 horas
-                        dateTime = dateTime.minusHours(6);
+                            // Restar 6 horas
+                            dateTime = dateTime.minusHours(6);
 
-                        // Actualizar la fecha ajustada en la actividad
-                        activity.getDoneTime(dateTime.format(formatter));
-                    } catch (DateTimeParseException e) {
-                        log.error("Error al analizar la fecha: " + activity.getDoneTime(), e);
+                            // Actualizar la fecha ajustada en la actividad
+                            activity.getDoneTime(dateTime.format(formatter));
+                        } catch (DateTimeParseException e) {
+                            log.error("Error al analizar la fecha: " + activity.getDoneTime(), e);
+                        }
+                    } else {
+                        log.error("Error al analizar la fecha: " + activity.getDoneTime());
                     }
+                });
+
+                // Agregar las actividades ajustadas a la lista principal
+                activitiesDataList.addAll(fetchedActivities);
+
+                // Actualizar el valor de inicio y verificar si hay más elementos
+                start += activities.getAdditionalData().getPagination().getLimit();
+                if (!activities.getAdditionalData().getPagination().isMoreItems()) {
+                    active = false;
                 }
-            });
-
-            // Agregar las actividades ajustadas a la lista principal
-            activitiesDataList.addAll(fetchedActivities);
-
-            // Actualizar el valor de inicio y verificar si hay más elementos
-            start += activities.getAdditionalData().getPagination().getLimit();
-            if (!activities.getAdditionalData().getPagination().isMoreItems()) {
-                active = false;
             }
         }
 

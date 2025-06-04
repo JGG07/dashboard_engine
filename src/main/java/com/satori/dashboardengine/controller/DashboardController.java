@@ -721,7 +721,7 @@ public class DashboardController {
             for (DealsData deal : filteredDeals) {
                 if(deal.getUserId().getId() != 12918702) {
                     int userId = deal.getUserId().getId();
-
+                    log.info("User: " + deal.getOwnerName() + deal.getUserId().getId());
                     if (!processedIds.contains(userId)) {
                         processedIds.add(userId);
                     }
