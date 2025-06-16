@@ -546,14 +546,14 @@ public class DashboardController {
             }
 
             if (deal.getStatus().equals("won")) {
-                stats.visita++;
-                statsFuente.visita++;
-
-                stats.negociacion++;
-                statsFuente.negociacion++;
-
-                stats.apartado++;
-                statsFuente.apartado++;
+//                stats.visita++;
+//                statsFuente.visita++;
+//
+//                stats.negociacion++;
+//                statsFuente.negociacion++;
+//
+//                stats.apartado++;
+//                statsFuente.apartado++;
 
                 stats.ganado++;
                 statsFuente.ganado++;
