@@ -180,7 +180,8 @@ body {
 }
 
 /* Estilos para las tablas de fuentes */
-.asesores-table {
+.asesores-table,
+.camping-wins{
     width: 60%;
     /* Ocupa el 100% del ancho del contenedor padre */
     border-collapse: collapse;
@@ -200,7 +201,8 @@ body {
     background-color: #333333;
 }
 
-.asesores-table th {
+.asesores-table th,
+.camping-wins th{
     border: 1px solid #333333;
     font-size: 14px;
     padding: 11px;
@@ -208,13 +210,15 @@ body {
     background-color: #333333;
 }
 
-.asesores-table td {
+.asesores-table td,
+.camping-wins td{
     border: 1px solid #bfbdbd;
     padding: 11px;
     text-align: center;
 }
 
-.asesores-table th {
+.asesores-table th,
+.camping-wins th{
     background-color: #a1725a;
     /* Fondo de la cabecera */
     color: white;
@@ -222,13 +226,69 @@ body {
     text-align: center;
 }
 
-.asesores-table td {
+.asesores-table td,
+.camping-wins td{
     text-align: left;
     background-color: #000000;
     color: #ffffff;
 }
 
-.asesores-table tr.highlight {
+.asesores-table tr.highlight,
+.camping-wins tr.highlight {
+    background-color: #ff6347;
+    /* Color para filas resaltadas */
+}
+
+/* Estilos para las tablas de fuentes */
+.camping-wins{
+    width: 60%;
+    /* Ocupa el 100% del ancho del contenedor padre */
+    border-collapse: collapse;
+    /* Colapsa los bordes de las celdas adyacentes para que no se dupliquen */
+    font-family: "Arial";
+    /* Establece la fuente de texto de la tabla como Arial */
+    font-size: 14px;
+    /* Define el tamaño de la fuente dentro de la tabla */
+    position: relative;
+    /* Establece el posicionamiento de la tabla como relativo. Esto es útil si se aplican posicionamientos absolutos a elementos hijos */
+    top: 220px;
+    /* Añade un margen superior de 100 píxeles para separar la tabla del contenido superior */
+    margin: 0 auto;
+    /* Centra la tabla horizontalmente en su contenedor. La propiedad auto aplica márgenes automáticos a los lados izquierdo y derecho, mientras que el margen superior es de 0 píxeles */
+    table-layout: fixed;
+    /* Establece el diseño de la tabla en modo fijo, lo que asegura que las columnas tengan un ancho uniforme basado en el ancho especificado de la tabla */
+    background-color: #333333;
+}
+
+.camping-wins th{
+    border: 1px solid #333333;
+    font-size: 14px;
+    padding: 11px;
+    text-align: center;
+    background-color: #333333;
+}
+
+.camping-wins td{
+    border: 1px solid #bfbdbd;
+    padding: 11px;
+    text-align: center;
+}
+
+.camping-wins th{
+    background-color: #a1725a;
+    /* Fondo de la cabecera */
+    color: white;
+    /* Color del texto de la cabecera */
+    text-align: center;
+}
+
+.camping-wins td{
+    text-align: left;
+    background-color: #000000;
+    color: #ffffff;
+}
+
+.camping-wins tr.highlight {
     background-color: #ff6347;
     /* Color para filas resaltadas */
 }

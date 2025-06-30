@@ -1,6 +1,7 @@
 package com.satori.dashboardengine.controller;
 
 import com.satori.dashboardengine.dto.ActivitiesData;
+import com.satori.dashboardengine.dto.CampanaResumen;
 import com.satori.dashboardengine.dto.Deals;
 import com.satori.dashboardengine.dto.DealsData;
 import com.satori.dashboardengine.service.PipedriveService;
@@ -295,7 +296,9 @@ public class DashboardController {
         model.addAttribute("asesores", listAsesores);
 
         Map<String, Integer> dealsByCampaign = new HashMap<>();
+        Map<String, Integer> dealsByFuente = new HashMap<>();
         String campaign = "";
+        String fuente = "";
         for(DealsData deal : filteredDeals) {
 
             if (deal.getCampaign() != null && deal.getCampaign().contains(",")) {
@@ -304,6 +307,8 @@ public class DashboardController {
                 campaign = deal.getCampaign();
             } else {
                 campaign = "Desconocido";
+                fuente = pipedriveService.getFuenteName(deal.getFuente());
+                dealsByFuente.put(fuente, dealsByFuente.getOrDefault(fuente, 0) + 1);
             }
 
             dealsByCampaign.put(campaign, dealsByCampaign.getOrDefault(campaign, 0) + 1);
@@ -316,7 +321,13 @@ public class DashboardController {
                 .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
                 .toList();
 
+        List<Map.Entry<String, Integer>> sortedDealsByFuente = dealsByFuente.entrySet()
+                .stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                .toList();
+
         List<CombinedCampaign> combinedCampaignList = new ArrayList<>();
+        List<DealsData> filteredDealsByCampaign = new ArrayList<>();
 
         for(DealsData deal : filteredDeals) {
             if (deal.getCampaign() != null && deal.getCampaign().contains(",")) {
@@ -327,6 +338,7 @@ public class DashboardController {
 
             } else {
                 campaign = "Desconocido";
+                filteredDealsByCampaign.add(deal);
             }
 
             statsCampaign = campaignStatsMap.getOrDefault(campaign, new AdvisorStats());
@@ -359,14 +371,74 @@ public class DashboardController {
 
             statsCampaign = campaignStatsMap.getOrDefault(campaign, new AdvisorStats());
 
-            CombinedCampaign combinedCampaign = new CombinedCampaign(campaign, dealsCount,
-                    statsCampaign.getCita(), statsCampaign.getVisita(), statsCampaign.getNegociacion(),
-                    statsCampaign.getApartado(), statsCampaign.getGanado());
+            CombinedCampaign combinedCampaign = new CombinedCampaign(
+                    campaign,
+                    dealsCount,
+                    statsCampaign.getCita(),
+                    statsCampaign.getVisita(),
+                    statsCampaign.getNegociacion(),
+                    statsCampaign.getApartado(),
+                    statsCampaign.getGanado());
 
             combinedCampaignList.add(combinedCampaign);
         }
 
+        System.out.println("Tamaño de lista: " + filteredDealsByCampaign.size());
+        AdvisorStats statsCampaignByFuente;
+        Map<String, AdvisorStats> fuenteStatsMap = new HashMap<>();
+
+        for(DealsData deal : filteredDealsByCampaign) {
+
+            fuente = pipedriveService.getFuenteName(deal.getFuente());
+
+            statsCampaignByFuente = campaignStatsMap.getOrDefault(fuente, new AdvisorStats());
+
+            if (deal.getStageId() == 8) {
+                statsCampaignByFuente.cita++;
+            }
+
+            if (deal.getStageId() == 9) {
+                statsCampaignByFuente.visita++;
+            }
+            if (deal.getStageId() == 10) {
+                statsCampaignByFuente.negociacion++;
+            }
+
+            if (deal.getStageId() == 11) {
+                statsCampaignByFuente.apartado++;
+            }
+
+            if (deal.getStatus().equals("won")) {
+                statsCampaignByFuente.ganado++;
+            }
+
+            fuenteStatsMap.put(fuente, statsCampaignByFuente);
+        }
+
+        List<CombinedFuente> combinedFuenteList = new ArrayList<>();
+
+        for (Map.Entry<String, Integer> entry : sortedDealsByFuente) {
+            fuente = entry.getKey();
+            int dealsCount = entry.getValue();
+
+            statsCampaignByFuente = fuenteStatsMap.getOrDefault(fuente, new AdvisorStats());
+
+            CombinedFuente combinedFuente = new CombinedFuente(
+                    fuente,
+                    dealsCount,
+                    statsCampaignByFuente.getCita(),
+                    statsCampaignByFuente.getVisita(),
+                    statsCampaignByFuente.getNegociacion(),
+                    statsCampaignByFuente.getApartado(),
+                    statsCampaignByFuente.getGanado());
+
+            combinedFuenteList.add(combinedFuente);
+        }
+
+        System.out.println("Fuente Stats Map: " + fuenteStatsMap);
+
         model.addAttribute("combinedCampaign" , combinedCampaignList);
+        model.addAttribute("campaignByFuente", combinedFuenteList);
 
         // Inicializar los totales
         int totalDealsCampaign = 0;
@@ -392,6 +464,32 @@ public class DashboardController {
         model.addAttribute("totalNegociacionesCampaign", totalNegociacionesCampaign);
         model.addAttribute("totalApartadosCampaign", totalApartadosCampaign);
         model.addAttribute("totalWonDealsCampaign", totalWonDealsCampaign);
+
+
+        // Inicializar los totales
+        int totalDealsFuente = 0;
+        int totalCitasFuente = 0;
+        int totalVisitasFuente = 0;
+        int totalNegociacionesFuente = 0;
+        int totalApartadosFuente = 0;
+        int totalWonDealsFuente = 0;
+
+        for(CombinedFuente stat : combinedFuenteList){
+            totalDealsFuente += stat.getDeals();
+            totalCitasFuente += stat.getCita();
+            totalVisitasFuente += stat.getVisita();
+            totalNegociacionesFuente += stat.getNegociacion();
+            totalApartadosFuente += stat.getApartado();
+            totalWonDealsFuente += stat.getGanado();
+        }
+
+        // Pasar los totales al modelo
+        model.addAttribute("totalDealsFuente", totalDealsFuente);
+        model.addAttribute("totalCitasFuente", totalCitasFuente);
+        model.addAttribute("totalVisitasFuente", totalVisitasFuente);
+        model.addAttribute("totalNegociacionesFuente", totalNegociacionesFuente);
+        model.addAttribute("totalApartadosFuente", totalApartadosFuente);
+        model.addAttribute("totalWonDealsFuente", totalWonDealsFuente);
 
         return "mercadeo"; // Retorna la vista con los datos filtrados
     }
@@ -445,7 +543,6 @@ public class DashboardController {
                 .toList();
 
         model.addAttribute("asesores", listAsesores);
-
         System.out.println(filteredDeals.size());
 
         List<DealsData> filteredDealsByStageChange = allDeals.stream()
@@ -781,6 +878,75 @@ public class DashboardController {
         model.addAttribute("fechas", fechas);
         model.addAttribute("series", series);
 
+        List<DealsData> dealsGanados = allDeals.stream()
+                .filter(dealsData -> dealsData.getWonTime() != null && !dealsData.getWonTime().isEmpty())
+                .toList();
+
+        Map<String, CampanaResumen> resumenMap = new HashMap<>();
+        Set<Integer> añosUsados = new HashSet<>();
+
+        for (DealsData dealsData : dealsGanados) {
+            LocalDateTime fechaGanado = LocalDateTime.parse(dealsData.getWonTime(), formatter);
+            int mes = fechaGanado.getMonthValue();
+            int año = fechaGanado.getYear();
+            añosUsados.add(año);
+
+            String nombreCampaña = dealsData.getCampaign();
+
+            String clave = nombreCampaña + "_" + año;
+            System.out.println("Clave: " + clave);
+
+            CampanaResumen resumen = resumenMap.getOrDefault(clave, new CampanaResumen(nombreCampaña, año));
+
+            if (resumen.getNombre() != null && resumen.getNombre().contains(",")) {
+                resumen.setNombre(pipedriveService.getCampaignName(resumen.getNombre()));
+
+            } else if (resumen.getNombre() != null && !resumen.getNombre().isEmpty()) {
+                resumen.getNombre();
+
+            } else {
+                resumen.setNombre("Desconocido");
+            }
+
+            resumen.incrementarMes(mes);
+            resumenMap.put(clave, resumen);
+        }
+
+        List<CampanaResumen> resumenList = new ArrayList<>(resumenMap.values());
+        resumenList.sort(
+                Comparator.comparing(
+                        CampanaResumen::getNombre,
+                        Comparator.nullsLast(String::compareToIgnoreCase)
+                ).thenComparing(
+                        CampanaResumen::getAnio,
+                        Comparator.nullsLast(Integer::compareTo)
+                )
+        );
+
+        // Mapa de año -> totales
+        Map<Integer, int[]> totalesPorAnio = new HashMap<>();
+
+        for (CampanaResumen resumen : resumenList) {
+            int anio = resumen.getAnio();
+            int[] totalesAnio = totalesPorAnio.getOrDefault(anio, new int[12]);
+
+            int[] meses = resumen.getMeses();
+            for (int i = 0; i < meses.length; i++) {
+                totalesAnio[i] += meses[i];
+            }
+
+            totalesPorAnio.put(anio, totalesAnio);
+        }
+
+        List<String> etiquetasMeses = new ArrayList<>();
+        for (int mes = 1; mes <= 12; mes++) {
+            etiquetasMeses.add(mesNombre(mes)); // Solo nombre del mes
+        }
+
+        model.addAttribute("resumenList", resumenList);
+        model.addAttribute("totalesPorAnio", totalesPorAnio);
+        model.addAttribute("meses", etiquetasMeses);
+
         return "comercial";
     }
 
@@ -846,6 +1012,18 @@ public class DashboardController {
 
     @Data
     @AllArgsConstructor
+    public static class CombinedFuente {
+        private String fuente;
+        private int deals;
+        private int cita;
+        private int visita;
+        private int negociacion;
+        private int apartado;
+        private int ganado;
+    }
+
+    @Data
+    @AllArgsConstructor
     public static class CombinedCampaignConversionStats {
         private String campaign;
         private int deals;
@@ -865,6 +1043,24 @@ public class DashboardController {
         public int apartado = 0;
         public int ganado = 0;
 
-
     }
+
+    public static String mesNombre(int mes) {
+        return switch (mes) {
+            case 1 -> "Enero";
+            case 2 -> "Febrero";
+            case 3 -> "Marzo";
+            case 4 -> "Abril";
+            case 5 -> "Mayo";
+            case 6 -> "Junio";
+            case 7 -> "Julio";
+            case 8 -> "Agosto";
+            case 9 -> "Septiembre";
+            case 10 -> "Octubre";
+            case 11 -> "Noviembre";
+            case 12 -> "Diciembre";
+            default -> "";
+        };
+    }
+
 }

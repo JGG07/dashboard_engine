@@ -337,8 +337,10 @@ public class FilterController {
         model.addAttribute("endDate", endDate);
 
         Map<String, Integer> dealsByCampaign = new HashMap<>();
+        Map<String, Integer> dealsByFuente = new HashMap<>();
         String campaign = "";
-        for(DealsData deal : filteredDeals) {
+        String fuente = "";
+        for (DealsData deal : filteredDeals) {
 
             if (deal.getCampaign() != null && deal.getCampaign().contains(",")) {
                 campaign = pipedriveService.getCampaignName(deal.getCampaign());
@@ -346,6 +348,8 @@ public class FilterController {
                 campaign = deal.getCampaign();
             } else {
                 campaign = "Desconocido";
+                fuente = pipedriveService.getFuenteName(deal.getFuente());
+                dealsByFuente.put(fuente, dealsByFuente.getOrDefault(fuente, 0) + 1);
             }
 
             dealsByCampaign.put(campaign, dealsByCampaign.getOrDefault(campaign, 0) + 1);
@@ -358,7 +362,13 @@ public class FilterController {
                 .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
                 .toList();
 
+        List<Map.Entry<String, Integer>> sortedDealsByFuente = dealsByFuente.entrySet()
+                .stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                .toList();
+
         List<DashboardController.CombinedCampaign> combinedCampaignList = new ArrayList<>();
+        List<DealsData> filteredDealsByCampaign = new ArrayList<>();
 
         for(DealsData deal : filteredDeals){
             if (deal.getCampaign() != null && deal.getCampaign().contains(",")) {
@@ -369,7 +379,9 @@ public class FilterController {
 
             } else {
                 campaign = "Desconocido";
+                filteredDealsByCampaign.add(deal);
             }
+
             statsCampaign = campaignStatsMap.getOrDefault(campaign, new DashboardController.AdvisorStats());
 
             if (deal.getStageId() == 8) {
@@ -407,7 +419,62 @@ public class FilterController {
             combinedCampaignList.add(combinedCampaign);
         }
 
+        System.out.println("Tamaño de lista: " + filteredDealsByCampaign.size());
+        DashboardController.AdvisorStats statsCampaignByFuente;
+        Map<String, DashboardController.AdvisorStats> fuenteStatsMap = new HashMap<>();
+
+        for(DealsData deal : filteredDealsByCampaign) {
+
+            fuente = pipedriveService.getFuenteName(deal.getFuente());
+
+            statsCampaignByFuente = campaignStatsMap.getOrDefault(fuente, new DashboardController.AdvisorStats());
+
+            if (deal.getStageId() == 8) {
+                statsCampaignByFuente.cita++;
+            }
+
+            if (deal.getStageId() == 9) {
+                statsCampaignByFuente.visita++;
+            }
+            if (deal.getStageId() == 10) {
+                statsCampaignByFuente.negociacion++;
+            }
+
+            if (deal.getStageId() == 11) {
+                statsCampaignByFuente.apartado++;
+            }
+
+            if (deal.getStatus().equals("won")) {
+                statsCampaignByFuente.ganado++;
+            }
+
+            fuenteStatsMap.put(fuente, statsCampaignByFuente);
+        }
+
+        List<DashboardController.CombinedFuente> combinedFuenteList = new ArrayList<>();
+
+        for (Map.Entry<String, Integer> entry : sortedDealsByFuente) {
+            fuente = entry.getKey();
+            int dealsCount = entry.getValue();
+
+            statsCampaignByFuente = fuenteStatsMap.getOrDefault(fuente, new DashboardController.AdvisorStats());
+
+            DashboardController.CombinedFuente combinedFuente = new DashboardController.CombinedFuente(
+                    fuente,
+                    dealsCount,
+                    statsCampaignByFuente.getCita(),
+                    statsCampaignByFuente.getVisita(),
+                    statsCampaignByFuente.getNegociacion(),
+                    statsCampaignByFuente.getApartado(),
+                    statsCampaignByFuente.getGanado());
+
+            combinedFuenteList.add(combinedFuente);
+        }
+
+        System.out.println("Fuente Stats Map: " + fuenteStatsMap);
+
         model.addAttribute("combinedCampaign" , combinedCampaignList);
+        model.addAttribute("campaignByFuente", combinedFuenteList);
 
         // Inicializar los totales
         int totalDealsCampaign = 0;
@@ -434,6 +501,31 @@ public class FilterController {
         model.addAttribute("totalApartadosCampaign", totalApartadosCampaign);
         model.addAttribute("totalWonDealsCampaign", totalWonDealsCampaign);
 
+
+        // Inicializar los totales
+        int totalDealsFuente = 0;
+        int totalCitasFuente = 0;
+        int totalVisitasFuente = 0;
+        int totalNegociacionesFuente = 0;
+        int totalApartadosFuente = 0;
+        int totalWonDealsFuente = 0;
+
+        for(DashboardController.CombinedFuente stat : combinedFuenteList){
+            totalDealsFuente += stat.getDeals();
+            totalCitasFuente += stat.getCita();
+            totalVisitasFuente += stat.getVisita();
+            totalNegociacionesFuente += stat.getNegociacion();
+            totalApartadosFuente += stat.getApartado();
+            totalWonDealsFuente += stat.getGanado();
+        }
+
+        // Pasar los totales al modelo
+        model.addAttribute("totalDealsFuente", totalDealsFuente);
+        model.addAttribute("totalCitasFuente", totalCitasFuente);
+        model.addAttribute("totalVisitasFuente", totalVisitasFuente);
+        model.addAttribute("totalNegociacionesFuente", totalNegociacionesFuente);
+        model.addAttribute("totalApartadosFuente", totalApartadosFuente);
+        model.addAttribute("totalWonDealsFuente", totalWonDealsFuente);
 
         return "mercadeo"; // Retorna la vista con los datos filtrados
     }

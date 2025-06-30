@@ -237,7 +237,8 @@ body {
     text-align: center;
 }
 
-.source-table-reason {
+.source-table-reason,
+.camping-wins {
     width: 100%;
     border-collapse: collapse;
     font-family: "Arial", sans-serif;
@@ -248,7 +249,8 @@ body {
     background-color: #000000;
 }
 
-.source-table-reason th {
+.source-table-reason th,
+.camping-wins th{
     border: 1px solid #333333;
     padding: 10px;
     background-color: #a1725a;
@@ -256,7 +258,8 @@ body {
     text-align: center;
 }
 
-.source-table-reason td {
+.source-table-reason td,
+.camping-wins td{
     border: 1px solid #bfbdbd;
     padding: 11px;
     text-align: left;

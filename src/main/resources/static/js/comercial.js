@@ -139,3 +139,33 @@ document.getElementById('botonExportarTablaAsesoresConversion').addEventListener
 document.getElementById('botonExportarTablaFuente').addEventListener('click', () => exportTableToCSV('.source-table-reason'));
 // Asocia el script a un botón de exportación
 document.getElementById('botonExportarTablaFuenteConversion').addEventListener('click', () => exportTableToCSV('.asesores-table-conversion'));
+
+function filtrarPorAnio() {
+    const anioSeleccionado = document.getElementById("anioSelector").value;
+
+    // Filtrar filas de campañas
+    const filas = document.querySelectorAll(".camping-wins tbody tr");
+    filas.forEach(fila => {
+        const anioFila = fila.getAttribute("data-anio");
+        if (anioFila === anioSeleccionado) {
+            fila.style.display = "";
+        } else {
+            fila.style.display = "none";
+        }
+    });
+
+    // Filtrar filas de totales
+    const totales = document.querySelectorAll(".camping-wins tfoot tr");
+    totales.forEach(fila => {
+        const anioFila = fila.getAttribute("data-anio");
+        if (anioFila === anioSeleccionado) {
+            fila.style.display = "";
+        } else {
+            fila.style.display = "none";
+        }
+    });
+}
+
+
+document.addEventListener("DOMContentLoaded", filtrarPorAnio);
+//window.onload = filtrarPorAnio;

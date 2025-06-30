@@ -276,6 +276,61 @@
         </div>
     </div>
 </section>
+
+<section>
+    <div class="section-container">
+        <!-- Título general para los KPIs -->
+
+        <h2 class="kpi-title">¿Cuáles son los desconocidos?</h2>
+        <button id="" class="custom-button">
+            <i class="fas fa-file-csv"></i> Exportar a CSV
+        </button>
+        <!-- Tabla para mostrar datos por asesor -->
+        <div>
+            <table class="leads-campaign-table" id="">
+                <thead>
+
+                <tr>
+                    <th>Campaña</th>
+                    <th>Leads</th>
+                    <th>Citas</th>
+                    <th>Visitas</th>
+                    <th>Negociaciones</th>
+                    <th>Apartados</th>
+                    <th>Ganados</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <!-- Iterar sobre la lista combinada de fuente y estadísticas -->
+                <tr th:each="entry : ${campaignByFuente}">
+                    <td th:text="${entry.fuente}">Fuente</td>
+                    <td th:text="${entry.deals}" style="text-align: center;">Número de Deals</td>
+                    <td th:text="${entry.cita}" style="text-align: center;">Número de Citas</td>
+                    <td th:text="${entry.visita}" style="text-align: center;">Número de Visitas</td>
+                    <td th:text="${entry.negociacion}" style="text-align: center;">Número de Negociaciones</td>
+                    <td th:text="${entry.apartado}" style="text-align: center;">Número de Apartados</td>
+                    <td th:text="${entry.ganado}" style="text-align: center;">Número de Ganados</td>
+                </tr>
+                </tbody>
+                <tfoot>
+
+                <!-- Muestra los totales en el pie de la tabla -->
+                <tr>
+                    <th>Total</th>
+                    <td th:text="${totalDealsFuente}" style="text-align: center; font-weight: bold;">0</td>
+                    <td th:text="${totalCitasFuente}" style="text-align: center; font-weight: bold;">0</td>
+                    <td th:text="${totalVisitasFuente}" style="text-align: center; font-weight: bold;">0</td>
+                    <td th:text="${totalNegociacionesFuente}" style="text-align: center; font-weight: bold;">0</td>
+                    <td th:text="${totalApartadosFuente}" style="text-align: center; font-weight: bold;">0</td>
+                    <td th:text="${totalWonDealsFuente}" style="text-align: center; font-weight: bold;">0</td>
+                </tr>
+                </tfoot>
+
+            </table>
+        </div>
+    </div>
+</section>
 </body>
 
 </html>
