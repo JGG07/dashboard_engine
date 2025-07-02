@@ -309,7 +309,7 @@ public class PipedriveBo {
             case "71": return "Real Estate";
             case "114": return "LinkedIn";
             case "74": return "Convenios Empresas";
-            case "24": return "Clientes Casa";
+            case "24": return "Clientes de casa";
             default: return "Desconocido";
         }
     }
