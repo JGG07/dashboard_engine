@@ -238,6 +238,8 @@
                 <tr>
                     <th>Campaña</th>
                     <th>Leads</th>
+                    <th>Interesados</th>
+                    <th>Contactados</th>
                     <th>Citas</th>
                     <th>Visitas</th>
                     <th>Negociaciones</th>
@@ -251,6 +253,8 @@
                 <tr th:each="entry : ${combinedCampaign}">
                     <td th:text="${entry.campaign}">Campaña</td>
                     <td th:text="${entry.deals}" style="text-align: center;">Número de Deals</td>
+                    <td th:text="${entry.interesados}" style="text-align: center;">Número de Interesados</td>
+                    <td th:text="${entry.contactados}" style="text-align: center;">Número de Contactados</td>
                     <td th:text="${entry.cita}" style="text-align: center;">Número de Citas</td>
                     <td th:text="${entry.visita}" style="text-align: center;">Número de Visitas</td>
                     <td th:text="${entry.negociacion}" style="text-align: center;">Número de Negociaciones</td>
@@ -262,8 +266,10 @@
 
                 <!-- Muestra los totales en el pie de la tabla -->
                 <tr>
-                    <th>Total</th>
+                    <th>Subtotal</th>
                     <td th:text="${totalDealsCampaign}" style="text-align: center; font-weight: bold;">0</td>
+                    <td th:text="${totalInteresadosCampaign}" style="text-align: center; font-weight: bold;">0</td>
+                    <td th:text="${totalContactadosCampaign}" style="text-align: center; font-weight: bold;">0</td>
                     <td th:text="${totalCitasCampaign}" style="text-align: center; font-weight: bold;">0</td>
                     <td th:text="${totalVisitasCampaign}" style="text-align: center; font-weight: bold;">0</td>
                     <td th:text="${totalNegociacionesCampaign}" style="text-align: center; font-weight: bold;">0</td>
@@ -274,25 +280,18 @@
 
             </table>
         </div>
-    </div>
-</section>
-
-<section>
-    <div class="section-container">
-        <!-- Título general para los KPIs -->
-
-        <h2 class="kpi-title">¿Cuáles son los desconocidos?</h2>
-        <button id="" class="custom-button">
-            <i class="fas fa-file-csv"></i> Exportar a CSV
-        </button>
-        <!-- Tabla para mostrar datos por asesor -->
         <div>
-            <table class="leads-campaign-table" id="">
+            <p></p>
+        </div>
+        <div>
+            <table class="leads-campaign-table" id="table-campaign">
                 <thead>
 
                 <tr>
-                    <th>Campaña</th>
+                    <th>Fuente</th>
                     <th>Leads</th>
+                    <th>Interesados</th>
+                    <th>Contactados</th>
                     <th>Citas</th>
                     <th>Visitas</th>
                     <th>Negociaciones</th>
@@ -306,6 +305,8 @@
                 <tr th:each="entry : ${campaignByFuente}">
                     <td th:text="${entry.fuente}">Fuente</td>
                     <td th:text="${entry.deals}" style="text-align: center;">Número de Deals</td>
+                    <td th:text="${entry.interesados}" style="text-align: center;">Número de Interesados</td>
+                    <td th:text="${entry.contactados}" style="text-align: center;">Número de Contactados</td>
                     <td th:text="${entry.cita}" style="text-align: center;">Número de Citas</td>
                     <td th:text="${entry.visita}" style="text-align: center;">Número de Visitas</td>
                     <td th:text="${entry.negociacion}" style="text-align: center;">Número de Negociaciones</td>
@@ -317,8 +318,10 @@
 
                 <!-- Muestra los totales en el pie de la tabla -->
                 <tr>
-                    <th>Total</th>
+                    <th>Subtotal</th>
                     <td th:text="${totalDealsFuente}" style="text-align: center; font-weight: bold;">0</td>
+                    <td th:text="${totalInteresadosFuente}" style="text-align: center; font-weight: bold;">0</td>
+                    <td th:text="${totalContactadosFuente}" style="text-align: center; font-weight: bold;">0</td>
                     <td th:text="${totalCitasFuente}" style="text-align: center; font-weight: bold;">0</td>
                     <td th:text="${totalVisitasFuente}" style="text-align: center; font-weight: bold;">0</td>
                     <td th:text="${totalNegociacionesFuente}" style="text-align: center; font-weight: bold;">0</td>
@@ -327,6 +330,29 @@
                 </tr>
                 </tfoot>
 
+            </table>
+        </div>
+        <div>
+            <p>
+            </p>
+        </div>
+        <div>
+            <table class="leads-campaign-table" id="">
+                <tfoot>
+
+                <!-- Muestra los totales en el pie de la tabla -->
+                <tr>
+                    <th>Total</th>
+                    <td th:text="${totalFuenteCampania}" style="text-align: center; font-weight: bold;">0</td>
+                    <td th:text="${interesadosFuenteCampania}" style="text-align: center; font-weight: bold;">0</td>
+                    <td th:text="${contactadosFuenteCampania}" style="text-align: center; font-weight: bold;">0</td>
+                    <td th:text="${citasFuenteCampania}" style="text-align: center; font-weight: bold;">0</td>
+                    <td th:text="${visitasFuenteCampania}" style="text-align: center; font-weight: bold;">0</td>
+                    <td th:text="${negoFuenteCampania}" style="text-align: center; font-weight: bold;">0</td>
+                    <td th:text="${apartFuenteCampania}" style="text-align: center; font-weight: bold;">0</td>
+                    <td th:text="${wonFuenteCampania}" style="text-align: center; font-weight: bold;">0</td>
+                </tr>
+                </tfoot>
             </table>
         </div>
     </div>

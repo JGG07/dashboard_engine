@@ -331,23 +331,56 @@ public class PipedriveBo {
         // Retornar el nombre de la etapa basado en su ID
         switch (campaign) {
 
-            case ", , none,  Facebook": return "Sitio Web";
             case ", , none,  satoriresidencial.com": return "Sitio Web";
+            case "Leads | 3 | 5.8": return "Sitio Web";
             case ", , paid,  Google": return "Sitio Web";
-            case "cbo_leads, bo_leads, landing, landing, Lead+ad, Lead ad,  Facebook": return "Sitio Web";
-            case "cbo_leads, cbo_leads, landing, landing, none,  Facebook": return "Sitio Web";
+            case ", , referral, referral,  taboola": return "Sitio Web";
+            case ", , referral,  taboola": return "Sitio Web";
             case "cbo_leads, landing, Lead+ad,  Facebook": return "Sitio Web";
-            case "EAIaIQobChMIqaGZ4f2UigMV3XF_AB3bIBPwEAAYBCAAEgKaKPD_BwE, , , , ,": return "Sitio Web";
-            case "EAIaIQobChMIqLPXwviRigMVqG5_AB2qQR6DEAAYASAAEgJnY_D_BwE, , , , ,": return "Sitio Web";
+            case "cbo_leads, cbo_leads, landing, landing, Lead+ad, Lead ad,  Facebook": return "Sitio Web";
+            case ", , none,  Facebook": return "Sitio Web";
             case "Leads+%7C+1+%7C+General, Leads | 1 | General, landing, landing, Instagram_Reels, Instagram_Reels,  ig": return "Sitio Web";
+            case "Leads | 3 | 5.8, landing, Instagram_Feed,  ig": return "Sitio Web";
+            case "Leads+%7C+3+%7C+5.8, Leads | 3 | 5.8, landing, landing, Instagram_Feed, Instagram_Feed,  ig": return "Sitio Web";
+            case "Leads | 1 | General, landing, Facebook_Mobile_Reels,  fb": return "Sitio Web";
+            case "Leads | 2 | 6.6.MDP, landing, Facebook_Mobile_Feed,  fb": return "Sitio Web";
+            case "CjwKCAjw_4S3BhAAEiwA_64Yhq3pghyQSBnfARhp3vnWWEl4wMPBb1j_KHujhhQWjBt8x1Tdbpn8choCoYcQAvD_BwE, , , , ,": return "Sitio Web";
+            case ", , , , ,": return "Sitio Web";
+            case ", , , ,": return "Sitio Web";
+            case "Cj0KCQjwmOm3BhC8ARIsAOSbapUMpk_qngzzyc1dkzHgmXi4zynX4qX8w5FvjFyVVz8wQ6u-JDC8hWAaAvvpEALw_wcB, , , ,": return "Sitio Web";
+            case "Leads | 3 | 5.8, landing, Facebook_Mobile_Reels,  fb": return "Sitio Web";
+            case "Cj0KCQjwsc24BhDPARIsAFXqAB05UyE-m4YQCT9cg2GQfS5_oEccu7aeVFw2lhQyRjq-MS2a-b9CgJAaAhxqEALw_wcB, , , ,": return "Sitio Web";
+            case ", ig, Leads+%7C+2+%7C+6.6.MDP, landing, Instagram_Feed": return "Sitio Web";
+            case "Leads+%7C+2+%7C+6.6.MDP, Leads | 2 | 6.6.MDP, landing, landing, Instagram_Stories, Instagram_Stories,  ig": return "Sitio Web";
+            case "Leads+%7C+1+%7C+General, Leads | 1 | General, landing, landing, Facebook_Mobile_Reels, Facebook_Mobile_Reels,  fb": return "Sitio Web";
+            case "Leads | 2 | 6.6.MDP, landing, Instagram_Reels,  ig": return "Sitio Web";
+            case "Leads+%7C+2+%7C+6.6.MDP, Leads | 2 | 6.6.MDP, landing, landing, Instagram_Reels, Instagram_Reels,  ig": return "Sitio Web";
+            case "EAIaIQobChMIqLPXwviRigMVqG5_AB2qQR6DEAAYASAAEgJnY_D_BwE, , , , ,": return "Sitio Web";
+            case "EAIaIQobChMIqaGZ4f2UigMV3XF_AB3bIBPwEAAYBCAAEgKaKPD_BwE, , , , ,": return "Sitio Web";
             case "Leads+%7C+2+%7C+6.6.MDP, Leads | 2 | 6.6.MDP, landing, landing, Instagram_Feed, Instagram_Feed,  ig": return "Sitio Web";
-            case "Leads+%7C+2+%7C+6.6.MDP. Leads | 2 | 6.6.MDP. landing, landing, Instagram Stories, Instagram Stories,  ig": return "Sitio Web";
-            case "120217717137420459, 120217717137420459, 120217717138480459, 120217717138480459, none,  ig, ig": return "Sitio Web";
-            case "120217717137420459, 120217717137420459, 120217717138480459, 120217717138480459, none,  fb, fb": return "Sitio Web";
-            case "120212520989740459, 120212520989740459, 120212520989750459, 120212520989750459, none,  fb, fb": return "Sitio Web";
             case "Leads | 2 | 6.9 MDP, landing, Instagram_Stories,  ig": return "Sitio Web";
-            default: return "Desconocido";
+            case "Leads | 3 | 5.8, landing, Facebook_Mobile_Feed,  fb": return "Sitio Web";
+            case "Leads | 2 | 6.9 MDP, landing, Facebook_Mobile_Feed,  fb": return "Sitio Web";
+            case "Leads+%7C+2+%7C+6.9+MDP, Leads | 2 | 6.9 MDP, landing, landing, Instagram_Feed, Instagram_Feed,  ig": return "Sitio Web";
+            case "Leads | 1 | General, landing, Instagram_Reels,  ig": return "Sitio Web";
+            case "Leads+%7C+2+%7C+6.9+MDP, Leads | 2 | 6.9 MDP, landing, landing, Instagram_Reels, Instagram_Reels,  ig": return "Sitio Web";
+            case "Leads+%7C+2+%7C+6.9+MDP, Leads | 2 | 6.9 MDP, landing, landing, Facebook_Mobile_Feed, Facebook_Mobile_Feed,  fb": return "Sitio Web";
+            case "Leads+%7C+3+%7C+5.8, Leads | 3 | 5.8, landing, landing, none,  fb": return "Sitio Web";
+            case "120217717137420459, 120217717138480459, paid,  ig": return "Sitio Web";
+            case "cbo_leads, cbo_leads, landing, landing, none,  Facebook": return "Sitio Web";
+            case "120217717137420459, 120217717138480459, paid,  fb": return "Sitio Web";
+            case ", , none,  direct": return "Sitio Web";
+            case "120217717137420459, 120217717137420459, 120217717138480459, 120217717138480459, none,  fb, fb": return "Sitio Web";
+            case "120217717137420459, 120217717137420459, 120217717138480459, 120217717138480459, none,  ig, ig": return "Sitio Web";
+            case "120212520989740459, 120212520989740459, 120212520989750459, 120212520989750459, none,  fb, fb": return "Sitio Web";
+            case "Leads | 2 | 6.9 MDP, landing, Facebook_Mobile_Reels,  fb": return "Sitio Web";
+            case "120226415248920459, 120226415248920459, 120226415248980459, 120226415248980459, none,  fb, fb": return "Sitio Web";
+            case "120226415248920459, 120226415248920459, 120226415248980459, 120226415248980459, none,  fb, fb": return "Sitio Web";
+            case "120225374461220459, 120225374461220459, 120225374461380459, 120225374461380459, none,  ig, ig": return "Sitio Web";
+            case "EAIaIQobChMIlfaJgJ-mjgMVOZHuAR1RpwSLEAAYASAAEgLuzPD_BwE, , , , , ": return "Sitio Web";
         }
+
+        return campaign;
     }
 
 }

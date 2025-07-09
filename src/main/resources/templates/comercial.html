@@ -240,15 +240,14 @@
         <h2 class="kpi-title">¿Campañas?</h2>
 
         <div>
-        <select id="anioSelector" class="custom-select" onchange="filtrarPorAnio()">
-            <option value="2023">2023</option>
-            <option value="2024">2024</option>
-            <option value="2025" selected>2025</option>
-        </select>
-
         <button id="" class="custom-button">
             <i class="fas fa-file-csv"></i> Exportar a CSV
         </button>
+            <select id="anioSelector" class="custom-select" onchange="filtrarPorAnio()">
+                <option value="2023">2023</option>
+                <option value="2024">2024</option>
+                <option value="2025" selected>2025</option>
+            </select>
         </div>
         <table class="camping-wins">
 
@@ -268,6 +267,43 @@
             </tbody>
             <tfoot>
             <tr th:each="entry : ${totalesPorAnio}" th:attr="data-anio=${entry.key}">
+                <th><strong>Subtotal</strong> <span th:text="${entry.key}"></span></th>
+                <td th:each="mes : ${entry.value}" th:text="${mes}"></td>
+            </tr>
+            </tfoot>
+        </table>
+        <div>
+            <p></p>
+        </div>
+        <table class="camping-wins">
+
+            <thead>
+            <tr>
+                <th>Campaña</th>
+                <th th:each="mes : ${meses}" th:text="${mes}"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="c : ${resumenListFuente}"
+                th:attr="data-anio=${c.anio}">
+                <td th:text="${c.nombre}"></td>
+                <td th:each="i : ${#numbers.sequence(0,11)}"
+                    th:text="${c.meses[i]}"></td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr th:each="entry : ${totalesPorAnioFuente}" th:attr="data-anio=${entry.key}">
+                <th><strong>Subtotal</strong> <span th:text="${entry.key}"></span></th>
+                <td th:each="mes : ${entry.value}" th:text="${mes}"></td>
+            </tr>
+            </tfoot>
+        </table>
+        <div>
+            <p></p>
+        </div>
+        <table class="camping-wins">
+            <tfoot>
+            <tr th:each="entry : ${totales}" th:attr="data-anio=${entry.key}">
                 <th><strong>Total</strong> <span th:text="${entry.key}"></span></th>
                 <td th:each="mes : ${entry.value}" th:text="${mes}"></td>
             </tr>

@@ -299,6 +299,7 @@ public class DashboardController {
         Map<String, Integer> dealsByFuente = new HashMap<>();
         String campaign = "";
         String fuente = "";
+
         for(DealsData deal : filteredDeals) {
 
             if (deal.getCampaign() != null && deal.getCampaign().contains(",")) {
@@ -306,9 +307,9 @@ public class DashboardController {
             } else if (deal.getCampaign() != null && !deal.getCampaign().isEmpty()) {
                 campaign = deal.getCampaign();
             } else {
-                campaign = "Desconocido";
                 fuente = pipedriveService.getFuenteName(deal.getFuente());
                 dealsByFuente.put(fuente, dealsByFuente.getOrDefault(fuente, 0) + 1);
+                continue;
             }
 
             dealsByCampaign.put(campaign, dealsByCampaign.getOrDefault(campaign, 0) + 1);
@@ -337,11 +338,19 @@ public class DashboardController {
                 campaign = deal.getCampaign();
 
             } else {
-                campaign = "Desconocido";
                 filteredDealsByCampaign.add(deal);
+                continue;
             }
 
             statsCampaign = campaignStatsMap.getOrDefault(campaign, new AdvisorStats());
+
+            if (deal.getStageId() == 6){
+                statsCampaign.interesados++;
+            }
+
+            if (deal.getStageId() == 7){
+                statsCampaign.contactados++;
+            }
 
             if (deal.getStageId() == 8) {
                 statsCampaign.cita++;
@@ -359,6 +368,7 @@ public class DashboardController {
             }
 
             if (deal.getStatus().equals("won")) {
+                System.out.println("Campaña: " + campaign + " " + deal.getStatus() + " " + deal.getOwnerName() + " " + deal.getPersonName());
                 statsCampaign.ganado++;
             }
 
@@ -375,6 +385,8 @@ public class DashboardController {
                     campaign,
                     dealsCount,
                     statsCampaign.getCita(),
+                    statsCampaign.getInteresados(),
+                    statsCampaign.getContactados(),
                     statsCampaign.getVisita(),
                     statsCampaign.getNegociacion(),
                     statsCampaign.getApartado(),
@@ -391,7 +403,15 @@ public class DashboardController {
 
             fuente = pipedriveService.getFuenteName(deal.getFuente());
 
-            statsCampaignByFuente = campaignStatsMap.getOrDefault(fuente, new AdvisorStats());
+            statsCampaignByFuente = fuenteStatsMap.getOrDefault(fuente, new AdvisorStats());
+
+            if (deal.getStageId() == 6){
+                statsCampaignByFuente.interesados++;
+            }
+
+            if (deal.getStageId() == 7){
+                statsCampaignByFuente.contactados++;
+            }
 
             if (deal.getStageId() == 8) {
                 statsCampaignByFuente.cita++;
@@ -409,6 +429,7 @@ public class DashboardController {
             }
 
             if (deal.getStatus().equals("won")) {
+                System.out.println("Fuente: " + fuente + " " + deal.getStatus() + " " + deal.getOwnerName() + " " + deal.getPersonName());
                 statsCampaignByFuente.ganado++;
             }
 
@@ -426,6 +447,8 @@ public class DashboardController {
             CombinedFuente combinedFuente = new CombinedFuente(
                     fuente,
                     dealsCount,
+                    statsCampaignByFuente.getInteresados(),
+                    statsCampaignByFuente.getContactados(),
                     statsCampaignByFuente.getCita(),
                     statsCampaignByFuente.getVisita(),
                     statsCampaignByFuente.getNegociacion(),
@@ -442,6 +465,8 @@ public class DashboardController {
 
         // Inicializar los totales
         int totalDealsCampaign = 0;
+        int totalInteresadosCampaign = 0;
+        int totalContactadosCampaign = 0;
         int totalCitasCampaign = 0;
         int totalVisitasCampaign = 0;
         int totalNegociacionesCampaign = 0;
@@ -450,6 +475,8 @@ public class DashboardController {
 
         for(CombinedCampaign stat : combinedCampaignList){
             totalDealsCampaign += stat.getDeals();
+            totalInteresadosCampaign += stat.getInteresados();
+            totalContactadosCampaign += stat.getContactados();
             totalCitasCampaign += stat.getCita();
             totalVisitasCampaign += stat.getVisita();
             totalNegociacionesCampaign += stat.getNegociacion();
@@ -459,6 +486,8 @@ public class DashboardController {
 
         // Pasar los totales al modelo
         model.addAttribute("totalDealsCampaign", totalDealsCampaign);
+        model.addAttribute("totalInteresadosCampaign", totalInteresadosCampaign);
+        model.addAttribute("totalContactadosCampaign", totalContactadosCampaign);
         model.addAttribute("totalCitasCampaign", totalCitasCampaign);
         model.addAttribute("totalVisitasCampaign", totalVisitasCampaign);
         model.addAttribute("totalNegociacionesCampaign", totalNegociacionesCampaign);
@@ -468,6 +497,8 @@ public class DashboardController {
 
         // Inicializar los totales
         int totalDealsFuente = 0;
+        int totalInteresadosFuente = 0;
+        int totalContactadosFuente = 0;
         int totalCitasFuente = 0;
         int totalVisitasFuente = 0;
         int totalNegociacionesFuente = 0;
@@ -476,6 +507,8 @@ public class DashboardController {
 
         for(CombinedFuente stat : combinedFuenteList){
             totalDealsFuente += stat.getDeals();
+            totalInteresadosFuente += stat.getInteresados();
+            totalContactadosFuente += stat.getContactados();
             totalCitasFuente += stat.getCita();
             totalVisitasFuente += stat.getVisita();
             totalNegociacionesFuente += stat.getNegociacion();
@@ -485,11 +518,22 @@ public class DashboardController {
 
         // Pasar los totales al modelo
         model.addAttribute("totalDealsFuente", totalDealsFuente);
+        model.addAttribute("totalInteresadosFuente", totalInteresadosFuente);
+        model.addAttribute("totalContactadosFuente", totalContactadosFuente);
         model.addAttribute("totalCitasFuente", totalCitasFuente);
         model.addAttribute("totalVisitasFuente", totalVisitasFuente);
         model.addAttribute("totalNegociacionesFuente", totalNegociacionesFuente);
         model.addAttribute("totalApartadosFuente", totalApartadosFuente);
         model.addAttribute("totalWonDealsFuente", totalWonDealsFuente);
+
+        model.addAttribute("totalFuenteCampania", totalDealsFuente + totalDealsCampaign);
+        model.addAttribute("interesadosFuenteCampania", totalInteresadosFuente + totalInteresadosCampaign);
+        model.addAttribute("contactadosFuenteCampania", totalContactadosFuente + totalContactadosCampaign);
+        model.addAttribute("citasFuenteCampania", totalCitasFuente + totalCitasCampaign);
+        model.addAttribute("visitasFuenteCampania", totalVisitasFuente + totalVisitasCampaign);
+        model.addAttribute("negoFuenteCampania", totalNegociacionesFuente + totalNegociacionesCampaign);
+        model.addAttribute("apartFuenteCampania", totalApartadosFuente + totalApartadosCampaign);
+        model.addAttribute("wonFuenteCampania", totalWonDealsFuente + totalWonDealsCampaign);
 
         return "mercadeo"; // Retorna la vista con los datos filtrados
     }
@@ -883,6 +927,7 @@ public class DashboardController {
                 .toList();
 
         Map<String, CampanaResumen> resumenMap = new HashMap<>();
+        Map<String, CampanaResumen> resumenMapFuente = new HashMap<>();
         Set<Integer> añosUsados = new HashSet<>();
 
         for (DealsData dealsData : dealsGanados) {
@@ -894,7 +939,7 @@ public class DashboardController {
             String nombreCampaña = dealsData.getCampaign();
 
             String clave = nombreCampaña + "_" + año;
-            System.out.println("Clave: " + clave);
+            //System.out.println("Clave: " + clave);
 
             CampanaResumen resumen = resumenMap.getOrDefault(clave, new CampanaResumen(nombreCampaña, año));
 
@@ -905,11 +950,25 @@ public class DashboardController {
                 resumen.getNombre();
 
             } else {
-                resumen.setNombre("Desconocido");
+
+                String nombreFuente = pipedriveService.getFuenteName(dealsData.getFuente());
+                String claveFuente = nombreFuente + "_" + año;
+                System.out.println(nombreFuente);
+
+                CampanaResumen resumenFuente = resumenMapFuente.getOrDefault(claveFuente, new CampanaResumen(nombreFuente, año));
+
+                resumenFuente.setNombre(resumenFuente.getNombre());
+
+                resumenFuente.incrementarMes(mes);
+                resumenMapFuente.put(claveFuente, resumenFuente);
+
+                continue;
+
             }
 
             resumen.incrementarMes(mes);
             resumenMap.put(clave, resumen);
+
         }
 
         List<CampanaResumen> resumenList = new ArrayList<>(resumenMap.values());
@@ -923,8 +982,20 @@ public class DashboardController {
                 )
         );
 
+        List<CampanaResumen> resumenListFuente = new ArrayList<>(resumenMapFuente.values());
+        resumenListFuente.sort(
+                Comparator.comparing(
+                        CampanaResumen::getNombre,
+                        Comparator.nullsLast(String::compareToIgnoreCase)
+                ).thenComparing(
+                        CampanaResumen::getAnio,
+                        Comparator.nullsLast(Integer::compareTo)
+                )
+        );
+
         // Mapa de año -> totales
         Map<Integer, int[]> totalesPorAnio = new HashMap<>();
+        Map<Integer, int[]> totalesPorAnioFuente = new HashMap<>();
 
         for (CampanaResumen resumen : resumenList) {
             int anio = resumen.getAnio();
@@ -938,6 +1009,18 @@ public class DashboardController {
             totalesPorAnio.put(anio, totalesAnio);
         }
 
+        for (CampanaResumen resumen : resumenListFuente) {
+            int anio = resumen.getAnio();
+            int[] totalesAnio = totalesPorAnioFuente.getOrDefault(anio, new int[12]);
+
+            int[] meses = resumen.getMeses();
+            for (int i = 0; i < meses.length; i++) {
+                totalesAnio[i] += meses[i];
+            }
+
+            totalesPorAnioFuente.put(anio, totalesAnio);
+        }
+
         List<String> etiquetasMeses = new ArrayList<>();
         for (int mes = 1; mes <= 12; mes++) {
             etiquetasMeses.add(mesNombre(mes)); // Solo nombre del mes
@@ -946,6 +1029,33 @@ public class DashboardController {
         model.addAttribute("resumenList", resumenList);
         model.addAttribute("totalesPorAnio", totalesPorAnio);
         model.addAttribute("meses", etiquetasMeses);
+        model.addAttribute("resumenListFuente", resumenListFuente);
+        model.addAttribute("totalesPorAnioFuente", totalesPorAnioFuente);
+
+        Map<Integer, int[]> totalesCombinados = new HashMap<>();
+
+// Sumar los primeros
+        totalesPorAnio.forEach((anio, arreglo) -> {
+            // Clonar el arreglo para no modificar el original
+            int[] suma = arreglo.clone();
+            totalesCombinados.put(anio, suma);
+        });
+
+// Sumar los segundos
+        totalesPorAnioFuente.forEach((anio, arreglo) -> {
+            int[] suma = totalesCombinados.get(anio);
+            if (suma == null) {
+                // Si no existía el año, clonar el arreglo
+                totalesCombinados.put(anio, arreglo.clone());
+            } else {
+                // Si existía, sumar elemento a elemento
+                for (int i = 0; i < arreglo.length; i++) {
+                    suma[i] += arreglo[i];
+                }
+            }
+        });
+
+        model.addAttribute("totales", totalesCombinados);
 
         return "comercial";
     }
@@ -1003,6 +1113,8 @@ public class DashboardController {
     public static class CombinedCampaign {
         private String campaign;
         private int deals;
+        private int interesados;
+        private int contactados;
         private int cita;
         private int visita;
         private int negociacion;
@@ -1015,6 +1127,8 @@ public class DashboardController {
     public static class CombinedFuente {
         private String fuente;
         private int deals;
+        private int interesados;
+        private int contactados;
         private int cita;
         private int visita;
         private int negociacion;
@@ -1037,6 +1151,8 @@ public class DashboardController {
     @Getter
     @Data
     public static class AdvisorStats {
+        public int interesados = 0;
+        public int contactados = 0;
         public int cita = 0;
         public int visita = 0;
         public int negociacion = 0;
