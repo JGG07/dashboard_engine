@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Controller
@@ -295,247 +296,130 @@ public class DashboardController {
         model.addAttribute("orderedWonDeals", orderedWonDeals);
         model.addAttribute("asesores", listAsesores);
 
-        Map<String, Integer> dealsByCampaign = new HashMap<>();
-        Map<String, Integer> dealsByFuente = new HashMap<>();
-        String campaign = "";
-        String fuente = "";
+        // --- Declaraciones iniciales ---
+        Map<String, Integer> dealsPorCampania = new HashMap<>();
+        Map<String, Integer> dealsPorFuente = new HashMap<>();
+        Map<String, AdvisorStats> estadisticasCampania = new HashMap<>();
+        Map<String, AdvisorStats> estadisticasFuente = new HashMap<>();
 
-        for(DealsData deal : filteredDeals) {
+        List<CombinedCampaign> listaCampaniasCombinadas = new ArrayList<>();
+        List<CombinedFuente> listaFuentesCombinadas = new ArrayList<>();
+        List<DealsData> dealsSinCampania = new ArrayList<>();
 
-            if (deal.getCampaign() != null && deal.getCampaign().contains(",")) {
-                campaign = pipedriveService.getCampaignName(deal.getCampaign());
-            } else if (deal.getCampaign() != null && !deal.getCampaign().isEmpty()) {
-                campaign = deal.getCampaign();
+        for (DealsData deal : filteredDeals) {
+            String rawCampania = deal.getCampaign();
+            String campania = null;
+
+            if (rawCampania != null && !rawCampania.isBlank()) {
+                campania = rawCampania.contains(",")
+                        ? pipedriveService.getCampaignName(rawCampania)
+                        : rawCampania.trim(); // aseguramos que sea la forma limpia
+            }
+
+            if (campania != null) {
+                dealsPorCampania.put(campania, dealsPorCampania.getOrDefault(campania, 0) + 1);
+                AdvisorStats stats = estadisticasCampania.getOrDefault(campania, new AdvisorStats());
+                actualizarEstadisticas(stats, deal);
+                estadisticasCampania.put(campania, stats);
             } else {
-                fuente = pipedriveService.getFuenteName(deal.getFuente());
-                dealsByFuente.put(fuente, dealsByFuente.getOrDefault(fuente, 0) + 1);
-                continue;
+                String fuente = pipedriveService.getFuenteName(deal.getFuente());
+                dealsPorFuente.put(fuente, dealsPorFuente.getOrDefault(fuente, 0) + 1);
+                AdvisorStats stats = estadisticasFuente.getOrDefault(fuente, new AdvisorStats());
+                actualizarEstadisticas(stats, deal);
+                estadisticasFuente.put(fuente, stats);
             }
-
-            dealsByCampaign.put(campaign, dealsByCampaign.getOrDefault(campaign, 0) + 1);
         }
 
-        Map<String, AdvisorStats> campaignStatsMap = new HashMap<>();
-        AdvisorStats statsCampaign;
-        List<Map.Entry<String, Integer>> sortedDealsByCampaign = dealsByCampaign.entrySet()
-                .stream()
+// --- Ordenar y construir listas combinadas ---
+        dealsPorCampania.entrySet().stream()
                 .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
-                .toList();
+                .forEach(entry -> {
+                    String campania = entry.getKey();
+                    int cantidadDeals = entry.getValue();
+                    AdvisorStats stats = estadisticasCampania.getOrDefault(campania, new AdvisorStats());
+                    listaCampaniasCombinadas.add(new CombinedCampaign(campania, cantidadDeals,
+                            stats.getInteresados(), stats.getContactados(), stats.getCita(),
+                            stats.getVisita(), stats.getNegociacion(), stats.getApartado(), stats.getGanado()));
+                });
 
-        List<Map.Entry<String, Integer>> sortedDealsByFuente = dealsByFuente.entrySet()
-                .stream()
+        // --- DEBUG: Total interesados por campaña antes de armar la lista ---
+        System.out.println("===== [DEBUG CHECK] Totales por campaña antes de combinar =====");
+        estadisticasCampania.forEach((key, value) -> {
+            System.out.println("Campaña: '" + key + "' - Interesados: " + value.getInteresados());
+        });
+        System.out.println("===== [DEBUG CHECK] FIN =====");
+
+        dealsPorFuente.entrySet().stream()
                 .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
-                .toList();
+                .forEach(entry -> {
+                    String fuente = entry.getKey();
+                    int cantidadDeals = entry.getValue();
+                    AdvisorStats stats = estadisticasFuente.getOrDefault(fuente, new AdvisorStats());
+                    listaFuentesCombinadas.add(new CombinedFuente(fuente, cantidadDeals,
+                            stats.getInteresados(), stats.getContactados(), stats.getCita(),
+                            stats.getVisita(), stats.getNegociacion(), stats.getApartado(), stats.getGanado()));
+                });
 
-        List<CombinedCampaign> combinedCampaignList = new ArrayList<>();
-        List<DealsData> filteredDealsByCampaign = new ArrayList<>();
+// --- Totales ---
+        Consumer<List<? extends Object>> agregarTotales = (lista) -> {
+            int dealsTotal = 0, interesadosTotal = 0, contactadosTotal = 0, citasTotal = 0, visitasTotal = 0, negociacionesTotal = 0, apartadosTotal = 0, ganadosTotal = 0;
 
-        for(DealsData deal : filteredDeals) {
-            if (deal.getCampaign() != null && deal.getCampaign().contains(",")) {
-                campaign = pipedriveService.getCampaignName(deal.getCampaign());
-
-            } else if (deal.getCampaign() != null && !deal.getCampaign().isEmpty()) {
-                campaign = deal.getCampaign();
-
-            } else {
-                filteredDealsByCampaign.add(deal);
-                continue;
+            for (Object obj : lista) {
+                if (obj instanceof CombinedCampaign c) {
+                    dealsTotal += c.getDeals(); interesadosTotal += c.getInteresados(); contactadosTotal += c.getContactados();
+                    citasTotal += c.getCita(); visitasTotal += c.getVisita(); negociacionesTotal += c.getNegociacion();
+                    apartadosTotal += c.getApartado(); ganadosTotal += c.getGanado();
+                } else if (obj instanceof CombinedFuente f) {
+                    dealsTotal += f.getDeals(); interesadosTotal += f.getInteresados(); contactadosTotal += f.getContactados();
+                    citasTotal += f.getCita(); visitasTotal += f.getVisita(); negociacionesTotal += f.getNegociacion();
+                    apartadosTotal += f.getApartado(); ganadosTotal += f.getGanado();
+                }
             }
 
-            statsCampaign = campaignStatsMap.getOrDefault(campaign, new AdvisorStats());
-
-            if (deal.getStageId() == 6){
-                statsCampaign.interesados++;
-            }
-
-            if (deal.getStageId() == 7){
-                statsCampaign.contactados++;
-            }
-
-            if (deal.getStageId() == 8) {
-                statsCampaign.cita++;
-            }
-
-            if (deal.getStageId() == 9) {
-                statsCampaign.visita++;
-            }
-            if (deal.getStageId() == 10) {
-                statsCampaign.negociacion++;
-            }
-
-            if (deal.getStageId() == 11) {
-                statsCampaign.apartado++;
-            }
-
-            if (deal.getStatus().equals("won")) {
-                System.out.println("Campaña: " + campaign + " " + deal.getStatus() + " " + deal.getOwnerName() + " " + deal.getPersonName());
-                statsCampaign.ganado++;
-            }
-
-            campaignStatsMap.put(campaign, statsCampaign);
-        }
-
-        for (Map.Entry<String, Integer> entry : sortedDealsByCampaign) {
-            campaign = entry.getKey();
-            int dealsCount = entry.getValue();
-
-            statsCampaign = campaignStatsMap.getOrDefault(campaign, new AdvisorStats());
-
-            CombinedCampaign combinedCampaign = new CombinedCampaign(
-                    campaign,
-                    dealsCount,
-                    statsCampaign.getCita(),
-                    statsCampaign.getInteresados(),
-                    statsCampaign.getContactados(),
-                    statsCampaign.getVisita(),
-                    statsCampaign.getNegociacion(),
-                    statsCampaign.getApartado(),
-                    statsCampaign.getGanado());
-
-            combinedCampaignList.add(combinedCampaign);
-        }
-
-        System.out.println("Tamaño de lista: " + filteredDealsByCampaign.size());
-        AdvisorStats statsCampaignByFuente;
-        Map<String, AdvisorStats> fuenteStatsMap = new HashMap<>();
-
-        for(DealsData deal : filteredDealsByCampaign) {
-
-            fuente = pipedriveService.getFuenteName(deal.getFuente());
-
-            statsCampaignByFuente = fuenteStatsMap.getOrDefault(fuente, new AdvisorStats());
-
-            if (deal.getStageId() == 6){
-                statsCampaignByFuente.interesados++;
-            }
-
-            if (deal.getStageId() == 7){
-                statsCampaignByFuente.contactados++;
-            }
-
-            if (deal.getStageId() == 8) {
-                statsCampaignByFuente.cita++;
-            }
-
-            if (deal.getStageId() == 9) {
-                statsCampaignByFuente.visita++;
-            }
-            if (deal.getStageId() == 10) {
-                statsCampaignByFuente.negociacion++;
-            }
-
-            if (deal.getStageId() == 11) {
-                statsCampaignByFuente.apartado++;
-            }
-
-            if (deal.getStatus().equals("won")) {
-                System.out.println("Fuente: " + fuente + " " + deal.getStatus() + " " + deal.getOwnerName() + " " + deal.getPersonName());
-                statsCampaignByFuente.ganado++;
-            }
-
-            fuenteStatsMap.put(fuente, statsCampaignByFuente);
-        }
-
-        List<CombinedFuente> combinedFuenteList = new ArrayList<>();
-
-        for (Map.Entry<String, Integer> entry : sortedDealsByFuente) {
-            fuente = entry.getKey();
-            int dealsCount = entry.getValue();
-
-            statsCampaignByFuente = fuenteStatsMap.getOrDefault(fuente, new AdvisorStats());
-
-            CombinedFuente combinedFuente = new CombinedFuente(
-                    fuente,
-                    dealsCount,
-                    statsCampaignByFuente.getInteresados(),
-                    statsCampaignByFuente.getContactados(),
-                    statsCampaignByFuente.getCita(),
-                    statsCampaignByFuente.getVisita(),
-                    statsCampaignByFuente.getNegociacion(),
-                    statsCampaignByFuente.getApartado(),
-                    statsCampaignByFuente.getGanado());
-
-            combinedFuenteList.add(combinedFuente);
-        }
-
-        System.out.println("Fuente Stats Map: " + fuenteStatsMap);
-
-        model.addAttribute("combinedCampaign" , combinedCampaignList);
-        model.addAttribute("campaignByFuente", combinedFuenteList);
-
-        // Inicializar los totales
-        int totalDealsCampaign = 0;
-        int totalInteresadosCampaign = 0;
-        int totalContactadosCampaign = 0;
-        int totalCitasCampaign = 0;
-        int totalVisitasCampaign = 0;
-        int totalNegociacionesCampaign = 0;
-        int totalApartadosCampaign = 0;
-        int totalWonDealsCampaign = 0;
-
-        for(CombinedCampaign stat : combinedCampaignList){
-            totalDealsCampaign += stat.getDeals();
-            totalInteresadosCampaign += stat.getInteresados();
-            totalContactadosCampaign += stat.getContactados();
-            totalCitasCampaign += stat.getCita();
-            totalVisitasCampaign += stat.getVisita();
-            totalNegociacionesCampaign += stat.getNegociacion();
-            totalApartadosCampaign += stat.getApartado();
-            totalWonDealsCampaign += stat.getGanado();
-        }
-
-        // Pasar los totales al modelo
-        model.addAttribute("totalDealsCampaign", totalDealsCampaign);
-        model.addAttribute("totalInteresadosCampaign", totalInteresadosCampaign);
-        model.addAttribute("totalContactadosCampaign", totalContactadosCampaign);
-        model.addAttribute("totalCitasCampaign", totalCitasCampaign);
-        model.addAttribute("totalVisitasCampaign", totalVisitasCampaign);
-        model.addAttribute("totalNegociacionesCampaign", totalNegociacionesCampaign);
-        model.addAttribute("totalApartadosCampaign", totalApartadosCampaign);
-        model.addAttribute("totalWonDealsCampaign", totalWonDealsCampaign);
+            String tipo = lista.get(0) instanceof CombinedCampaign ? "Campaign" : "Fuente";
+            model.addAttribute("totalDeals" + tipo, dealsTotal);
+            model.addAttribute("totalInteresados" + tipo, interesadosTotal);
+            model.addAttribute("totalContactados" + tipo, contactadosTotal);
+            model.addAttribute("totalCitas" + tipo, citasTotal);
+            model.addAttribute("totalVisitas" + tipo, visitasTotal);
+            model.addAttribute("totalNegociaciones" + tipo, negociacionesTotal);
+            model.addAttribute("totalApartados" + tipo, apartadosTotal);
+            model.addAttribute("totalWonDeals" + tipo, ganadosTotal);
+        };
 
 
-        // Inicializar los totales
-        int totalDealsFuente = 0;
-        int totalInteresadosFuente = 0;
-        int totalContactadosFuente = 0;
-        int totalCitasFuente = 0;
-        int totalVisitasFuente = 0;
-        int totalNegociacionesFuente = 0;
-        int totalApartadosFuente = 0;
-        int totalWonDealsFuente = 0;
+        agregarTotales.accept(listaCampaniasCombinadas);
+        agregarTotales.accept(listaFuentesCombinadas);
 
-        for(CombinedFuente stat : combinedFuenteList){
-            totalDealsFuente += stat.getDeals();
-            totalInteresadosFuente += stat.getInteresados();
-            totalContactadosFuente += stat.getContactados();
-            totalCitasFuente += stat.getCita();
-            totalVisitasFuente += stat.getVisita();
-            totalNegociacionesFuente += stat.getNegociacion();
-            totalApartadosFuente += stat.getApartado();
-            totalWonDealsFuente += stat.getGanado();
-        }
+// --- Totales combinados ---
+        model.addAttribute("totalFuenteCampania", model.getAttribute("totalDealsCampaign") instanceof Integer tc ? tc + (Integer) model.getAttribute("totalDealsFuente") : 0);
+        model.addAttribute("interesadosFuenteCampania", (Integer) model.getAttribute("totalInteresadosCampaign") + (Integer) model.getAttribute("totalInteresadosFuente"));
+        model.addAttribute("contactadosFuenteCampania", (Integer) model.getAttribute("totalContactadosCampaign") + (Integer) model.getAttribute("totalContactadosFuente"));
+        model.addAttribute("citasFuenteCampania", (Integer) model.getAttribute("totalCitasCampaign") + (Integer) model.getAttribute("totalCitasFuente"));
+        model.addAttribute("visitasFuenteCampania", (Integer) model.getAttribute("totalVisitasCampaign") + (Integer) model.getAttribute("totalVisitasFuente"));
+        model.addAttribute("negoFuenteCampania", (Integer) model.getAttribute("totalNegociacionesCampaign") + (Integer) model.getAttribute("totalNegociacionesFuente"));
+        model.addAttribute("apartFuenteCampania", (Integer) model.getAttribute("totalApartadosCampaign") + (Integer) model.getAttribute("totalApartadosFuente"));
+        model.addAttribute("wonFuenteCampania", (Integer) model.getAttribute("totalWonDealsCampaign") + (Integer) model.getAttribute("totalWonDealsFuente"));
 
-        // Pasar los totales al modelo
-        model.addAttribute("totalDealsFuente", totalDealsFuente);
-        model.addAttribute("totalInteresadosFuente", totalInteresadosFuente);
-        model.addAttribute("totalContactadosFuente", totalContactadosFuente);
-        model.addAttribute("totalCitasFuente", totalCitasFuente);
-        model.addAttribute("totalVisitasFuente", totalVisitasFuente);
-        model.addAttribute("totalNegociacionesFuente", totalNegociacionesFuente);
-        model.addAttribute("totalApartadosFuente", totalApartadosFuente);
-        model.addAttribute("totalWonDealsFuente", totalWonDealsFuente);
-
-        model.addAttribute("totalFuenteCampania", totalDealsFuente + totalDealsCampaign);
-        model.addAttribute("interesadosFuenteCampania", totalInteresadosFuente + totalInteresadosCampaign);
-        model.addAttribute("contactadosFuenteCampania", totalContactadosFuente + totalContactadosCampaign);
-        model.addAttribute("citasFuenteCampania", totalCitasFuente + totalCitasCampaign);
-        model.addAttribute("visitasFuenteCampania", totalVisitasFuente + totalVisitasCampaign);
-        model.addAttribute("negoFuenteCampania", totalNegociacionesFuente + totalNegociacionesCampaign);
-        model.addAttribute("apartFuenteCampania", totalApartadosFuente + totalApartadosCampaign);
-        model.addAttribute("wonFuenteCampania", totalWonDealsFuente + totalWonDealsCampaign);
+// --- Envío al modelo ---
+        model.addAttribute("combinedCampaign", listaCampaniasCombinadas);
+        model.addAttribute("campaignByFuente", listaFuentesCombinadas);
 
         return "mercadeo"; // Retorna la vista con los datos filtrados
+    }
+
+    private void actualizarEstadisticas(AdvisorStats stats, DealsData deal) {
+        switch (deal.getStageId()) {
+            case 6 -> stats.interesados++;
+            case 7 -> stats.contactados++;
+            case 8 -> stats.cita++;
+            case 9 -> stats.visita++;
+            case 10 -> stats.negociacion++;
+            case 11 -> stats.apartado++;
+        }
+        if ("won".equals(deal.getStatus())) {
+            stats.ganado++;
+        }
     }
 
     @GetMapping("/comercial")
