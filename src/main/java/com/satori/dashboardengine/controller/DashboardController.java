@@ -361,51 +361,84 @@ public class DashboardController {
                 });
 
 // --- Totales ---
-        Consumer<List<? extends Object>> agregarTotales = (lista) -> {
-            int dealsTotal = 0, interesadosTotal = 0, contactadosTotal = 0, citasTotal = 0, visitasTotal = 0, negociacionesTotal = 0, apartadosTotal = 0, ganadosTotal = 0;
+        Consumer<List<DashboardController.CombinedCampaign>> agregarTotalesCampania = (lista) -> {
+            int dealsTotal = 0, interesadosTotal = 0, contactadosTotal = 0;
+            int citasTotal = 0, visitasTotal = 0, negociacionesTotal = 0;
+            int apartadosTotal = 0, ganadosTotal = 0;
 
-            for (Object obj : lista) {
-                if (obj instanceof CombinedCampaign c) {
-                    dealsTotal += c.getDeals(); interesadosTotal += c.getInteresados(); contactadosTotal += c.getContactados();
-                    citasTotal += c.getCita(); visitasTotal += c.getVisita(); negociacionesTotal += c.getNegociacion();
-                    apartadosTotal += c.getApartado(); ganadosTotal += c.getGanado();
-                } else if (obj instanceof CombinedFuente f) {
-                    dealsTotal += f.getDeals(); interesadosTotal += f.getInteresados(); contactadosTotal += f.getContactados();
-                    citasTotal += f.getCita(); visitasTotal += f.getVisita(); negociacionesTotal += f.getNegociacion();
-                    apartadosTotal += f.getApartado(); ganadosTotal += f.getGanado();
-                }
+            for (DashboardController.CombinedCampaign c : lista) {
+                dealsTotal += c.getDeals();
+                interesadosTotal += c.getInteresados();
+                contactadosTotal += c.getContactados();
+                citasTotal += c.getCita();
+                visitasTotal += c.getVisita();
+                negociacionesTotal += c.getNegociacion();
+                apartadosTotal += c.getApartado();
+                ganadosTotal += c.getGanado();
             }
 
-            String tipo = lista.get(0) instanceof CombinedCampaign ? "Campaign" : "Fuente";
-            model.addAttribute("totalDeals" + tipo, dealsTotal);
-            model.addAttribute("totalInteresados" + tipo, interesadosTotal);
-            model.addAttribute("totalContactados" + tipo, contactadosTotal);
-            model.addAttribute("totalCitas" + tipo, citasTotal);
-            model.addAttribute("totalVisitas" + tipo, visitasTotal);
-            model.addAttribute("totalNegociaciones" + tipo, negociacionesTotal);
-            model.addAttribute("totalApartados" + tipo, apartadosTotal);
-            model.addAttribute("totalWonDeals" + tipo, ganadosTotal);
+            model.addAttribute("totalDealsCampaign", dealsTotal);
+            model.addAttribute("totalInteresadosCampaign", interesadosTotal);
+            model.addAttribute("totalContactadosCampaign", contactadosTotal);
+            model.addAttribute("totalCitasCampaign", citasTotal);
+            model.addAttribute("totalVisitasCampaign", visitasTotal);
+            model.addAttribute("totalNegociacionesCampaign", negociacionesTotal);
+            model.addAttribute("totalApartadosCampaign", apartadosTotal);
+            model.addAttribute("totalWonDealsCampaign", ganadosTotal);
+        };
+
+// Consumer para fuentes
+        Consumer<List<DashboardController.CombinedFuente>> agregarTotalesFuente = (lista) -> {
+            int dealsTotal = 0, interesadosTotal = 0, contactadosTotal = 0;
+            int citasTotal = 0, visitasTotal = 0, negociacionesTotal = 0;
+            int apartadosTotal = 0, ganadosTotal = 0;
+
+            for (DashboardController.CombinedFuente f : lista) {
+                dealsTotal += f.getDeals();
+                interesadosTotal += f.getInteresados();
+                contactadosTotal += f.getContactados();
+                citasTotal += f.getCita();
+                visitasTotal += f.getVisita();
+                negociacionesTotal += f.getNegociacion();
+                apartadosTotal += f.getApartado();
+                ganadosTotal += f.getGanado();
+            }
+
+            model.addAttribute("totalDealsFuente", dealsTotal);
+            model.addAttribute("totalInteresadosFuente", interesadosTotal);
+            model.addAttribute("totalContactadosFuente", contactadosTotal);
+            model.addAttribute("totalCitasFuente", citasTotal);
+            model.addAttribute("totalVisitasFuente", visitasTotal);
+            model.addAttribute("totalNegociacionesFuente", negociacionesTotal);
+            model.addAttribute("totalApartadosFuente", apartadosTotal);
+            model.addAttribute("totalWonDealsFuente", ganadosTotal);
         };
 
 
-        agregarTotales.accept(listaCampaniasCombinadas);
-        agregarTotales.accept(listaFuentesCombinadas);
+        agregarTotalesCampania.accept(listaCampaniasCombinadas);
+        agregarTotalesFuente.accept(listaFuentesCombinadas);
 
 // --- Totales combinados ---
-        model.addAttribute("totalFuenteCampania", model.getAttribute("totalDealsCampaign") instanceof Integer tc ? tc + (Integer) model.getAttribute("totalDealsFuente") : 0);
-        model.addAttribute("interesadosFuenteCampania", (Integer) model.getAttribute("totalInteresadosCampaign") + (Integer) model.getAttribute("totalInteresadosFuente"));
-        model.addAttribute("contactadosFuenteCampania", (Integer) model.getAttribute("totalContactadosCampaign") + (Integer) model.getAttribute("totalContactadosFuente"));
-        model.addAttribute("citasFuenteCampania", (Integer) model.getAttribute("totalCitasCampaign") + (Integer) model.getAttribute("totalCitasFuente"));
-        model.addAttribute("visitasFuenteCampania", (Integer) model.getAttribute("totalVisitasCampaign") + (Integer) model.getAttribute("totalVisitasFuente"));
-        model.addAttribute("negoFuenteCampania", (Integer) model.getAttribute("totalNegociacionesCampaign") + (Integer) model.getAttribute("totalNegociacionesFuente"));
-        model.addAttribute("apartFuenteCampania", (Integer) model.getAttribute("totalApartadosCampaign") + (Integer) model.getAttribute("totalApartadosFuente"));
-        model.addAttribute("wonFuenteCampania", (Integer) model.getAttribute("totalWonDealsCampaign") + (Integer) model.getAttribute("totalWonDealsFuente"));
+        model.addAttribute("totalFuenteCampania", safeSum(model, "totalDealsCampaign", "totalDealsFuente"));
+        model.addAttribute("interesadosFuenteCampania", safeSum(model, "totalInteresadosCampaign", "totalInteresadosFuente"));
+        model.addAttribute("contactadosFuenteCampania", safeSum(model, "totalContactadosCampaign", "totalContactadosFuente"));
+        model.addAttribute("citasFuenteCampania", safeSum(model, "totalCitasCampaign", "totalCitasFuente"));
+        model.addAttribute("visitasFuenteCampania", safeSum(model, "totalVisitasCampaign", "totalVisitasFuente"));
+        model.addAttribute("negoFuenteCampania", safeSum(model, "totalNegociacionesCampaign", "totalNegociacionesFuente"));
+        model.addAttribute("apartFuenteCampania", safeSum(model, "totalApartadosCampaign", "totalApartadosFuente"));
+        model.addAttribute("wonFuenteCampania", safeSum(model, "totalWonDealsCampaign", "totalWonDealsFuente"));
 
 // --- Envío al modelo ---
         model.addAttribute("combinedCampaign", listaCampaniasCombinadas);
         model.addAttribute("campaignByFuente", listaFuentesCombinadas);
 
         return "mercadeo"; // Retorna la vista con los datos filtrados
+    }
+
+    private Integer safeSum(Model model, String attr1, String attr2) {
+        Integer val1 = (Integer) model.getAttribute(attr1);
+        Integer val2 = (Integer) model.getAttribute(attr2);
+        return (val1 != null ? val1 : 0) + (val2 != null ? val2 : 0);
     }
 
     private void actualizarEstadisticas(AdvisorStats stats, DealsData deal) {
