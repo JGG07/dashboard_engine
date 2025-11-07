@@ -378,6 +378,10 @@ public class PipedriveBo {
             case "120226415248920459, 120226415248920459, 120226415248980459, 120226415248980459, none,  fb, fb": return "Sitio Web";
             case "120225374461220459, 120225374461220459, 120225374461380459, 120225374461380459, none,  ig, ig": return "Sitio Web";
             case "EAIaIQobChMIlfaJgJ-mjgMVOZHuAR1RpwSLEAAYASAAEgLuzPD_BwE, , , , , ": return "Sitio Web";
+            case "Cj0KCQjwovPGBhDxARIsAFhgkwSoX1kWSY2ftdc0D5j472UWyoki9rpQfd6eexDelIsBWLE3QtdLQsUaAkZNEALw_wcB, , , , , ": return "Sitio Web";
+            case ", , , , , ": return "Sitio Web";
+            case "120230547012730459, 120230547012730459, 120230547012710459, 120230547012710459, none,  fb, fb": return "Sitio Web";
+            case "120230547012730459, 120230547012710459, paid,  ig": return "Sitio Web";
         }
 
         return campaign;

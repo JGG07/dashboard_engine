@@ -309,22 +309,33 @@ public class DashboardController {
         for (DealsData deal : filteredDeals) {
             String rawCampania = deal.getCampaign();
             String campania = null;
+            String rawFuente = deal.getFuente();
+            String fuente = null;
 
             if (rawCampania != null && !rawCampania.isBlank()) {
                 campania = rawCampania.contains(",")
                         ? pipedriveService.getCampaignName(rawCampania)
                         : rawCampania.trim(); // aseguramos que sea la forma limpia
+            } else if (rawFuente != null && !rawFuente.isBlank()) {
+                fuente = pipedriveService.getFuenteName(deal.getFuente());
             }
 
             if (campania != null) {
                 dealsPorCampania.put(campania, dealsPorCampania.getOrDefault(campania, 0) + 1);
-                AdvisorStats stats = estadisticasCampania.getOrDefault(campania, new AdvisorStats());
+                AdvisorStats stats = estadisticasCampania.getOrDefault(campania, new DashboardController.AdvisorStats());
                 actualizarEstadisticas(stats, deal);
                 estadisticasCampania.put(campania, stats);
-            } else {
-                String fuente = pipedriveService.getFuenteName(deal.getFuente());
-                dealsPorFuente.put(fuente, dealsPorFuente.getOrDefault(fuente, 0) + 1);
-                AdvisorStats stats = estadisticasFuente.getOrDefault(fuente, new AdvisorStats());
+            } else if(fuente != null) {
+
+                if (deal.getFuente().equalsIgnoreCase("77")) {
+                    System.out.println("****************** Es sitio web *****************");
+                    System.out.println("Se agregará a tabla campaña: " + fuente + " " + deal.getFuente() + " " + dealsPorCampania.toString());
+                    dealsPorCampania.put(fuente, dealsPorCampania.getOrDefault(fuente, 0) + 1);
+                }else{
+                    dealsPorFuente.put(fuente, dealsPorFuente.getOrDefault(fuente, 0) + 1);
+                }
+
+                AdvisorStats stats = estadisticasFuente.getOrDefault(fuente, new DashboardController.AdvisorStats());
                 actualizarEstadisticas(stats, deal);
                 estadisticasFuente.put(fuente, stats);
             }

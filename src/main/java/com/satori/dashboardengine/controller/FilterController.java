@@ -346,16 +346,19 @@ public class FilterController {
 
         List<DashboardController.CombinedCampaign> listaCampaniasCombinadas = new ArrayList<>();
         List<DashboardController.CombinedFuente> listaFuentesCombinadas = new ArrayList<>();
-        List<DealsData> dealsSinCampania = new ArrayList<>();
 
         for (DealsData deal : filteredDeals) {
             String rawCampania = deal.getCampaign();
             String campania = null;
+            String rawFuente = deal.getFuente();
+            String fuente = null;
 
             if (rawCampania != null && !rawCampania.isBlank()) {
                 campania = rawCampania.contains(",")
                         ? pipedriveService.getCampaignName(rawCampania)
                         : rawCampania.trim(); // aseguramos que sea la forma limpia
+            } else if (rawFuente != null && !rawFuente.isBlank()) {
+                fuente = pipedriveService.getFuenteName(deal.getFuente());
             }
 
             if (campania != null) {
@@ -363,9 +366,16 @@ public class FilterController {
                 DashboardController.AdvisorStats stats = estadisticasCampania.getOrDefault(campania, new DashboardController.AdvisorStats());
                 actualizarEstadisticas(stats, deal);
                 estadisticasCampania.put(campania, stats);
-            } else {
-                String fuente = pipedriveService.getFuenteName(deal.getFuente());
-                dealsPorFuente.put(fuente, dealsPorFuente.getOrDefault(fuente, 0) + 1);
+            } else if(fuente != null) {
+
+                if (deal.getFuente().equalsIgnoreCase("77")) {
+                    System.out.println("****************** Es sitio web *****************");
+                    System.out.println("Se agregará a tabla campaña: " + fuente + " " + deal.getFuente() + " " + dealsPorCampania.toString());
+                    dealsPorCampania.put(fuente, dealsPorCampania.getOrDefault(fuente, 0) + 1);
+                }else{
+                    dealsPorFuente.put(fuente, dealsPorFuente.getOrDefault(fuente, 0) + 1);
+                }
+
                 DashboardController.AdvisorStats stats = estadisticasFuente.getOrDefault(fuente, new DashboardController.AdvisorStats());
                 actualizarEstadisticas(stats, deal);
                 estadisticasFuente.put(fuente, stats);
@@ -483,7 +493,6 @@ public class FilterController {
         Integer val2 = (Integer) model.getAttribute(attr2);
         return (val1 != null ? val1 : 0) + (val2 != null ? val2 : 0);
     }
-
 
     private void actualizarEstadisticas(DashboardController.AdvisorStats stats, DealsData deal) {
         switch (deal.getStageId()) {
@@ -683,9 +692,12 @@ public class FilterController {
         Map<String, Integer> dealsByFuente = new HashMap<>();
 
         // Iterar sobre la lista de filteredDeals
+        log.info("************* Iterar sobre la lista de filteredDeals *************");
         for (DealsData deal : filteredDeals) {
             String advisor = deal.getOwnerName();  // Suponiendo que getOwnerName() devuelve el nombre del asesor
             String fuente = pipedriveService.getFuenteName(deal.getFuente());
+
+            log.info(deal.getPersonName() + " " + deal.getOwnerName() + " " + pipedriveService.getFuenteName(deal.getFuente()) + " " + deal.getAddTime());
 
             dealsByAdvisor.put(advisor, dealsByAdvisor.getOrDefault(advisor, 0) + 1);
             dealsByFuente.put(fuente, dealsByFuente.getOrDefault(fuente, 0) + 1);
@@ -727,6 +739,9 @@ public class FilterController {
             if (deal.getStageId() == 9) {
                 stats.cita++;
                 statsFuente.cita++;
+
+                log.info("************* filteredDealsByStageChange *************");
+                log.info(deal.getPersonName() + " " + deal.getOwnerName() + " " + pipedriveService.getFuenteName(deal.getFuente()) + " " + deal.getAddTime());
 
                 stats.visita++;
                 statsFuente.visita++;
